@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <TimesSquare/TimesSquare.h>
 
+@interface PlusCalendarView : TSQCalendarView;
+
+@end
+
 @interface ViewController : UIViewController
 
 @property (nonatomic, strong) NSCalendar *calendar;
-@property (strong, nonatomic) IBOutlet TSQCalendarView *myCalendarView;
+//@property (strong, nonatomic) IBOutlet TSQCalendarView *myCalendarView;
+@property (strong, nonatomic) IBOutlet PlusCalendarView *myCalendarView;
+
 
 @end
 
