@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CalendarViewController.h
 //  CalendarPlus
 //
 //  Created by Howon Song on 10/19/14.
@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <TimesSquare/TimesSquare.h>
 
-@interface ViewController : UIViewController
+@interface CalendarViewController : UIViewController
 
 @property (nonatomic, strong) NSCalendar *calendar;
-@property (strong, nonatomic) IBOutlet TSQCalendarView *myCalendarView;
 
 @end
-

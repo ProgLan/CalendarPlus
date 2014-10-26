@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "CalendarViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,28 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+//     Override point for customization after application launch.
+    
+//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+//    CGRect bounds = [[UIScreen mainScreen] bounds];
+//    //CGRect newBounds = CGRectMake(bounds.origin.x, bounds.origin.y-250, bounds.size.width, bounds.size.height);
+//    
+//    NSLog(@"x: %f, y: %f, width: %f, height: %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+//    
+//    self.window = [[UIWindow alloc] initWithFrame:bounds];
+//
+//    CalendarViewController *gregorian = [[CalendarViewController alloc] init];
+//    gregorian.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+//    gregorian.calendar.locale = [NSLocale currentLocale];
+//
+//    UITabBarController *tabController = [[UITabBarController alloc] init];
+//    tabController.viewControllers = @[gregorian];
+//    self.window.rootViewController = tabController;
+//
+//    [self.window makeKeyAndVisible];
+
     return YES;
 }
 
