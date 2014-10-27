@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "CalendarRowCellViewController.h"
 #import <TimesSquare/TimesSquare.h>
+#import "PlusCalendarView.h"
 
 @interface ViewController ()
 
@@ -35,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpCalendarView:self.myCalendarView];
+    
+    self.myCalendarView.initialVC = self;
 }
 
 - (void)setUpCalendarView:(TSQCalendarView *) calendarView {

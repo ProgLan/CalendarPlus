@@ -10,4 +10,6 @@
 
 @interface PlusCalendarView : TSQCalendarView
 
+    @property (nonatomic, weak) UIViewController *initialVC;
+
 @end
