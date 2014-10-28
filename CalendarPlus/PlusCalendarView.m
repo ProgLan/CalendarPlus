@@ -19,8 +19,8 @@
 */
 
 - (void)setSelectedDate:(NSDate *)newSelectedDate; {
-    NSLog(@"override worked");
     [super setSelectedDate:newSelectedDate];
+    self.initialVC.pickedDate = newSelectedDate; // store this variable for prepareForSegue method
     [self.initialVC performSegueWithIdentifier:@"GoToSecondViewController" sender:self.initialVC];
 }
 

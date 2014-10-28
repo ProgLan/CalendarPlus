@@ -21,7 +21,6 @@
     self.STARTDATELABEL = @"startDateSelected";
     self.STARTDATELABEL = @"endDateSelected";
     
-    
     UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
                             resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
     UIImage *buttonImageHighlight = [[UIImage imageNamed:@"btn_light_carrot.png"]
@@ -30,6 +29,151 @@
     [self.startDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
     [self.endDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [self.endDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
+    
+    [self setDateLables:self.firstDate];
+    
+    [super viewDidLoad];
+    self.eventStore = [[EKEventStore alloc] init];
+//    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
+    self.addEventButton.enabled = NO;
+
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self checkEventStoreAccessForCalendar];
+}
+
+- (void)setInitDate:(NSDate *)pickedDate
+{
+    self.firstDate = pickedDate;
+}
+
+- (void)setDateLables:(NSDate*)firstSelectedDate
+{
+//    INTERESTING: if I change datePicker's date, events are not added to the calendar at all.
+    [self.datePicker setDate:firstSelectedDate];
+    NSDate *startDate = firstSelectedDate;
+    NSTimeInterval anHourAfter = 1 * 60 * 60;
+    NSDate *endDate = [startDate dateByAddingTimeInterval:anHourAfter];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+    self.eventStartDate = startDate;
+    self.eventEndDate = endDate;
+    self.startDateLabel.text = [dateFormatter stringFromDate:startDate];
+    self.endDateLabel.text = [dateFormatter stringFromDate:endDate];
+}
+
+- (IBAction)addEventBtnPressed:(id)sender
+{
+    EKEvent *myEvent = [EKEvent eventWithEventStore:self.eventStore];
+    myEvent.title = self.eventTitle.text;
+    myEvent.startDate = self.eventStartDate;
+    myEvent.endDate = self.eventEndDate;
+    myEvent.allDay = NO;
+    
+    [myEvent setCalendar:[self.eventStore defaultCalendarForNewEvents]];
+    NSError *err;
+    
+    [self.eventStore saveEvent:myEvent span:EKSpanThisEvent error:&err];
+    
+    if (!err) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"Event Created"
+                              message:@"Yay!?"
+                              delegate:nil
+                              cancelButtonTitle:@"Okay"
+                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+// This method is called when the user has granted permission to Calendar
+-(void)accessGrantedForCalendar
+{
+    // Let's get the default calendar associated with our event store
+    self.defaultCalendar = self.eventStore.defaultCalendarForNewEvents;
+    // Enable the Add button
+    self.addEventButton.enabled = YES;
+//    // Fetch all events happening in the next 24 hours and put them into eventsList
+//    self.eventsList = [self fetchEvents];
+//    // Update the UI with the above events
+//    [self.tableView reloadData];
+}
+
+// Fetch all events happening in the next 24 hours
+- (NSMutableArray *)fetchEvents
+{
+    NSDate *startDate = [NSDate date];
+    
+    //Create the end date components
+    NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
+    tomorrowDateComponents.day = 1;
+    
+    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:tomorrowDateComponents
+                                                                    toDate:startDate
+                                                                   options:0];
+    // We will only search the default calendar for our events
+    NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
+    
+    // Create the predicate
+    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate
+                                                                      endDate:endDate
+                                                                    calendars:calendarArray];
+    
+    // Fetch all events that match the predicate
+    NSMutableArray *events = [NSMutableArray arrayWithArray:[self.eventStore eventsMatchingPredicate:predicate]];
+    
+    return events;
+}
+
+// Prompt the user for access to their Calendar
+-(void)requestCalendarAccess
+{
+    [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error)
+     {
+         if (granted)
+         {
+             NSLog(@"yay we have permission");
+             AddEventViewController * __weak weakSelf = self;
+             // Let's ensure that our code will be executed from the main queue
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 // The user has granted access to their Calendar; let's populate our UI with all events occuring in the next 24 hours.
+                 [weakSelf accessGrantedForCalendar];
+             });
+         } else {
+             NSLog(@"we dont have permission");
+         }
+     }];
+}
+
+// Check the authorization status of our application for Calendar
+-(void)checkEventStoreAccessForCalendar
+{
+    EKAuthorizationStatus status = [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent];
+    NSLog(@"checkESAccessForCalendar");
+    switch (status)
+    {
+            // Update our UI if the user has granted access to their Calendar
+        case EKAuthorizationStatusAuthorized: [self accessGrantedForCalendar];
+            break;
+            // Prompt the user for access to Calendar if there is no definitive answer
+        case EKAuthorizationStatusNotDetermined: [self requestCalendarAccess];
+            break;
+            // Display a message if the user has denied or restricted access to Calendar
+        case EKAuthorizationStatusDenied:
+        case EKAuthorizationStatusRestricted:
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Warning" message:@"Permission was not granted for Calendar"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,10 +183,6 @@
 
 - (IBAction)startDateButtonTapped:(id)sender {
     [self textFieldShouldReturn:self.eventTitle];
-//    [UIView animateWithDuration:1 animations:nil completion:^(BOOL finished) {
-//        self.startDateButton.highlighted = YES;
-//        self.startDateButton.selected = YES;
-//    }];
     self.startDateButton.selected = YES;
     self.datePicker.hidden = NO;
     self.currentDateLabel = self.STARTDATELABEL;
@@ -57,43 +197,19 @@
 }
 
 - (IBAction)dateSelected:(id)sender {
+    
     NSDate *dateSelected = self.datePicker.date;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
     if (self.currentDateLabel == self.STARTDATELABEL) {
+        self.eventStartDate = dateSelected;
         self.startDateLabel.text = [dateFormatter stringFromDate:dateSelected];
     } else if (self.currentDateLabel == self.ENDDATELABEL) {
+        self.eventEndDate = dateSelected;
         self.endDateLabel.text = [dateFormatter stringFromDate:dateSelected];
-    } else {
-        NSLog(@"else block");
     }
-    
-//    if ([self.startDateButton isFirstResponder]) {
-//        self.startDateLabel.text = [dateFormatter stringFromDate:dateSelected];
-//    } else if ([self.endDateLabel isFirstResponder]) {
-//        self.endDateLabel.text = [dateFormatter stringFromDate:dateSelected];
-//    } else {
-//        NSLog(@"else block");
-//    }
-    NSLog(@"dateSelected called");
-    
 }
 
-//-(IBAction)dateValueChanged:(id)sender
-//{
-//    NSDate *dateSelected = [picker date];
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-//    
-//    if ([firstTextField isFirstResponder])
-//    {
-//        firstTextField.text = [dateFormatter stringFromDate:dateSelected];
-//    }
-//    else if ([self.endTextField isFirstResponder])
-//    {
-//        secondTextField.text = [dateFormatter stringFromDate:dateSelected];
-//    }
-//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -104,15 +220,5 @@
 - (IBAction)startDateButtonTouchUp:(id)sender {
     [self.startDateButton setSelected:YES];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

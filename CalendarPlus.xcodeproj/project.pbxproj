@@ -2600,17 +2600,17 @@
 		7043873619F4AA27000AE179 /* CalendarPlus */ = {
 			isa = PBXGroup;
 			children = (
+				7043874119F4AA27000AE179 /* Main.storyboard */,
 				7043873B19F4AA27000AE179 /* AppDelegate.h */,
 				7024AAA219FDA79A0069700D /* PlusCalendarView.h */,
 				7024AAA319FDA79A0069700D /* PlusCalendarView.m */,
 				7043873C19F4AA27000AE179 /* AppDelegate.m */,
 				7043873E19F4AA27000AE179 /* ViewController.h */,
 				7043873F19F4AA27000AE179 /* ViewController.m */,
-				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
-				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
-				7043874119F4AA27000AE179 /* Main.storyboard */,
 				7002350319FE449800CBACB4 /* AddEventViewController.h */,
 				7002350419FE449800CBACB4 /* AddEventViewController.m */,
+				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
+				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
 				7043874619F4AA27000AE179 /* LaunchScreen.xib */,
 				702D38C319FF3BC1002D2D53 /* Images.xcassets */,
 				7043873719F4AA27000AE179 /* Supporting Files */,

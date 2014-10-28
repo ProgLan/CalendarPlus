@@ -9,10 +9,10 @@
 
 //#import "TSQCalendarView.h"
 #import <TimesSquare/TSQCalendarView.h>
-
+#import "ViewController.h"
 
 @interface PlusCalendarView : TSQCalendarView
 
-    @property (nonatomic, weak) UIViewController *initialVC;
+@property (nonatomic, weak) ViewController *initialVC;
 
 @end

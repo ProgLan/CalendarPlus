@@ -183,7 +183,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="bVc-57-qmb">
+                            <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVc-57-qmb">
                                 <rect key="frame" x="0.0" y="438" width="600" height="162"/>
                                 <date key="date" timeIntervalSinceReferenceDate="436154903.93699902">
                                     <!--2014-10-28 02:08:23 +0000-->
@@ -245,10 +245,15 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add" id="cas-mj-RnC">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AmK-fx-XDM"/>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="f9c-gE-7TI"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="plain" id="f9c-gE-7TI">
+                            <connections>
+                                <action selector="addEventBtnPressed:" destination="BXE-Pg-e6e" id="dZq-XS-04G"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="addEventButton" destination="f9c-gE-7TI" id="58a-04-IHw"/>
                         <outlet property="datePicker" destination="bVc-57-qmb" id="mJR-gj-WfA"/>
                         <outlet property="endDateButton" destination="j15-f1-1Cj" id="BWI-yb-367"/>
                         <outlet property="endDateLabel" destination="vrH-cL-R0i" id="CsC-no-Igz"/>
