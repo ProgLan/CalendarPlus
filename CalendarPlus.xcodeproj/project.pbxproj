@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7002350519FE449800CBACB4 /* AddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7002350419FE449800CBACB4 /* AddEventViewController.m */; };
+		700D65B519FF3DB900A717FA /* btn_carrot.png in Resources */ = {isa = PBXBuildFile; fileRef = 700D65B419FF3DB900A717FA /* btn_carrot.png */; };
+		700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */ = {isa = PBXBuildFile; fileRef = 700D65B619FF3EED00A717FA /* btn_light_carrot.png */; };
 		7024AAA419FDA79A0069700D /* PlusCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7024AAA319FDA79A0069700D /* PlusCalendarView.m */; };
+		702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 702D38C319FF3BC1002D2D53 /* Images.xcassets */; };
 		70304CD619FD8BB500DF81E0 /* libTimesSquare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70304CD519FD8BB500DF81E0 /* libTimesSquare.a */; };
 		7043873A19F4AA27000AE179 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873919F4AA27000AE179 /* main.m */; };
 		7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873C19F4AA27000AE179 /* AppDelegate.m */; };
 		7043874019F4AA27000AE179 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873F19F4AA27000AE179 /* ViewController.m */; };
 		7043874319F4AA27000AE179 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7043874119F4AA27000AE179 /* Main.storyboard */; };
-		7043874519F4AA27000AE179 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7043874419F4AA27000AE179 /* Images.xcassets */; };
 		7043874819F4AA27000AE179 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7043874619F4AA27000AE179 /* LaunchScreen.xib */; };
 		7043875419F4AA28000AE179 /* CalendarPlusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043875319F4AA28000AE179 /* CalendarPlusTests.m */; };
 		7043876F19F4AB32000AE179 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7043875E19F4AB32000AE179 /* LICENSE */; };
@@ -303,8 +306,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7002350319FE449800CBACB4 /* AddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddEventViewController.h; sourceTree = "<group>"; };
+		7002350419FE449800CBACB4 /* AddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddEventViewController.m; sourceTree = "<group>"; };
+		700D65B419FF3DB900A717FA /* btn_carrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_carrot.png; path = Images.xcassets/btn_carrot.png; sourceTree = "<group>"; };
+		700D65B619FF3EED00A717FA /* btn_light_carrot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_light_carrot.png; path = Images.xcassets/btn_light_carrot.png; sourceTree = "<group>"; };
 		7024AAA219FDA79A0069700D /* PlusCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlusCalendarView.h; sourceTree = "<group>"; };
 		7024AAA319FDA79A0069700D /* PlusCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlusCalendarView.m; sourceTree = "<group>"; };
+		702D38C319FF3BC1002D2D53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		703049AF19FD8B1D00DF81E0 /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
 		703049B019FD8B1D00DF81E0 /* 815 openhouse.key */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "815 openhouse.key"; sourceTree = "<group>"; };
 		703049B119FD8B1D00DF81E0 /* acquisition-overview.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "acquisition-overview.pdf"; sourceTree = "<group>"; };
@@ -790,7 +798,6 @@
 		7043873E19F4AA27000AE179 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		7043873F19F4AA27000AE179 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		7043874219F4AA27000AE179 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7043874419F4AA27000AE179 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7043874719F4AA27000AE179 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7043874D19F4AA28000AE179 /* CalendarPlusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalendarPlusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7043875219F4AA28000AE179 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2602,8 +2609,10 @@
 				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
 				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
 				7043874119F4AA27000AE179 /* Main.storyboard */,
-				7043874419F4AA27000AE179 /* Images.xcassets */,
+				7002350319FE449800CBACB4 /* AddEventViewController.h */,
+				7002350419FE449800CBACB4 /* AddEventViewController.m */,
 				7043874619F4AA27000AE179 /* LaunchScreen.xib */,
+				702D38C319FF3BC1002D2D53 /* Images.xcassets */,
 				7043873719F4AA27000AE179 /* Supporting Files */,
 			);
 			path = CalendarPlus;
@@ -2612,6 +2621,8 @@
 		7043873719F4AA27000AE179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				700D65B619FF3EED00A717FA /* btn_light_carrot.png */,
+				700D65B419FF3DB900A717FA /* btn_carrot.png */,
 				7043873819F4AA27000AE179 /* Info.plist */,
 				7043873919F4AA27000AE179 /* main.m */,
 			);
@@ -3103,10 +3114,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				7043874319F4AA27000AE179 /* Main.storyboard in Resources */,
+				702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */,
+				700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */,
 				7043874819F4AA27000AE179 /* LaunchScreen.xib in Resources */,
 				7043877519F4AB32000AE179 /* TimesSquare.podspec in Resources */,
 				7043876F19F4AB32000AE179 /* LICENSE in Resources */,
-				7043874519F4AA27000AE179 /* Images.xcassets in Resources */,
+				700D65B519FF3DB900A717FA /* btn_carrot.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3130,6 +3143,7 @@
 				7043874019F4AA27000AE179 /* ViewController.m in Sources */,
 				7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */,
 				7043877119F4AB32000AE179 /* TSQCalendarCell.m in Sources */,
+				7002350519FE449800CBACB4 /* AddEventViewController.m in Sources */,
 				7024AAA419FDA79A0069700D /* PlusCalendarView.m in Sources */,
 				7043878019F4B081000AE179 /* CalendarRowCellViewController.m in Sources */,
 				7043877019F4AB32000AE179 /* README.md in Sources */,

@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSCalendar *calendar;
 @property (strong, nonatomic) IBOutlet PlusCalendarView *myCalendarView;
+@property (strong, nonatomic) IBOutlet UITableView *calendarTable;
 
 @end
 

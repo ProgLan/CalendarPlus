@@ -8,14 +8,23 @@
 
 #import "ViewController.h"
 #import "CalendarRowCellViewController.h"
-#import <TimesSquare/TimesSquare.h>
 #import "PlusCalendarView.h"
+@import EventKit;
 
 @interface ViewController ()
 
+// The database with calendar events and reminders
+@property (strong, nonatomic) EKEventStore *eventStore;
+
+// Indicates whether app has access to event store.
+@property (nonatomic) BOOL isAccessToEventStoreGranted;
+
+// The data source for the table view
+@property (strong, nonatomic) NSMutableArray *todoItems;
+
 @end
 
-// This is to access TSQCalendarView from this CaeldnarViewController?
+// This is to access TSQCalendarView from this CalendarViewController?
 //@interface TSQCalendarView (AccessingPrivateStuff)
 //
 //@property (nonatomic, readonly) UITableView *tableView; // Where is it used??
@@ -25,18 +34,62 @@
 
 @implementation ViewController
 
+// FROM THE COOKBOOK
+
+//how Is this a function???
+- (EKEventStore *)eventStore {
+    if (!_eventStore) {
+        _eventStore = [[EKEventStore alloc] init];
+    }
+    return _eventStore;
+}
+
+- (void)updateAuthorizationStatusToAccessEventStore {
+    EKAuthorizationStatus authorizationStatus = [EKEventStore authorizationStatusForEntityType:EKEntityTypeReminder];
+    
+    switch (authorizationStatus) {
+        case EKAuthorizationStatusDenied:
+        case EKAuthorizationStatusRestricted: {
+            self.isAccessToEventStoreGranted = NO;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Access Denied"
+                                                                message:@"This app doesn't have access to your Reminders." delegate:nil
+                                                      cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+            [alertView show];
+            [self.calendarTable reloadData];
+            break;
+        }
+        case EKAuthorizationStatusAuthorized:
+            self.isAccessToEventStoreGranted = YES;
+            [self.calendarTable reloadData];
+            break;
+        case EKAuthorizationStatusNotDetermined: {
+            __weak ViewController *weakSelf = self;
+            [self.eventStore requestAccessToEntityType:EKEntityTypeReminder
+                                            completion:^(BOOL granted, NSError *error) {
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    weakSelf.isAccessToEventStoreGranted = granted;
+                                                    [weakSelf.calendarTable reloadData];
+                                                });
+                                            }];
+            break;
+        }
+    }
+}
+
+// COOKBOOKE ENDS
+
 - (void)setCalendar:(NSCalendar *)calendar;
 {
     _calendar = calendar; // what is this? what kind of variable is _variable_name?
-    
-    self.navigationItem.title = calendar.calendarIdentifier;
-    self.tabBarItem.title = calendar.calendarIdentifier;
+//    self.navigationItem.title = calendar.calendarIdentifier;
+//    self.tabBarItem.title = calendar.calendarIdentifier;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpCalendarView:self.myCalendarView];
-    
+    [self setCalendar: self.calendar];
+    [self updateAuthorizationStatusToAccessEventStore]; // grants access
     self.myCalendarView.initialVC = self;
 }
 
