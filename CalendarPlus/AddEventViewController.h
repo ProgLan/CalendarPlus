@@ -45,6 +45,7 @@
 
 // Drawing a line graph
 @property (weak, nonatomic) IBOutlet UIView *graphView;
+@property (strong, nonatomic) CAShapeLayer *currentGraph;
 
 @property (nonatomic, strong) IBOutlet UITapGestureRecognizer *tapRecognizer;
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer;

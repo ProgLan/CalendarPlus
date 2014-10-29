@@ -99,6 +99,14 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E4q-sD-I0R">
+                                <rect key="frame" x="0.0" y="213" width="600" height="224"/>
+                                <color key="backgroundColor" red="1" green="0.99301028205290465" blue="0.98004559424243398" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="cP2-s0-dib" appends="YES" id="1Iz-IW-PSX"/>
+                                </connections>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j15-f1-1Cj">
                                 <rect key="frame" x="0.0" y="163" width="600" height="50"/>
                                 <color key="backgroundColor" red="1" green="0.89778869029999997" blue="0.46902739739999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -197,14 +205,6 @@
                                     <action selector="dateSelected:" destination="BXE-Pg-e6e" eventType="valueChanged" id="ZKP-zb-Lnx"/>
                                 </connections>
                             </datePicker>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E4q-sD-I0R">
-                                <rect key="frame" x="0.0" y="213" width="600" height="224"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="cP2-s0-dib" appends="YES" id="1Iz-IW-PSX"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

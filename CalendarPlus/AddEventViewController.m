@@ -40,6 +40,9 @@
     
 //    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
     self.addEventButton.enabled = NO;
+    
+//    graph related
+//    [self setupGraphView];
 
 }
 
@@ -232,23 +235,58 @@
     return YES;
 }
 
-- (void)setupGraphView
-{
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.strokeColor = [UIColor blueColor].CGColor;
-    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.lineWidth = 4.0;
-    [self.graphView.layer addSublayer:shapeLayer]; // not sure what it does
+//- (void)setupGraphView
+//{
+//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+//    shapeLayer.strokeColor = [UIColor blueColor].CGColor;
+//    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+//    shapeLayer.lineWidth = 4.0;
+//    [self.graphView.layer addSublayer:shapeLayer]; // not sure what it does
+//}
+
+static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
+    return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-//-(void)tapAction:(UITapGestureRecognizer *)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
-//    NSLog(@"single tap gesture!");
-//}
+static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
+    CGPoint controlPoint = midPointForPoints(p1, p2);
+    CGFloat diffY = abs(p2.y - controlPoint.y);
+    
+    if (p1.y < p2.y)
+        controlPoint.y += diffY;
+    else if (p1.y > p2.y)
+        controlPoint.y -= diffY;
+    
+    return controlPoint;
+}
 
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
     NSLog(@"%@", NSStringFromCGPoint(location));
+    
+    if (self.currentGraph != nil) {
+        [self.currentGraph removeFromSuperlayer];
+    }
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    self.currentGraph = shapeLayer;
+    shapeLayer.strokeColor = [UIColor blackColor].CGColor;
+    shapeLayer.fillColor = [UIColor grayColor].CGColor;
+    shapeLayer.lineWidth = 1.0;
+    [self.view.layer addSublayer:shapeLayer];
+    
+    CGPoint origin = CGPointMake(0.0, 440.0);
+    CGPoint endpt = CGPointMake(370.0, 440.0);
+    CGPoint midpt1 = midPointForPoints(origin, location);
+    CGPoint midpt2 = midPointForPoints(location, endpt);
+    
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:origin];
+    [path addQuadCurveToPoint:location controlPoint:CGPointMake(midpt1.x, midpt1.y+50)];
+    [path addQuadCurveToPoint:endpt controlPoint:CGPointMake(midpt2.x, midpt2.y+50)];
+    
+    [shapeLayer setPath:path.CGPath];
 }
 
 @end
