@@ -20,12 +20,12 @@
 
 - (UIImage *)todayBackgroundImage;
 {
-    return [[UIImage imageNamed:@"CalendarTodaysDate.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+    return [[UIImage imageNamed:@"todays_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
 }
 
 - (UIImage *)selectedBackgroundImage;
 {
-    return [[UIImage imageNamed:@"CalendarSelectedDate.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+    return [[UIImage imageNamed:@"selected_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
 }
 
 - (UIImage *)notThisMonthBackgroundImage;
@@ -37,5 +37,6 @@
 {
     return [UIImage imageNamed:[NSString stringWithFormat:@"CalendarRow%@.png", self.bottomRow ? @"Bottom" : @""]];
 }
+
 
 @end

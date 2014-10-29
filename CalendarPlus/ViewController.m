@@ -30,15 +30,22 @@
     _calendar = calendar; // what is this? what kind of variable is _variable_name?
 //    self.navigationItem.title = calendar.calendarIdentifier;
 //    self.tabBarItem.title = calendar.calendarIdentifier;
+    
 }
 
 - (void)viewDidLoad {
+    self.pickedDate = [NSDate date];
     [super viewDidLoad];
     self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [self setUpCalendarView:self.myCalendarView];
     [self setCalendar: self.calendar];
     self.myCalendarView.initialVC = self;
+    [self.myCalendarView scrollToDate:self.pickedDate animated:NO];
     
+//    tableView color
+    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TableViewBackground.png"]];
+    [tempImageView setFrame:self.tableView.frame];
+    self.tableView.backgroundView = tempImageView;
 }
 
 - (IBAction)clickGoToDetailedView:(id)sender
@@ -63,11 +70,17 @@
     EKEvent *currentEvent = [self.appDelegate.eventManager.eventsList objectAtIndex:indexPath.row];
     NSDate *startD = currentEvent.startDate;
     NSDate *endD = currentEvent.endDate;
-    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mma"];
     NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
     cell.textLabel.text = eventTitle;
+    
+//    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+//    backView.backgroundColor = [UIColor clearColor];
+//    cell.backgroundView = backView;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.textColor = [UIColor whiteColor];
     return cell;
 }
 // -- Table view related
@@ -94,6 +107,14 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.pickedDate != nil) {
+        self.appDelegate.eventManager.eventsList = [self.appDelegate.eventManager fetchEvents:self.pickedDate];
+        [self.tableView reloadData];
+    }
 }
 
 @end

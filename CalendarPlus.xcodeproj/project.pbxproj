@@ -28,6 +28,18 @@
 		7043877519F4AB32000AE179 /* TimesSquare.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7043876B19F4AB32000AE179 /* TimesSquare.podspec */; };
 		7043878019F4B081000AE179 /* CalendarRowCellViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */; };
 		709B12A21A00013D00CA7C1A /* EventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 709B12A11A00013D00CA7C1A /* EventManager.m */; };
+		709B12AD1A00672800CA7C1A /* CalendarSelectedDate.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12AB1A00672800CA7C1A /* CalendarSelectedDate.png */; };
+		709B12AE1A00672800CA7C1A /* CalendarTodaysDate.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12AC1A00672800CA7C1A /* CalendarTodaysDate.png */; };
+		709B12B01A00674400CA7C1A /* CalendarPreviousMonth.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12AF1A00674400CA7C1A /* CalendarPreviousMonth.png */; };
+		709B12BD1A00774A00CA7C1A /* CalendarPreviousMonth.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12B51A00774A00CA7C1A /* CalendarPreviousMonth.png */; };
+		709B12BE1A00774A00CA7C1A /* CalendarPreviousMonth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12B61A00774A00CA7C1A /* CalendarPreviousMonth@2x.png */; };
+		709B12BF1A00774A00CA7C1A /* CalendarRow.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12B71A00774A00CA7C1A /* CalendarRow.png */; };
+		709B12C01A00774A00CA7C1A /* CalendarRow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12B81A00774A00CA7C1A /* CalendarRow@2x.png */; };
+		709B12C11A00774A00CA7C1A /* CalendarRowBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12B91A00774A00CA7C1A /* CalendarRowBottom.png */; };
+		709B12C21A00774A00CA7C1A /* CalendarRowBottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BA1A00774A00CA7C1A /* CalendarRowBottom@2x.png */; };
+		709B12C31A00774A00CA7C1A /* selected_date_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BB1A00774A00CA7C1A /* selected_date_custom.png */; };
+		709B12C41A00774A00CA7C1A /* todays_date_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BC1A00774A00CA7C1A /* todays_date_custom.png */; };
+		709B12C61A007A1000CA7C1A /* TableViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C51A007A1000CA7C1A /* TableViewBackground.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -820,6 +832,18 @@
 		7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarRowCellViewController.m; sourceTree = "<group>"; };
 		709B12A01A00013D00CA7C1A /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
 		709B12A11A00013D00CA7C1A /* EventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventManager.m; sourceTree = "<group>"; };
+		709B12AB1A00672800CA7C1A /* CalendarSelectedDate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarSelectedDate.png; path = "../../objc-TimesSquare-master/TimesSquareTestApp/CalendarSelectedDate.png"; sourceTree = "<group>"; };
+		709B12AC1A00672800CA7C1A /* CalendarTodaysDate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarTodaysDate.png; path = "../../objc-TimesSquare-master/TimesSquareTestApp/CalendarTodaysDate.png"; sourceTree = "<group>"; };
+		709B12AF1A00674400CA7C1A /* CalendarPreviousMonth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarPreviousMonth.png; path = "../../objc-TimesSquare-master/TimesSquareTestApp/CalendarPreviousMonth.png"; sourceTree = "<group>"; };
+		709B12B51A00774A00CA7C1A /* CalendarPreviousMonth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarPreviousMonth.png; path = Resources/CalendarPreviousMonth.png; sourceTree = SOURCE_ROOT; };
+		709B12B61A00774A00CA7C1A /* CalendarPreviousMonth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CalendarPreviousMonth@2x.png"; path = "Resources/CalendarPreviousMonth@2x.png"; sourceTree = SOURCE_ROOT; };
+		709B12B71A00774A00CA7C1A /* CalendarRow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarRow.png; path = Resources/CalendarRow.png; sourceTree = SOURCE_ROOT; };
+		709B12B81A00774A00CA7C1A /* CalendarRow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CalendarRow@2x.png"; path = "Resources/CalendarRow@2x.png"; sourceTree = SOURCE_ROOT; };
+		709B12B91A00774A00CA7C1A /* CalendarRowBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CalendarRowBottom.png; path = Resources/CalendarRowBottom.png; sourceTree = SOURCE_ROOT; };
+		709B12BA1A00774A00CA7C1A /* CalendarRowBottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "CalendarRowBottom@2x.png"; path = "Resources/CalendarRowBottom@2x.png"; sourceTree = SOURCE_ROOT; };
+		709B12BB1A00774A00CA7C1A /* selected_date_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_date_custom.png; path = Resources/selected_date_custom.png; sourceTree = SOURCE_ROOT; };
+		709B12BC1A00774A00CA7C1A /* todays_date_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = todays_date_custom.png; path = Resources/todays_date_custom.png; sourceTree = SOURCE_ROOT; };
+		709B12C51A007A1000CA7C1A /* TableViewBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TableViewBackground.png; path = Resources/TableViewBackground.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2626,6 +2650,18 @@
 		7043873719F4AA27000AE179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				709B12C51A007A1000CA7C1A /* TableViewBackground.png */,
+				709B12B51A00774A00CA7C1A /* CalendarPreviousMonth.png */,
+				709B12B61A00774A00CA7C1A /* CalendarPreviousMonth@2x.png */,
+				709B12B71A00774A00CA7C1A /* CalendarRow.png */,
+				709B12B81A00774A00CA7C1A /* CalendarRow@2x.png */,
+				709B12B91A00774A00CA7C1A /* CalendarRowBottom.png */,
+				709B12BA1A00774A00CA7C1A /* CalendarRowBottom@2x.png */,
+				709B12BB1A00774A00CA7C1A /* selected_date_custom.png */,
+				709B12BC1A00774A00CA7C1A /* todays_date_custom.png */,
+				709B12AF1A00674400CA7C1A /* CalendarPreviousMonth.png */,
+				709B12AB1A00672800CA7C1A /* CalendarSelectedDate.png */,
+				709B12AC1A00672800CA7C1A /* CalendarTodaysDate.png */,
 				700D65B619FF3EED00A717FA /* btn_light_carrot.png */,
 				700D65B419FF3DB900A717FA /* btn_carrot.png */,
 				7043873819F4AA27000AE179 /* Info.plist */,
@@ -3118,11 +3154,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				709B12C31A00774A00CA7C1A /* selected_date_custom.png in Resources */,
 				7043874319F4AA27000AE179 /* Main.storyboard in Resources */,
 				702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */,
+				709B12BE1A00774A00CA7C1A /* CalendarPreviousMonth@2x.png in Resources */,
+				709B12BF1A00774A00CA7C1A /* CalendarRow.png in Resources */,
 				700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */,
+				709B12BD1A00774A00CA7C1A /* CalendarPreviousMonth.png in Resources */,
 				7043874819F4AA27000AE179 /* LaunchScreen.xib in Resources */,
+				709B12C11A00774A00CA7C1A /* CalendarRowBottom.png in Resources */,
+				709B12AD1A00672800CA7C1A /* CalendarSelectedDate.png in Resources */,
 				7043877519F4AB32000AE179 /* TimesSquare.podspec in Resources */,
+				709B12AE1A00672800CA7C1A /* CalendarTodaysDate.png in Resources */,
+				709B12C41A00774A00CA7C1A /* todays_date_custom.png in Resources */,
+				709B12B01A00674400CA7C1A /* CalendarPreviousMonth.png in Resources */,
+				709B12C21A00774A00CA7C1A /* CalendarRowBottom@2x.png in Resources */,
+				709B12C01A00774A00CA7C1A /* CalendarRow@2x.png in Resources */,
+				709B12C61A007A1000CA7C1A /* TableViewBackground.png in Resources */,
 				7043876F19F4AB32000AE179 /* LICENSE in Resources */,
 				700D65B519FF3DB900A717FA /* btn_carrot.png in Resources */,
 			);

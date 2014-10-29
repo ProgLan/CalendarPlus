@@ -55,6 +55,7 @@
     } else {
         NSLog(@"no permission");
     }
+    [self.eventTitle becomeFirstResponder];
 }
 
 - (void)setInitDate:(NSDate *)pickedDate
@@ -64,9 +65,7 @@
 
 - (void)setDateLables:(NSDate*)firstSelectedDate
 {
-//    INTERESTING: if I change datePicker's date, events are not added to the calendar at all.
-//    [self.datePicker setDate:firstSelectedDate];
-    
+    [self.datePicker setDate:firstSelectedDate];
     NSDate *startDate = firstSelectedDate;
     NSTimeInterval anHourAfter = 1 * 60 * 60;
     NSDate *endDate = [startDate dateByAddingTimeInterval:anHourAfter];
@@ -87,18 +86,20 @@
     myEvent.allDay = NO;
     
     [myEvent setCalendar:[self.eventStore defaultCalendarForNewEvents]];
-    NSError *err;
     
+    NSError *err;
     [self.eventStore saveEvent:myEvent span:EKSpanThisEvent error:&err];
     
-    if (!err) {
+    if (err) {
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Event Created"
-                              message:@"Yay!?"
+                              initWithTitle:@"Error"
+                              message:@"Invalid input"
                               delegate:nil
                               cancelButtonTitle:@"Okay"
                               otherButtonTitles:nil];
         [alert show];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -165,7 +166,7 @@
 -(void)checkEventStoreAccessForCalendar
 {
     EKAuthorizationStatus status = [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent];
-    NSLog(@"checkESAccessForCalendar");
+    NSLog(@"check Event Store AccessForCalendar");
     switch (status)
     {
             // Update our UI if the user has granted access to their Calendar

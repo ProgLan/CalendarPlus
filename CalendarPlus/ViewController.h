@@ -19,8 +19,8 @@
 @property (strong, nonatomic) IBOutlet PlusCalendarView *myCalendarView;
 @property (strong, nonatomic) IBOutlet UITableView *calendarTable;
 @property (nonatomic, strong) NSDate *pickedDate;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *goToDetailedView;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *goToDetailedView;
 - (IBAction)clickGoToDetailedView:(id)sender;
 @property AppDelegate *appDelegate;
 

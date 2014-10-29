@@ -19,13 +19,13 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fjX-ZU-bvh" userLabel="CalendarView" customClass="PlusCalendarView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="373"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="382"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="-116" y="114" width="139" height="130"/>
                                 </variation>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fRP-Xj-SvA">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fRP-Xj-SvA">
                                 <rect key="frame" x="0.0" y="381" width="600" height="219"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -44,16 +44,16 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="fRP-Xj-SvA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="BgE-HO-aYn"/>
-                            <constraint firstItem="fRP-Xj-SvA" firstAttribute="trailing" secondItem="fjX-ZU-bvh" secondAttribute="trailing" id="NWd-CN-2k8"/>
-                            <constraint firstItem="fRP-Xj-SvA" firstAttribute="top" secondItem="fjX-ZU-bvh" secondAttribute="bottom" constant="8" symbolic="YES" id="ONR-wt-njP"/>
-                            <constraint firstItem="fjX-ZU-bvh" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="Yp6-hu-QrW"/>
+                            <constraint firstItem="fjX-ZU-bvh" firstAttribute="leading" secondItem="fRP-Xj-SvA" secondAttribute="leading" id="CCf-oF-NSP"/>
+                            <constraint firstItem="fjX-ZU-bvh" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="Txk-oQ-KxU"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="fjX-ZU-bvh" secondAttribute="bottom" constant="218" id="eoH-ei-0rL"/>
                             <constraint firstAttribute="trailing" secondItem="fRP-Xj-SvA" secondAttribute="trailing" id="mLL-az-q25"/>
                             <constraint firstItem="fRP-Xj-SvA" firstAttribute="bottom" secondItem="2fi-mo-0CV" secondAttribute="top" id="mpv-oJ-1N9"/>
-                            <constraint firstItem="fRP-Xj-SvA" firstAttribute="leading" secondItem="fjX-ZU-bvh" secondAttribute="leading" id="rwV-zj-GMe"/>
+                            <constraint firstItem="fjX-ZU-bvh" firstAttribute="trailing" secondItem="fRP-Xj-SvA" secondAttribute="trailing" id="xfK-Ii-wvA"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Calendar" id="PuU-bT-BG0">
-                        <barButtonItem key="rightBarButtonItem" title="+" style="done" id="dRu-wm-bbR">
+                    <navigationItem key="navigationItem" title="CalendarPlus" id="PuU-bT-BG0">
+                        <barButtonItem key="rightBarButtonItem" title="New Event" width="10" style="done" id="dRu-wm-bbR">
                             <connections>
                                 <action selector="clickGoToDetailedView:" destination="vXZ-lx-hvc" id="ExE-v4-3Ra"/>
                             </connections>
@@ -101,7 +101,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GIG-DF-9Vq">
                                 <rect key="frame" x="0.0" y="213" width="600" height="50"/>
-                                <color key="backgroundColor" red="0.92726089015151514" green="0.83487762193812964" blue="0.43606566640238753" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.63" colorSpace="calibratedRGB"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.026534880050000001" green="0.0065657321139999999" blue="0.01082811428" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
