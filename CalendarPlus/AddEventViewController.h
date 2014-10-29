@@ -43,4 +43,10 @@
 - (void)setInitDate:(NSDate*)pickedDate;
 - (void)setDateLables:(NSDate*)dateInit;
 
+// Drawing a line graph
+@property (weak, nonatomic) IBOutlet UIView *graphView;
+
+@property (nonatomic, strong) IBOutlet UITapGestureRecognizer *tapRecognizer;
+- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer;
+
 @end

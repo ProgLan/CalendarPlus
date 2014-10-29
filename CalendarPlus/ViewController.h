@@ -22,6 +22,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *goToDetailedView;
 - (IBAction)clickGoToDetailedView:(id)sender;
+
+
 @property AppDelegate *appDelegate;
 
 @end

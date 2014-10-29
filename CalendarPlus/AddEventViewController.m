@@ -232,8 +232,23 @@
     return YES;
 }
 
-- (IBAction)startDateButtonTouchUp:(id)sender {
-    [self.startDateButton setSelected:YES];
+- (void)setupGraphView
+{
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.strokeColor = [UIColor blueColor].CGColor;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.lineWidth = 4.0;
+    [self.graphView.layer addSublayer:shapeLayer]; // not sure what it does
+}
+
+//-(void)tapAction:(UITapGestureRecognizer *)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
+//    NSLog(@"single tap gesture!");
+//}
+
+- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.view];
+    NSLog(@"%@", NSStringFromCGPoint(location));
 }
 
 @end
