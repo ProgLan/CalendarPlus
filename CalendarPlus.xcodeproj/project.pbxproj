@@ -40,6 +40,7 @@
 		709B12C31A00774A00CA7C1A /* selected_date_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BB1A00774A00CA7C1A /* selected_date_custom.png */; };
 		709B12C41A00774A00CA7C1A /* todays_date_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BC1A00774A00CA7C1A /* todays_date_custom.png */; };
 		709B12C61A007A1000CA7C1A /* TableViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C51A007A1000CA7C1A /* TableViewBackground.png */; };
+		709B12C81A00898F00CA7C1A /* calendarPlusIcon180x180.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -844,6 +845,7 @@
 		709B12BB1A00774A00CA7C1A /* selected_date_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected_date_custom.png; path = Resources/selected_date_custom.png; sourceTree = SOURCE_ROOT; };
 		709B12BC1A00774A00CA7C1A /* todays_date_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = todays_date_custom.png; path = Resources/todays_date_custom.png; sourceTree = SOURCE_ROOT; };
 		709B12C51A007A1000CA7C1A /* TableViewBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TableViewBackground.png; path = Resources/TableViewBackground.png; sourceTree = SOURCE_ROOT; };
+		709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendarPlusIcon180x180.png; path = Resources/calendarPlusIcon180x180.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2650,6 +2652,7 @@
 		7043873719F4AA27000AE179 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */,
 				709B12C51A007A1000CA7C1A /* TableViewBackground.png */,
 				709B12B51A00774A00CA7C1A /* CalendarPreviousMonth.png */,
 				709B12B61A00774A00CA7C1A /* CalendarPreviousMonth@2x.png */,
@@ -3161,6 +3164,7 @@
 				709B12BF1A00774A00CA7C1A /* CalendarRow.png in Resources */,
 				700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */,
 				709B12BD1A00774A00CA7C1A /* CalendarPreviousMonth.png in Resources */,
+				709B12C81A00898F00CA7C1A /* calendarPlusIcon180x180.png in Resources */,
 				7043874819F4AA27000AE179 /* LaunchScreen.xib in Resources */,
 				709B12C11A00774A00CA7C1A /* CalendarRowBottom.png in Resources */,
 				709B12AD1A00672800CA7C1A /* CalendarSelectedDate.png in Resources */,
