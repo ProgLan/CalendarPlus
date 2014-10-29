@@ -27,6 +27,7 @@
 		7043877419F4AB32000AE179 /* TSQCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043876A19F4AB32000AE179 /* TSQCalendarView.m */; };
 		7043877519F4AB32000AE179 /* TimesSquare.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7043876B19F4AB32000AE179 /* TimesSquare.podspec */; };
 		7043878019F4B081000AE179 /* CalendarRowCellViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */; };
+		709B12A21A00013D00CA7C1A /* EventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 709B12A11A00013D00CA7C1A /* EventManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -817,6 +818,8 @@
 		7043876B19F4AB32000AE179 /* TimesSquare.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TimesSquare.podspec; sourceTree = SOURCE_ROOT; };
 		7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarRowCellViewController.h; sourceTree = "<group>"; };
 		7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarRowCellViewController.m; sourceTree = "<group>"; };
+		709B12A01A00013D00CA7C1A /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
+		709B12A11A00013D00CA7C1A /* EventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2602,13 +2605,15 @@
 			children = (
 				7043874119F4AA27000AE179 /* Main.storyboard */,
 				7043873B19F4AA27000AE179 /* AppDelegate.h */,
+				7043873C19F4AA27000AE179 /* AppDelegate.m */,
 				7024AAA219FDA79A0069700D /* PlusCalendarView.h */,
 				7024AAA319FDA79A0069700D /* PlusCalendarView.m */,
-				7043873C19F4AA27000AE179 /* AppDelegate.m */,
 				7043873E19F4AA27000AE179 /* ViewController.h */,
 				7043873F19F4AA27000AE179 /* ViewController.m */,
 				7002350319FE449800CBACB4 /* AddEventViewController.h */,
 				7002350419FE449800CBACB4 /* AddEventViewController.m */,
+				709B12A01A00013D00CA7C1A /* EventManager.h */,
+				709B12A11A00013D00CA7C1A /* EventManager.m */,
 				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
 				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
 				7043874619F4AA27000AE179 /* LaunchScreen.xib */,
@@ -3139,6 +3144,7 @@
 			files = (
 				7043877219F4AB32000AE179 /* TSQCalendarMonthHeaderCell.m in Sources */,
 				7043877419F4AB32000AE179 /* TSQCalendarView.m in Sources */,
+				709B12A21A00013D00CA7C1A /* EventManager.m in Sources */,
 				7043877319F4AB32000AE179 /* TSQCalendarRowCell.m in Sources */,
 				7043874019F4AA27000AE179 /* ViewController.m in Sources */,
 				7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */,

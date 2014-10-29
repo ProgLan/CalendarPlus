@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EventManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) EventManager *eventManager;
 
 @property (strong, nonatomic) UIWindow *window;
 

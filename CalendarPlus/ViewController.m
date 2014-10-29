@@ -34,10 +34,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [self setUpCalendarView:self.myCalendarView];
     [self setCalendar: self.calendar];
     self.myCalendarView.initialVC = self;
+    
 }
+
+- (IBAction)clickGoToDetailedView:(id)sender
+{
+    [self performSegueWithIdentifier:@"GoToSecondViewController" sender:self];
+}
+
+
+// Table view related
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.appDelegate.eventManager.eventsList count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *simpleTableIdentifier = @"SimpleTableCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    }
+    EKEvent *currentEvent = [self.appDelegate.eventManager.eventsList objectAtIndex:indexPath.row];
+    NSDate *startD = currentEvent.startDate;
+    NSDate *endD = currentEvent.endDate;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"hh:mma"];
+    NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
+    cell.textLabel.text = eventTitle;
+    return cell;
+}
+// -- Table view related
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -61,7 +94,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PlusCalendarView.h"
+#import "AppDelegate.h"
 
 @implementation PlusCalendarView
 
@@ -21,7 +22,12 @@
 - (void)setSelectedDate:(NSDate *)newSelectedDate; {
     [super setSelectedDate:newSelectedDate];
     self.initialVC.pickedDate = newSelectedDate; // store this variable for prepareForSegue method
-    [self.initialVC performSegueWithIdentifier:@"GoToSecondViewController" sender:self.initialVC];
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    appDelegate.eventManager.eventsList = [appDelegate.eventManager fetchEvents:newSelectedDate];
+    NSInteger arraySize = [appDelegate.eventManager.eventsList count];
+    NSLog(@"table should have been loaded. Size: %li", (long)arraySize);
+    [self.initialVC.tableView reloadData];
+    
 }
 
 @end

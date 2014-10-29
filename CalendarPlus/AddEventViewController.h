@@ -24,14 +24,14 @@
 @property NSString *const ENDDATELABEL;
 
 //FIXME: not sure if its okay to set global variables like this
-@property NSDate *eventStartDate;
-@property NSDate *eventEndDate;
+@property (strong, nonatomic) NSDate *eventStartDate;
+@property (strong, nonatomic) NSDate *eventEndDate;
 
 // EKEventStore instance associated with the current Calendar application
-@property (nonatomic, strong) EKEventStore *eventStore;
+@property (strong, nonatomic) EKEventStore *eventStore;
 
 // Default calendar associated with the above event store
-@property (nonatomic, strong) EKCalendar *defaultCalendar;
+@property (strong, nonatomic) EKCalendar *defaultCalendar;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addEventButton;
 

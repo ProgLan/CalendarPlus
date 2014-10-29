@@ -7,6 +7,7 @@
 //
 
 #import "AddEventViewController.h"
+#import "AppDelegate.h"
 
 @interface AddEventViewController ()
 
@@ -21,6 +22,7 @@
     self.STARTDATELABEL = @"startDateSelected";
     self.STARTDATELABEL = @"endDateSelected";
     
+    // Set button backgrounds
     UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
                             resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
     UIImage *buttonImageHighlight = [[UIImage imageNamed:@"btn_light_carrot.png"]
@@ -29,11 +31,13 @@
     [self.startDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
     [self.endDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [self.endDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
+    // Set button backgrounds Done
     
     [self setDateLables:self.firstDate];
-    
-    [super viewDidLoad];
     self.eventStore = [[EKEventStore alloc] init];
+    
+    
+    
 //    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
     self.addEventButton.enabled = NO;
 
@@ -41,7 +45,16 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self checkEventStoreAccessForCalendar];
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    // how come this method is not called??
+    [appDelegate.eventManager checkEventStoreAccessForCalendar];
+    if (appDelegate.eventManager.eventsAccessGranted) {
+        self.addEventButton.enabled = YES;
+        NSLog(@"event access granted");
+    } else {
+        NSLog(@"no permission");
+    }
 }
 
 - (void)setInitDate:(NSDate *)pickedDate
@@ -52,7 +65,8 @@
 - (void)setDateLables:(NSDate*)firstSelectedDate
 {
 //    INTERESTING: if I change datePicker's date, events are not added to the calendar at all.
-    [self.datePicker setDate:firstSelectedDate];
+//    [self.datePicker setDate:firstSelectedDate];
+    
     NSDate *startDate = firstSelectedDate;
     NSTimeInterval anHourAfter = 1 * 60 * 60;
     NSDate *endDate = [startDate dateByAddingTimeInterval:anHourAfter];

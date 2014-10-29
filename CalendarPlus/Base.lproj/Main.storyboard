@@ -31,9 +31,14 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="219" id="Hto-aa-uhH"/>
                                 </constraints>
+                                <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
+                                <connections>
+                                    <outlet property="dataSource" destination="vXZ-lx-hvc" id="6Ih-ET-ftG"/>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="Rgh-Cw-ohe"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -47,10 +52,18 @@
                             <constraint firstItem="fRP-Xj-SvA" firstAttribute="leading" secondItem="fjX-ZU-bvh" secondAttribute="leading" id="rwV-zj-GMe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Calendar" id="PuU-bT-BG0"/>
+                    <navigationItem key="navigationItem" title="Calendar" id="PuU-bT-BG0">
+                        <barButtonItem key="rightBarButtonItem" title="+" style="done" id="dRu-wm-bbR">
+                            <connections>
+                                <action selector="clickGoToDetailedView:" destination="vXZ-lx-hvc" id="ExE-v4-3Ra"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="calendarTable" destination="fRP-Xj-SvA" id="qqK-UN-tgv"/>
+                        <outlet property="goToDetailedView" destination="dRu-wm-bbR" id="WGV-mm-PdQ"/>
                         <outlet property="myCalendarView" destination="fjX-ZU-bvh" id="3fP-u6-tlX"/>
+                        <outlet property="tableView" destination="fRP-Xj-SvA" id="Zg5-ZS-a4x"/>
                         <segue destination="BXE-Pg-e6e" kind="show" identifier="GoToSecondViewController" id="dlw-np-lgg"/>
                     </connections>
                 </viewController>
@@ -264,7 +277,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nIT-S8-yIv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="595" y="485"/>
+            <point key="canvasLocation" x="595" y="471"/>
         </scene>
     </scenes>
 </document>
