@@ -219,6 +219,7 @@
     NSDate *dateSelected = self.datePicker.date;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+
     if (self.currentDateLabel == self.STARTDATELABEL) {
         self.eventStartDate = dateSelected;
         self.startDateLabel.text = [dateFormatter stringFromDate:dateSelected];
@@ -226,6 +227,10 @@
         self.eventEndDate = dateSelected;
         self.endDateLabel.text = [dateFormatter stringFromDate:dateSelected];
     }
+    //    hide datepicker
+    NSLog(@"hide datepicker");
+    self.datePicker.hidden = YES;
+    
 }
 
 
@@ -276,8 +281,8 @@ static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.lineWidth = 1.0;
     [self.view.layer addSublayer:shapeLayer];
     
-    CGPoint origin = CGPointMake(0.0, 440.0);
-    CGPoint endpt = CGPointMake(370.0, 440.0);
+    CGPoint origin = CGPointMake(0.0, 620.0);
+    CGPoint endpt = CGPointMake(370.0, 620.0);
     CGPoint midpt1 = midPointForPoints(origin, location);
     CGPoint midpt2 = midPointForPoints(location, endpt);
     
