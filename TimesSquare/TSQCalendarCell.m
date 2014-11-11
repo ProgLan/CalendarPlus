@@ -73,6 +73,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 {
     // do nothing
+//    NSLog(@"do nothing? setSelected inside TSQCalendarCell");
 }
 
 - (void)layoutViewsForColumnAtIndex:(NSUInteger)index inRect:(CGRect)rect;

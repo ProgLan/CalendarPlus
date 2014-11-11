@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <EventKit/EventKit.h>
+#import <UIKit/UIKit.h>
 
 @interface EventManager : NSObject
 
@@ -27,5 +28,6 @@
 - (void)requestCalendarAccess;
 - (NSMutableArray *)fetchEvents:(NSDate*)startDate;
 - (void)accessGrantedForCalendar;
+- (UIImage *)imageWithColor:(UIColor*)color width:(float)w height:(float)h;
 
 @end

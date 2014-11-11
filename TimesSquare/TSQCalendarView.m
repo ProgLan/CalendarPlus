@@ -128,16 +128,20 @@
     // clamp to beginning of its day
     NSDate *startOfDay = [self clampDate:newSelectedDate toComponents:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit];
     
+    NSLog(@"start of day: %@", startOfDay);
+    
     if ([self.delegate respondsToSelector:@selector(calendarView:shouldSelectDate:)] && ![self.delegate calendarView:self shouldSelectDate:startOfDay]) {
         return;
     }
     
     [[self cellForRowAtDate:_selectedDate] selectColumnForDate:nil];
     [[self cellForRowAtDate:startOfDay] selectColumnForDate:startOfDay];
+    
     NSIndexPath *newIndexPath = [self indexPathForRowAtDate:startOfDay];
     CGRect newIndexPathRect = [self.tableView rectForRowAtIndexPath:newIndexPath];
     CGRect scrollBounds = self.tableView.bounds;
     
+    // Scrolling
     if (self.pagingEnabled) {
         CGRect sectionRect = [self.tableView rectForSection:newIndexPath.section];
         [self.tableView setContentOffset:sectionRect.origin animated:YES];
@@ -161,8 +165,8 @@
     if ([self.delegate respondsToSelector:@selector(calendarView:didSelectDate:)]) {
         [self.delegate calendarView:self didSelectDate:startOfDay];
     }
-    
 //    //Howon adding part
+    
 }
 
 - (void)scrollToDate:(NSDate *)date animated:(BOOL)animated

@@ -65,4 +65,11 @@
  */
 - (void)selectColumnForDate:(NSDate *)date;
 
+
+
+//HOWON ADDING PART
+@property (nonatomic, strong) NSMutableDictionary *cellButtonsByDates;
+
+@property (nonatomic, weak, readonly) UIImage *selectedBackgroundImageTest;
+
 @end

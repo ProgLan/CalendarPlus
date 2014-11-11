@@ -12,6 +12,7 @@
 		700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */ = {isa = PBXBuildFile; fileRef = 700D65B619FF3EED00A717FA /* btn_light_carrot.png */; };
 		7024AAA419FDA79A0069700D /* PlusCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7024AAA319FDA79A0069700D /* PlusCalendarView.m */; };
 		702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 702D38C319FF3BC1002D2D53 /* Images.xcassets */; };
+		702F9AA31A11B84200EF14FC /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 702F9AA21A11B84200EF14FC /* Utils.m */; };
 		70304CD619FD8BB500DF81E0 /* libTimesSquare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70304CD519FD8BB500DF81E0 /* libTimesSquare.a */; };
 		7043873A19F4AA27000AE179 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873919F4AA27000AE179 /* main.m */; };
 		7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873C19F4AA27000AE179 /* AppDelegate.m */; };
@@ -41,6 +42,7 @@
 		709B12C41A00774A00CA7C1A /* todays_date_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12BC1A00774A00CA7C1A /* todays_date_custom.png */; };
 		709B12C61A007A1000CA7C1A /* TableViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C51A007A1000CA7C1A /* TableViewBackground.png */; };
 		709B12C81A00898F00CA7C1A /* calendarPlusIcon180x180.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */; };
+		70BE655C1A0F3A9E009D9CDD /* SmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BE655B1A0F3A9E009D9CDD /* SmallCalendarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -327,6 +329,8 @@
 		7024AAA219FDA79A0069700D /* PlusCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlusCalendarView.h; sourceTree = "<group>"; };
 		7024AAA319FDA79A0069700D /* PlusCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlusCalendarView.m; sourceTree = "<group>"; };
 		702D38C319FF3BC1002D2D53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		702F9AA11A11B84200EF14FC /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		702F9AA21A11B84200EF14FC /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		703049AF19FD8B1D00DF81E0 /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
 		703049B019FD8B1D00DF81E0 /* 815 openhouse.key */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "815 openhouse.key"; sourceTree = "<group>"; };
 		703049B119FD8B1D00DF81E0 /* acquisition-overview.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "acquisition-overview.pdf"; sourceTree = "<group>"; };
@@ -846,6 +850,8 @@
 		709B12BC1A00774A00CA7C1A /* todays_date_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = todays_date_custom.png; path = Resources/todays_date_custom.png; sourceTree = SOURCE_ROOT; };
 		709B12C51A007A1000CA7C1A /* TableViewBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TableViewBackground.png; path = Resources/TableViewBackground.png; sourceTree = SOURCE_ROOT; };
 		709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendarPlusIcon180x180.png; path = Resources/calendarPlusIcon180x180.png; sourceTree = SOURCE_ROOT; };
+		70BE655A1A0F3A9E009D9CDD /* SmallCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallCalendarView.h; sourceTree = "<group>"; };
+		70BE655B1A0F3A9E009D9CDD /* SmallCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallCalendarView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2636,15 +2642,19 @@
 				7024AAA319FDA79A0069700D /* PlusCalendarView.m */,
 				7043873E19F4AA27000AE179 /* ViewController.h */,
 				7043873F19F4AA27000AE179 /* ViewController.m */,
-				7002350319FE449800CBACB4 /* AddEventViewController.h */,
-				7002350419FE449800CBACB4 /* AddEventViewController.m */,
-				709B12A01A00013D00CA7C1A /* EventManager.h */,
-				709B12A11A00013D00CA7C1A /* EventManager.m */,
 				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
 				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
+				7002350319FE449800CBACB4 /* AddEventViewController.h */,
+				7002350419FE449800CBACB4 /* AddEventViewController.m */,
+				70BE655A1A0F3A9E009D9CDD /* SmallCalendarView.h */,
+				70BE655B1A0F3A9E009D9CDD /* SmallCalendarView.m */,
+				709B12A01A00013D00CA7C1A /* EventManager.h */,
+				709B12A11A00013D00CA7C1A /* EventManager.m */,
 				7043874619F4AA27000AE179 /* LaunchScreen.xib */,
 				702D38C319FF3BC1002D2D53 /* Images.xcassets */,
 				7043873719F4AA27000AE179 /* Supporting Files */,
+				702F9AA11A11B84200EF14FC /* Utils.h */,
+				702F9AA21A11B84200EF14FC /* Utils.m */,
 			);
 			path = CalendarPlus;
 			sourceTree = "<group>";
@@ -3196,8 +3206,10 @@
 			files = (
 				7043877219F4AB32000AE179 /* TSQCalendarMonthHeaderCell.m in Sources */,
 				7043877419F4AB32000AE179 /* TSQCalendarView.m in Sources */,
+				70BE655C1A0F3A9E009D9CDD /* SmallCalendarView.m in Sources */,
 				709B12A21A00013D00CA7C1A /* EventManager.m in Sources */,
 				7043877319F4AB32000AE179 /* TSQCalendarRowCell.m in Sources */,
+				702F9AA31A11B84200EF14FC /* Utils.m in Sources */,
 				7043874019F4AA27000AE179 /* ViewController.m in Sources */,
 				7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */,
 				7043877119F4AB32000AE179 /* TSQCalendarCell.m in Sources */,

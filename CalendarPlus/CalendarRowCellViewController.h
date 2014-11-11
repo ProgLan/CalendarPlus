@@ -11,6 +11,4 @@
 
 @interface CalendarRowCellViewController : TSQCalendarRowCell
 
-
-
 @end

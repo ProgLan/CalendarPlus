@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
+#import <TimesSquare/TimesSquare.h>
+#import "SmallCalendarView.h"
+//@class SmallCalendarView;
 
 @interface AddEventViewController : UIViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *startDateButton;
@@ -49,5 +52,11 @@
 
 @property (nonatomic, strong) IBOutlet UITapGestureRecognizer *tapRecognizer;
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer;
+
+// SmallCalendarView
+
+@property (nonatomic, strong) NSCalendar *calendar;
+@property (strong, nonatomic) IBOutlet SmallCalendarView *smallCalendarView;
+
 
 @end

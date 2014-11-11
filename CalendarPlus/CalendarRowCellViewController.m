@@ -28,6 +28,11 @@
     return [[UIImage imageNamed:@"selected_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
 }
 
+- (UIImage *)selectedBackgroundImageTest;
+{
+    return [[UIImage imageNamed:@"CalendarSelectedDate.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+}
+
 - (UIImage *)notThisMonthBackgroundImage;
 {
     return [[UIImage imageNamed:@"CalendarPreviousMonth.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
@@ -35,7 +40,9 @@
 
 - (UIImage *)backgroundImage;
 {
+    NSLog(@"background img called");
     return [UIImage imageNamed:[NSString stringWithFormat:@"CalendarRow%@.png", self.bottomRow ? @"Bottom" : @""]];
+    
 }
 
 

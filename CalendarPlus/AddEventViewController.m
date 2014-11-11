@@ -8,6 +8,8 @@
 
 #import "AddEventViewController.h"
 #import "AppDelegate.h"
+#import "CalendarRowCellViewController.h"
+#import "Utils.h"
 
 @interface AddEventViewController ()
 
@@ -43,7 +45,10 @@
     
 //    graph related
 //    [self setupGraphView];
-
+    
+    // CALENDAR RELATED
+    [self setUpCalendarView:self.smallCalendarView];
+    [self.smallCalendarView scrollToDate:self.firstDate animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -74,10 +79,11 @@
     NSDate *endDate = [startDate dateByAddingTimeInterval:anHourAfter];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
-    self.eventStartDate = startDate;
-    self.eventEndDate = endDate;
+//    self.eventStartDate = startDate;
+//    self.eventEndDate = endDate;
     self.startDateLabel.text = [dateFormatter stringFromDate:startDate];
     self.endDateLabel.text = [dateFormatter stringFromDate:endDate];
+//    [self.smallCalendarView scrollToDate:endDate animated:NO];
 }
 
 - (IBAction)addEventBtnPressed:(id)sender
@@ -214,22 +220,31 @@
     self.currentDateLabel = self.ENDDATELABEL;
 }
 
+// the user picked the date using the datepicker
 - (IBAction)dateSelected:(id)sender {
     
     NSDate *dateSelected = self.datePicker.date;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+    UIButton *dateCellButton = (UIButton *)[self.smallCalendarView viewWithTag:[dateSelected timeIntervalSince1970]];
 
     if (self.currentDateLabel == self.STARTDATELABEL) {
         self.eventStartDate = dateSelected;
         self.startDateLabel.text = [dateFormatter stringFromDate:dateSelected];
+//        [self.smallCalendarView setSelectedDate:dateSelected];
+        [dateCellButton setBackgroundColor: [UIColor redColor]];
+        
+        
     } else if (self.currentDateLabel == self.ENDDATELABEL) {
         self.eventEndDate = dateSelected;
         self.endDateLabel.text = [dateFormatter stringFromDate:dateSelected];
+//        [self.smallCalendarView setSelectedDate:dateSelected];
+        [dateCellButton setBackgroundColor: [UIColor blueColor]];
+//        [dateCellButton setBackgroundColor: [UIColor clearColor]];
     }
-    //    hide datepicker
-    NSLog(@"hide datepicker");
     self.datePicker.hidden = YES;
+    
+    NSLog(@"dateSelected: %@", dateSelected);
     
 }
 
@@ -253,18 +268,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
-    CGPoint controlPoint = midPointForPoints(p1, p2);
-    CGFloat diffY = abs(p2.y - controlPoint.y);
-    
-    if (p1.y < p2.y)
-        controlPoint.y += diffY;
-    else if (p1.y > p2.y)
-        controlPoint.y -= diffY;
-    
-    return controlPoint;
-}
-
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
@@ -281,8 +284,25 @@ static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.lineWidth = 1.0;
     [self.view.layer addSublayer:shapeLayer];
     
-    CGPoint origin = CGPointMake(0.0, 620.0);
-    CGPoint endpt = CGPointMake(370.0, 620.0);
+    float xStart = 0.0;
+    float xEnd = 370.0;
+    float xRange = xEnd - xStart;
+    
+    NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
+    NSInteger startDay = [startDateComponents day];
+    NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
+    NSInteger endDay = [endDateComponents day];
+    
+    NSLog(@"startDay: %ld", (long)startDay);
+    NSLog(@"endDay: %ld", (long)endDay);
+    
+    NSInteger numDatesSelected = endDay - startDay + 1;
+    float tickInterval = xRange / numDatesSelected;
+    
+    NSLog(@"tickInterval %f", tickInterval);
+    
+    CGPoint origin = CGPointMake(xStart, 620.0);
+    CGPoint endpt = CGPointMake(xEnd, 620.0);
     CGPoint midpt1 = midPointForPoints(origin, location);
     CGPoint midpt2 = midPointForPoints(location, endpt);
     
@@ -292,6 +312,60 @@ static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
     [path addQuadCurveToPoint:endpt controlPoint:CGPointMake(midpt2.x, midpt2.y+50)];
     
     [shapeLayer setPath:path.CGPath];
+    
+//    Represent the workload on the calendar
+    //Get a range of NSDate objects
+    
+    
+    NSDate *currentDate = [self.eventStartDate copy];
+    NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
+    [selectedDates addObject:currentDate];
+    for (int i = 1; i < numDatesSelected; i++) {
+        NSDateComponents *aDayDiff = [[NSDateComponents alloc] init];
+        aDayDiff.day = 1;
+        NSDate *aDayAfter = [[NSCalendar currentCalendar] dateByAddingComponents:aDayDiff
+                                                                          toDate:currentDate
+                                                                         options:0];
+        currentDate = aDayAfter;
+        [selectedDates addObject:currentDate];
+    }
+    NSLog(@"dates: %@", selectedDates);
+    
+    for (int i = 0; i < numDatesSelected; i++) {
+        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDates[i] timeIntervalSince1970]];
+        float btnWidth = myButton.frame.size.width;
+        float btnHeight = (myButton.frame.size.height * 0.1 * i);
+        UIImage *img = [self imageWithColor:[UIColor greenColor] width:btnWidth height:btnHeight];
+        [myButton setBackgroundImage:img forState:(UIControlStateNormal)];
+    }
+}
+
+//SmallCalendarView related
+
+- (UIImage *)imageWithColor:(UIColor *)color width:(float)w height:(float)h {
+    CGRect rect = CGRectMake(0, 0, w, h);
+    // Create a w by H pixel context
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    [color setFill];
+    UIRectFill(rect);   // Fill it with your color
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (void)setUpCalendarView:(TSQCalendarView *) calendarView {
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    self.calendar = gregorian;
+    calendarView.calendar = self.calendar;
+    calendarView.rowCellClass = [CalendarRowCellViewController class];
+    calendarView.firstDate = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365 * 1];
+    calendarView.lastDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24 * 365 * 5];
+    calendarView.backgroundColor = [UIColor colorWithRed:0.84f green:0.85f blue:0.86f alpha:1.0f];
+    calendarView.pagingEnabled = YES;
+
+//    CGFloat onePixel = 0.5f / [UIScreen mainScreen].scale;
+    calendarView.contentInset = UIEdgeInsetsMake(0.0f, 0, 0.0f, 0);
+    
 }
 
 @end

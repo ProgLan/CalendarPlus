@@ -77,8 +77,8 @@
                                                                    options:0];
     // We will only search the default calendar for our events
     NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
-    NSLog(@"startDate? %@", startDate);
-    NSLog(@"endDate? %@", endDate);
+//    NSLog(@"startDate? %@", startDate);
+//    NSLog(@"endDate? %@", endDate);
     
     // Create the predicate
     NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate
@@ -91,7 +91,7 @@
 // This method is called when the user has granted permission to Calendar
 -(void)accessGrantedForCalendar
 {
-    NSLog(@"accessGrantedForCalendar called");
+//    NSLog(@"accessGrantedForCalendar called");
     self.defaultCalendar = self.eventStore.defaultCalendarForNewEvents;
     self.eventsAccessGranted = YES;
 }

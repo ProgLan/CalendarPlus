@@ -98,15 +98,15 @@
 
 - (void)createSelectedButton;
 {
+    NSLog(@"create Selected BUtton");
     self.selectedButton = [[UIButton alloc] initWithFrame:self.contentView.bounds];
     [self.contentView addSubview:self.selectedButton];
     [self configureButton:self.selectedButton];
-    
     [self.selectedButton setAccessibilityTraits:UIAccessibilityTraitSelected|self.selectedButton.accessibilityTraits];
-    
     self.selectedButton.enabled = NO;
     [self.selectedButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.selectedButton setBackgroundImage:[self selectedBackgroundImage] forState:UIControlStateNormal];
+    [self.selectedButton setBackgroundImage:[self selectedBackgroundImageTest] forState:UIControlStateNormal]; // HOWON: TESTING
     [self.selectedButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.75f] forState:UIControlStateNormal];
     
     self.selectedButton.titleLabel.shadowOffset = CGSizeMake(0.0f, -1.0f / [UIScreen mainScreen].scale);
@@ -116,6 +116,8 @@
 - (void)setBeginningDate:(NSDate *)date;
 {
     _beginningDate = date;
+    NSLog(@"set Beginning Date called: %@", date);
+    self.cellButtonsByDates = [[NSMutableDictionary alloc] init]; // HOWON
     
     if (!self.dayButtons) {
         [self createDayButtons];
@@ -134,9 +136,14 @@
     
     for (NSUInteger index = 0; index < self.daysInWeek; index++) {
         NSString *title = [self.dayFormatter stringFromDate:date];
-        NSString *accessibilityLabel = [self.accessibilityFormatter stringFromDate:date];
+        NSString *accessibilityLabel = [self.accessibilityFormatter stringFromDate:date]; // I can probably use it to refer to this button??
         [self.dayButtons[index] setTitle:title forState:UIControlStateNormal];
         [self.dayButtons[index] setAccessibilityLabel:accessibilityLabel];
+        NSLog(@"day buttons!! %@", self.dayButtons[index]);
+        
+        NSInteger dateTagForButton = [date timeIntervalSince1970];
+        [self.dayButtons[index] setTag:dateTagForButton];
+        
         [self.notThisMonthButtons[index] setTitle:title forState:UIControlStateNormal];
         [self.notThisMonthButtons[index] setTitle:title forState:UIControlStateDisabled];
         [self.notThisMonthButtons[index] setAccessibilityLabel:accessibilityLabel];
@@ -183,6 +190,7 @@
 
 - (IBAction)dateButtonPressed:(id)sender;
 {
+//    HOWON: this is how "date" is passed to setSelected method
     NSDateComponents *offset = [NSDateComponents new];
     offset.day = [self.dayButtons indexOfObject:sender];
     NSDate *selectedDate = [self.calendar dateByAddingComponents:offset toDate:self.beginningDate options:0];
@@ -235,6 +243,7 @@
         NSInteger thisDayMonth = [self.calendar components:NSMonthCalendarUnit fromDate:date].month;
         if (self.monthOfBeginningDate == thisDayMonth) {
             newIndexOfSelectedButton = [self.calendar components:NSDayCalendarUnit fromDate:self.beginningDate toDate:date options:0].day;
+//            NSLog(@"newIndexOf %lu", (unsigned long)newIndexOfSelectedButton);
             if (newIndexOfSelectedButton >= (NSInteger)self.daysInWeek) {
                 newIndexOfSelectedButton = -1;
             }
@@ -244,6 +253,8 @@
     self.indexOfSelectedButton = newIndexOfSelectedButton;
     
     if (newIndexOfSelectedButton >= 0) {
+//        NSLog(@"make selectedbutton visible %@", self.selectedButton);
+        
         self.selectedButton.hidden = NO;
         NSString *newTitle = [self.dayButtons[newIndexOfSelectedButton] currentTitle];
         [self.selectedButton setTitle:newTitle forState:UIControlStateNormal];

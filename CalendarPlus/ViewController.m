@@ -10,6 +10,7 @@
 #import "CalendarRowCellViewController.h"
 #import "PlusCalendarView.h"
 #import "AddEventViewController.h"
+#import "Utils.h"
 
 @interface ViewController ()
 
@@ -30,7 +31,6 @@
     _calendar = calendar; // what is this? what kind of variable is _variable_name?
 //    self.navigationItem.title = calendar.calendarIdentifier;
 //    self.tabBarItem.title = calendar.calendarIdentifier;
-    
 }
 
 - (void)viewDidLoad {
@@ -78,7 +78,7 @@
 //    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
 //    backView.backgroundColor = [UIColor clearColor];
 //    cell.backgroundView = backView;
-    cell.backgroundColor = [UIColor clearColor];
+//    cell.backgroundColor = [UIColor greenColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textColor = [UIColor whiteColor];
     return cell;
@@ -98,11 +98,12 @@
     calendarView.rowCellClass = [CalendarRowCellViewController class];
     calendarView.firstDate = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365 * 1];
     calendarView.lastDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24 * 365 * 5];
+    
+//    This is each month's header's color
     calendarView.backgroundColor = [UIColor colorWithRed:0.84f green:0.85f blue:0.86f alpha:1.0f];
     calendarView.pagingEnabled = YES;
     CGFloat onePixel = 3.0f / [UIScreen mainScreen].scale;
     calendarView.contentInset = UIEdgeInsetsMake(0.0f, onePixel, 0.0f, onePixel);
-
 }
 
 - (void)didReceiveMemoryWarning {

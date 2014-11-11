@@ -11,13 +11,13 @@
 
 @implementation PlusCalendarView
 
-/*
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+//- (void)drawRect:(CGRect)rect {
+//    NSLog(@"drawRect called");
+//}
+
 
 - (void)setSelectedDate:(NSDate *)newSelectedDate; {
     [super setSelectedDate:newSelectedDate];
@@ -25,6 +25,13 @@
     AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     appDelegate.eventManager.eventsList = [appDelegate.eventManager fetchEvents:newSelectedDate];
     [self.initialVC.tableView reloadData];
+    
+//    TEST
+//    UIButton *myButton = (UIButton *)[self viewWithTag:[newSelectedDate timeIntervalSince1970]];
+//    [myButton setBackgroundColor: [UIColor greenColor]];
+//    NSLog(@"is my button working? %@", myButton);
+//    get rid of this later!
+
 }
 
 @end
