@@ -139,11 +139,8 @@
         NSString *accessibilityLabel = [self.accessibilityFormatter stringFromDate:date]; // I can probably use it to refer to this button??
         [self.dayButtons[index] setTitle:title forState:UIControlStateNormal];
         [self.dayButtons[index] setAccessibilityLabel:accessibilityLabel];
-        NSLog(@"day buttons!! %@", self.dayButtons[index]);
-        
         NSInteger dateTagForButton = [date timeIntervalSince1970];
-        [self.dayButtons[index] setTag:dateTagForButton];
-        
+        [self.dayButtons[index] setTag:dateTagForButton]; // set Tag for each date cell so I can access it later!
         [self.notThisMonthButtons[index] setTitle:title forState:UIControlStateNormal];
         [self.notThisMonthButtons[index] setTitle:title forState:UIControlStateDisabled];
         [self.notThisMonthButtons[index] setAccessibilityLabel:accessibilityLabel];
@@ -157,7 +154,6 @@
         if (self.monthOfBeginningDate != thisDayMonth) {
             [self.notThisMonthButtons[index] setHidden:NO];
         } else {
-
             if ([self.todayDateComponents isEqual:thisDateComponents]) {
                 self.todayButton.hidden = NO;
                 [self.todayButton setTitle:title forState:UIControlStateNormal];

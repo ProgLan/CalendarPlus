@@ -238,7 +238,6 @@
     } else if (self.currentDateLabel == self.ENDDATELABEL) {
         self.eventEndDate = dateSelected;
         self.endDateLabel.text = [dateFormatter stringFromDate:dateSelected];
-//        [self.smallCalendarView setSelectedDate:dateSelected];
         [dateCellButton setBackgroundColor: [UIColor blueColor]];
 //        [dateCellButton setBackgroundColor: [UIColor clearColor]];
     }
@@ -254,15 +253,6 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-//- (void)setupGraphView
-//{
-//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-//    shapeLayer.strokeColor = [UIColor blueColor].CGColor;
-//    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-//    shapeLayer.lineWidth = 4.0;
-//    [self.graphView.layer addSublayer:shapeLayer]; // not sure what it does
-//}
 
 static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
@@ -311,32 +301,15 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:origin];
     [path addQuadCurveToPoint:location controlPoint:ctrlpt1]; //ctrlpt1
-    
-    
     [path addQuadCurveToPoint:endpt controlPoint:ctrlpt2]; //ctrlpt2
-    
-    NSLog(@"X1: %f", ctrlpt1.x);
-    NSLog(@"X2: %f", ctrlpt2.x);
-    float tVal1 = [self getTvalFromBezierPath:location.x x0Val:0.0 x1Val:ctrlpt1.x x2Val:location.x];
-    float tVal2 = [self getTvalFromBezierPath:location.x x0Val:location.x x1Val:ctrlpt2.x x2Val:endpt.x];
-    NSLog(@"tVal1: %f", tVal1);
-    NSLog(@"tVal1: %f", tVal2);
-    float yVal1 = [self getCoordFromBezierPath:tVal1 origin:0.0 p1Val:ctrlpt1.y p2Val:location.y];
-    float yVal2 = [self getCoordFromBezierPath:tVal2 origin:location.y p1Val:ctrlpt2.y p2Val:endpt.y];
-    NSLog(@"Y_real: %f", location.y);
-    NSLog(@"Y_val1: %f", yVal1);
-    NSLog(@"Y_val2: %f", yVal2);
-    
-//    NSLog(@"Y_predicted: %f", yVal); // y should equal location.y
-    
     [shapeLayer setPath:path.CGPath];
     
 //    Represent the workload on the calendar
     
     //Get a range of NSDate objects
-    
     NSDate *currentDate = [self.eventStartDate copy];
     NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
+    NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
 //    [selectedDates addObject:currentDate];
     float xPointOnBezierPath = 0.0;
     for (int i = 0; i < numDatesSelected; i++) {
@@ -347,41 +320,67 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
                                                                           toDate:currentDate
                                                                          options:0];
         currentDate = aDayAfter;
-        
-        
-        float tmp = xPointOnBezierPath;
+        float prevXPoint = xPointOnBezierPath;
         xPointOnBezierPath = xPointOnBezierPath + tickInterval;
-        float fillHeightFromTwoPts = (tmp + xPointOnBezierPath) / 2; // get the avg between prev xPoint and new xPoint
-        
-//        NSLog(@"tick x = %f", xPointOnBezierPath);
-//        NSLog(@"fillHeight h = %f", fillHeightFromTwoPts);
+        float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
+        float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
+        float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
+        float fillHeightFromY1Y2 = origin.y - avgY1Y2;
+        NSNumber *fhNum = [NSNumber numberWithFloat:fillHeightFromY1Y2];
+        [fillHeightsArr addObject:fhNum];
     }
-//    NSLog(@"dates: %@", selectedDates);
-    
-    UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDates[0] timeIntervalSince1970]];
+    NSLog(@"dates: %@", selectedDates);
+    UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:0] timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
-    
+    fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight];
     for (int i = 0; i < numDatesSelected; i++) {
-        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDates[i] timeIntervalSince1970]];
-        float fillHeight = i*5.0+1;
+        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
+        float fillHeight = [fillHeightsArr[i] floatValue];
         UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         [myButton setImage:img forState:UIControlStateNormal];
-        
-//        To keep text alive I should probably do this
-//        [testBtn setTitleEdgeInsets:UIEdgeInsetsMake(70.0, -150.0, 5.0, 5.0)];
-//        [testBtn setTitle:@"Your text" forState:UIControlStateNormal];
-        
+        [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
+        [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
     }
 }
 
+- (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {
+    float yVal;
+    float tVal;
+    if (x <= location.x) {
+        tVal = [self getTvalFromBezierPath:x x0Val:startpt.x x1Val:ctrlpt1.x x2Val:location.x];
+        yVal = [self getCoordFromBezierPath:tVal origin:startpt.y p1Val:ctrlpt1.y p2Val:location.y];
+    } else {
+        tVal = [self getTvalFromBezierPath:x x0Val:location.x x1Val:ctrlpt2.x x2Val:endpt.x];
+        yVal = [self getCoordFromBezierPath:tVal origin:location.y p1Val:ctrlpt2.y p2Val:endpt.y];
+    }
+    return yVal;
+}
+
+- (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight {
+    int length = [nums count];
+    float max = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
+    //NSNumber *sum = [nums valueForKeyPath:@"@sum.self"];
+    //float sumFloat = [sum floatValue];
+    for (int i=0; i<length; i++) {
+        float num = [[nums objectAtIndex:i] floatValue];
+        float normed_num = num / max;
+        float scaled = normed_num * btnHeight;
+        NSNumber *num_ns = [NSNumber numberWithFloat:scaled];
+        [nums replaceObjectAtIndex:i withObject:num_ns];
+    }
+    return nums;
+}
+
 - (float)getTvalFromBezierPath:(float)x x0Val:(float)x0 x1Val:(float)x1 x2Val:(float)x2 {
-    NSLog(@"getTval: x: %f, x0: %f, x1: %f, x2: %f", x, x0, x1, x2);
+//    NSLog(@"getTval: x: %f, x0: %f, x1: %f, x2: %f", x, x0, x1, x2);
     float tVal = (x-x0)/(2*(x1-x0));
     return tVal;
 }
 
 - (float)getCoordFromBezierPath:(float)t origin: (float)origin p1Val: (float)p1 p2Val: (float)p2 {
+// tVal = (sqrt((-2.0 * x * x1) + (x * x0) + (x * x2) + pow(x1, 2) - (x0 * x2)) + x0 - x1) / (x0 - (2.0 * x1) + x2);
+//    NSLog(@"v1: %f, v2: %f, v3: %f", (pow((1-t),2) * origin), (2 * t * (1-t) * p1), (pow(t,2) * p2));
     return (pow((1-t),2) * origin) + (2 * t * (1-t) * p1) + (pow(t,2) * p2);
 }
 
