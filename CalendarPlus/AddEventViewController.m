@@ -9,7 +9,6 @@
 #import "AddEventViewController.h"
 #import "AppDelegate.h"
 #import "AddEventRowCellController.h"
-#import "Utils.h"
 
 @interface AddEventViewController ()
 
@@ -19,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.utils = [[Utils alloc] init];
     self.eventTitle.delegate = self;
     self.STARTDATELABEL = @"startDateSelected";
     self.STARTDATELABEL = @"endDateSelected";
@@ -38,8 +37,6 @@
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
     self.eventStore = [[EKEventStore alloc] init];
     
-    
-    
 //    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
     self.addEventButton.enabled = NO;
     // CALENDAR RELATED
@@ -47,6 +44,7 @@
     [self.smallCalendarView scrollToDate:self.firstDate animated:NO];
     
     self.coloredButtons = [[NSMutableArray alloc] init];
+    self.datePicker.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -222,7 +220,9 @@
     self.startDateButton.selected = YES;
     self.datePicker.hidden = NO;
     self.currentDateLabel = self.STARTDATELABEL;
-//    self.graphView.hidden = YES;
+    if (self.currentGraph != nil) {
+        [self.currentGraph removeFromSuperlayer];
+    }
 }
 
 - (IBAction)endDateButtonTapped:(id)sender {
@@ -232,6 +232,9 @@
     self.datePicker.hidden = NO;
     self.currentDateLabel = self.ENDDATELABEL;
 //    self.graphView.hidden = YES;
+    if (self.currentGraph != nil) {
+        [self.currentGraph removeFromSuperlayer];
+    }
 }
 
 // the user picked the date using the datepicker (the scrolling datepicker)
@@ -255,6 +258,7 @@
 //        [dateCellButton setBackgroundColor: [UIColor blueColor]];
     }
     self.datePicker.hidden = YES;
+//    self.graphView.hidden = NO;
 }
 
 
@@ -271,6 +275,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
 //    self.graphView.hidden = NO;
+    
     CGPoint location = [recognizer locationInView:self.view];
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
     
@@ -280,9 +285,10 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     self.currentGraph = shapeLayer;
-    shapeLayer.strokeColor = [UIColor blackColor].CGColor;
-    shapeLayer.fillColor = [UIColor grayColor].CGColor;
+    shapeLayer.strokeColor = [self.utils colorFromHexString:@"#16A085"].CGColor;
+    shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
+//    [self.graphView.layer addSublayer:shapeLayer];
     [self.view.layer addSublayer:shapeLayer];
     
     float xStart = 0.0;
@@ -348,6 +354,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [cb setImage:[self imageWithColor:[UIColor clearColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight] forState:UIControlStateNormal];
     }
     [self.coloredButtons removeAllObjects];
+    UIColor *prettyBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
+    
     for (int i = 0; i < numDatesSelected; i++) {
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
         NSLog(@"dates: %@", selectedDates);
@@ -355,7 +363,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         NSLog(@"mybutton? %@", myButton);
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
-        UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
+//        UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
+        UIImage *img = [self imageWithColor:prettyBtnColor buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         [myButton setImage:img forState:UIControlStateNormal];
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
         [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];

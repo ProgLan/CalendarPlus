@@ -107,8 +107,9 @@
                                     <outletCollection property="gestureRecognizers" destination="cP2-s0-dib" appends="YES" id="1Iz-IW-PSX"/>
                                 </connections>
                             </view>
-                            <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVc-57-qmb">
-                                <rect key="frame" x="0.0" y="445" width="600" height="160"/>
+                            <datePicker hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="10" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVc-57-qmb">
+                                <rect key="frame" x="0.0" y="446" width="600" height="162"/>
+                                <color key="backgroundColor" red="1" green="0.99301028209999997" blue="0.98004559420000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <date key="date" timeIntervalSinceReferenceDate="436154903.93699902">
                                     <!--2014-10-28 02:08:23 +0000-->
                                 </date>
@@ -282,7 +283,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="595" y="471"/>
+            <point key="canvasLocation" x="595" y="469"/>
         </scene>
     </scenes>
 </document>

@@ -10,6 +10,7 @@
 #import <EventKit/EventKit.h>
 #import <TimesSquare/TimesSquare.h>
 #import "SmallCalendarView.h"
+#import "Utils.h"
 //@class SmallCalendarView;
 
 @interface AddEventViewController : UIViewController <UITextFieldDelegate>
@@ -59,6 +60,6 @@
 @property (strong, nonatomic) IBOutlet SmallCalendarView *smallCalendarView;
 
 @property (strong, nonatomic) NSMutableArray* coloredButtons;
-
+@property (nonatomic,strong) Utils *utils;
 
 @end

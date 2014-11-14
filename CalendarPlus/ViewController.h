@@ -10,6 +10,7 @@
 #import <TimesSquare/TimesSquare.h>
 #import <EventKit/EventKit.h>
 #import "AppDelegate.h"
+#import "Utils.h"
 
 @class PlusCalendarView;
 
@@ -25,6 +26,8 @@
 
 
 @property AppDelegate *appDelegate;
+
+@property (nonatomic,strong) Utils *utils;
 
 @end
 

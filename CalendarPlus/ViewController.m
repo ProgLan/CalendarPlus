@@ -35,6 +35,7 @@
 
 - (void)viewDidLoad {
     self.pickedDate = [NSDate date];
+    self.utils = [[Utils alloc] init];
     [super viewDidLoad];
     self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [self setUpCalendarView:self.myCalendarView];
@@ -76,7 +77,9 @@
     cell.textLabel.text = eventTitle;
     
     UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
-    backView.backgroundColor = [UIColor purpleColor];
+    
+    backView.backgroundColor = [self.utils colorFromHexString:@"#16A085"];
+
     cell.backgroundView = backView;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textColor = [UIColor whiteColor];
