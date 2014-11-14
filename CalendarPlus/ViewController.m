@@ -75,10 +75,9 @@
     NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
     cell.textLabel.text = eventTitle;
     
-//    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
-//    backView.backgroundColor = [UIColor clearColor];
-//    cell.backgroundView = backView;
-//    cell.backgroundColor = [UIColor greenColor];
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+    backView.backgroundColor = [UIColor purpleColor];
+    cell.backgroundView = backView;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textColor = [UIColor whiteColor];
     return cell;

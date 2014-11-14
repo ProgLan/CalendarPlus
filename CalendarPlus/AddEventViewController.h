@@ -58,5 +58,7 @@
 @property (nonatomic, strong) NSCalendar *calendar;
 @property (strong, nonatomic) IBOutlet SmallCalendarView *smallCalendarView;
 
+@property (strong, nonatomic) NSMutableArray* coloredButtons;
+
 
 @end

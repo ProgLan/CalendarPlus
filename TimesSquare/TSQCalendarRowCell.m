@@ -98,7 +98,7 @@
 
 - (void)createSelectedButton;
 {
-    NSLog(@"create Selected BUtton");
+//    NSLog(@"create Selected BUtton");
     self.selectedButton = [[UIButton alloc] initWithFrame:self.contentView.bounds];
     [self.contentView addSubview:self.selectedButton];
     [self configureButton:self.selectedButton];
@@ -116,7 +116,7 @@
 - (void)setBeginningDate:(NSDate *)date;
 {
     _beginningDate = date;
-    NSLog(@"set Beginning Date called: %@", date);
+//    NSLog(@"set Beginning Date called: %@", date);
     self.cellButtonsByDates = [[NSMutableDictionary alloc] init]; // HOWON
     
     if (!self.dayButtons) {

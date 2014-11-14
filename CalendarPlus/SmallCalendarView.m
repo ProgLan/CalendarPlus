@@ -14,9 +14,14 @@
 
 //  Only override drawRect: if you perform custom drawing.
 //  An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
-     NSLog(@"drawRect");
- }
+// - (void)drawRect:(CGRect)rect {
+//     NSLog(@"drawRect");
+// }
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    CGRect frame = CGRectInset(self.bounds, 0, 0);
+    return CGRectContainsPoint(frame, point) ? self : nil;
+}
 
 //- (void)setSelectedDate:(NSDate *)newSelectedDate; {
 //    [super setSelectedDate:newSelectedDate];
