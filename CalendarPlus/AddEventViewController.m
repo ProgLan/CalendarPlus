@@ -312,7 +312,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     //Represent the workload on the calendar
     //Get a range of NSDate objects
-    NSDate *currentDate = [self.eventStartDate copy];
+//    NSDate *currentDate = [self.eventStartDate copy];
+    NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
     NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float xPointOnBezierPath = 0.0;
@@ -349,6 +350,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self.coloredButtons removeAllObjects];
     for (int i = 0; i < numDatesSelected; i++) {
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
+        NSLog(@"dates: %@", selectedDates);
+        NSLog(@"numDatesSelected? %li", (long)numDatesSelected);
+        NSLog(@"mybutton? %@", myButton);
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
         UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
@@ -373,14 +377,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 
 - (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight {
     int length = [nums count];
-    float max = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
+    float realmax = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
+    float max = 110.0; // THIS IS THE VALUE THAT DECIDES HOW MUCH TO COLOR EACH CELL BASED ON THE GRAPH
+//    NSLog(@"realmax value: %f", realmax);
+//    NSLog(@"max value: %f", max);
     //NSNumber *sum = [nums valueForKeyPath:@"@sum.self"];
     //float sumFloat = [sum floatValue];
     for (int i=0; i<length; i++) {
         float num = [[nums objectAtIndex:i] floatValue];
         float normed_num = num / max;
         float scaled = normed_num * btnHeight;
-        if (scaled < 0 || scaled > btnHeight) {
+        if (scaled < 0) {
+            NSLog(@"scaled exceeded: %f", scaled);
             scaled = 0.0;
         }
         NSNumber *num_ns = [NSNumber numberWithFloat:scaled];
