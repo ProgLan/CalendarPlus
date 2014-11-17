@@ -62,4 +62,7 @@
 @property (strong, nonatomic) NSMutableArray* coloredButtons;
 @property (nonatomic,strong) Utils *utils;
 
+//@property (strong, nonatomic) NSMutableArray *tickDateLabels;
+@property (strong, nonatomic) UIView *tickDateLabelContainer;
+
 @end

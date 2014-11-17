@@ -45,6 +45,18 @@
     
     self.coloredButtons = [[NSMutableArray alloc] init];
     self.datePicker.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    NSLog(@"labelContainer before init: %@", self.tickDateLabelContainer);
+    self.tickDateLabelContainer = [[UIView alloc] init];
+    NSLog(@"labelContainer after init: %@", self.tickDateLabelContainer);
+//    self.tickDateLabels = [[NSMutableArray alloc] init];
+    // labels
+//    UILabel *hrLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 600, 50, 20)];
+//    [hrLabel setTextColor:[UIColor blackColor]];
+//    [hrLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
+//    hrLabel.text = @"10hrs";
+//    [self.view addSubview:hrLabel];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -274,7 +286,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
-//    self.graphView.hidden = NO;
+    self.graphView.hidden = NO;
     
     CGPoint location = [recognizer locationInView:self.view];
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
@@ -318,13 +330,33 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     //Represent the workload on the calendar
     //Get a range of NSDate objects
-//    NSDate *currentDate = [self.eventStartDate copy];
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
     NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float xPointOnBezierPath = 0.0;
+    float xTickLabel = (tickInterval/2.0);
+    
+    if (self.tickDateLabelContainer != nil) {
+        [self.tickDateLabelContainer removeFromSuperview];
+    }
+    
+    self.tickDateLabelContainer = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 30)];
+    self.tickDateLabelContainer.backgroundColor = [UIColor clearColor];
+    [self.graphView addSubview:self.tickDateLabelContainer];
+    
     for (int i = 0; i < numDatesSelected; i++) {
         [selectedDates addObject:currentDate];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"d"];
+        
+        UILabel *tickDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(xTickLabel, 0, 50, 20)];
+        [tickDateLabel setTextColor:[UIColor blackColor]];
+        [tickDateLabel setBackgroundColor:[UIColor clearColor]];
+        [tickDateLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
+        tickDateLabel.text = [dateFormatter stringFromDate:currentDate];
+        [self.tickDateLabelContainer addSubview:tickDateLabel];
+        
         NSDateComponents *aDayDiff = [[NSDateComponents alloc] init];
         aDayDiff.day = 1;
         NSDate *aDayAfter = [[NSCalendar currentCalendar] dateByAddingComponents:aDayDiff
@@ -333,6 +365,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         currentDate = aDayAfter;
         float prevXPoint = xPointOnBezierPath;
         xPointOnBezierPath = xPointOnBezierPath + tickInterval;
+        xTickLabel += tickInterval;
+        
         float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
         float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
         float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
@@ -348,7 +382,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     // Clear all previously colored buttons
     
     int numColoredButtons = [self.coloredButtons count];
-    NSLog(@"num colored: %i", numColoredButtons);
     for (int i = 0; i < numColoredButtons; i++) {
         UIButton *cb = [self.coloredButtons objectAtIndex:i];
         [cb setImage:[self imageWithColor:[UIColor clearColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight] forState:UIControlStateNormal];
@@ -358,9 +391,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     for (int i = 0; i < numDatesSelected; i++) {
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
-        NSLog(@"dates: %@", selectedDates);
-        NSLog(@"numDatesSelected? %li", (long)numDatesSelected);
-        NSLog(@"mybutton? %@", myButton);
+//        NSLog(@"dates: %@", selectedDates);
+//        NSLog(@"numDatesSelected? %li", (long)numDatesSelected);
+//        NSLog(@"mybutton? %@", myButton);
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
 //        UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
