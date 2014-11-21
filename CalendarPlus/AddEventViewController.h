@@ -65,4 +65,10 @@
 //@property (strong, nonatomic) NSMutableArray *tickDateLabels;
 @property (strong, nonatomic) UIView *tickDateLabelContainer;
 
+//workload buttons
+@property (weak, nonatomic) IBOutlet UILabel *workButton4;
+@property (weak, nonatomic) IBOutlet UILabel *workButton3;
+@property (weak, nonatomic) IBOutlet UILabel *workButton2;
+@property (weak, nonatomic) IBOutlet UILabel *workButton1;
+
 @end

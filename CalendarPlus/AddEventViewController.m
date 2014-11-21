@@ -24,14 +24,14 @@
     self.STARTDATELABEL = @"endDateSelected";
     
     // Set button backgrounds
-    UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
-                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-    UIImage *buttonImageHighlight = [[UIImage imageNamed:@"btn_light_carrot.png"]
-                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-    [self.startDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.startDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
-    [self.endDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.endDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
+//    UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
+//                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+//    UIImage *buttonImageHighlight = [[UIImage imageNamed:@"btn_light_carrot.png"]
+//                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+//    [self.startDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+//    [self.startDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
+//    [self.endDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+//    [self.endDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
     // Set button backgrounds Done
     
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
@@ -57,6 +57,14 @@
 //    hrLabel.text = @"10hrs";
 //    [self.view addSubview:hrLabel];
     
+//    UITapGestureRecognizer *tapGesture =
+//    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTap)];
+//    self.workButton1.userInteractionEnabled = YES;
+//    [self.workButton1 addGestureRecognizer:tapGesture];
+}
+
+- (void)labelTap {
+    NSLog(@"im tapped!");
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -227,16 +235,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)startDateButtonTapped:(id)sender {
-    [self textFieldShouldReturn:self.eventTitle];
-    self.startDateButton.selected = YES;
-    self.datePicker.hidden = NO;
-    self.currentDateLabel = self.STARTDATELABEL;
-    if (self.currentGraph != nil) {
-        [self.currentGraph removeFromSuperlayer];
-    }
-}
-
 - (IBAction)endDateButtonTapped:(id)sender {
     [self textFieldShouldReturn:self.eventTitle];
     self.endDateButton.selected = YES;
@@ -287,8 +285,44 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
     self.graphView.hidden = NO;
-    
     CGPoint location = [recognizer locationInView:self.view];
+    
+    NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
+    NSInteger startDay = [startDateComponents day];
+    NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
+    NSInteger endDay = [endDateComponents day];
+    NSInteger numDatesSelected = endDay - startDay + 1;
+    
+    // Howon: transforming bezier path
+    int numHoursAvailable = (int)numDatesSelected * 24;
+    // workButton1: 430 ~ 405 - least amount of work (the less fixLocationY is, the bigger the graph is)
+    // workButton2: 405 ~ 380
+    // workButton3: 380 ~ 355
+    // workButton4: 355 ~ 330
+    int workload = 0;
+    if (location.y < 355 && location.y >= 330) {
+        workload = 14 * 24;
+        //NSLog(@"Two weeks. Available: %i, Workload: %i", numHoursAvailable, workload);
+    } else if (location.y < 380 && location.y >= 355) {
+        workload = 7 * 24;
+        //NSLog(@"One week. Available: %i, Workload: %i", numHoursAvailable, workload);
+    } else if (location.y < 405 && location.y >= 380) {
+        workload = 24;
+        //NSLog(@"One day. Available: %i, Workload: %i", numHoursAvailable, workload);
+    } else if (location.y < 430 && location.y >= 405) {
+        workload = 1;
+        //NSLog(@"One hour. Available: %i, Workload: %i", numHoursAvailable, workload);
+    }
+    float transformingScale = workload / (float)numHoursAvailable;
+    NSLog(@"transfomringScale = %f", transformingScale);
+    if (transformingScale > 1) {
+        NSLog(@"we cannot draw the graph");
+        return;
+    }
+    
+//    HOWON: set a fixed location 11/24/14
+    location.y = 330.0;
+    
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
     
     if (self.currentGraph != nil) {
@@ -300,20 +334,15 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.strokeColor = [self.utils colorFromHexString:@"#16A085"].CGColor;
     shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
+//    To hide the graph, just comment these out. Howon: visible graph
 //    [self.graphView.layer addSublayer:shapeLayer];
-    [self.view.layer addSublayer:shapeLayer];
+//    [self.view.layer addSublayer:shapeLayer];
     
-    float xStart = 0.0;
+    float xStart = 188.0;
     float xEnd = 370.0;
-    float yStart = 430.0;
+    float yStart = 425.0;
     float xRange = xEnd - xStart;
     
-    NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
-    NSInteger startDay = [startDateComponents day];
-    NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
-    NSInteger endDay = [endDateComponents day];
-    
-    NSInteger numDatesSelected = endDay - startDay + 1;
     float tickInterval = xRange / numDatesSelected;
     
     CGPoint origin = CGPointMake(xStart, yStart);
@@ -334,7 +363,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
     NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
-    float xPointOnBezierPath = 0.0;
+    float xPointOnBezierPath = xStart;
     float xTickLabel = (tickInterval/2.0);
     
     if (self.tickDateLabelContainer != nil) {
@@ -350,14 +379,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"d"];
-        
-        UILabel *tickDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(xTickLabel, 0, 50, 20)];
-        [tickDateLabel setTextColor:[UIColor blackColor]];
-        [tickDateLabel setBackgroundColor:[UIColor clearColor]];
-        [tickDateLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-        tickDateLabel.text = [dateFormatter stringFromDate:currentDate];
-        [self.tickDateLabelContainer addSubview:tickDateLabel];
-        
+//        
         NSDateComponents *aDayDiff = [[NSDateComponents alloc] init];
         aDayDiff.day = 1;
         NSDate *aDayAfter = [[NSCalendar currentCalendar] dateByAddingComponents:aDayDiff
@@ -367,7 +389,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         float prevXPoint = xPointOnBezierPath;
         xPointOnBezierPath = xPointOnBezierPath + tickInterval;
         xTickLabel += tickInterval;
-        
         float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
         float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
         float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
@@ -379,7 +400,11 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:0] timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
-    fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight];
+    NSLog(@"before normalizing: %@", fillHeightsArr);
+    
+    fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
+    
+    NSLog(@"after normalizing: %@", fillHeightsArr);
     // Clear all previously colored buttons
     
     int numColoredButtons = [self.coloredButtons count];
@@ -392,12 +417,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     for (int i = 0; i < numDatesSelected; i++) {
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
-//        NSLog(@"dates: %@", selectedDates);
-//        NSLog(@"numDatesSelected? %li", (long)numDatesSelected);
-//        NSLog(@"mybutton? %@", myButton);
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
-//        UIImage *img = [self imageWithColor:[UIColor greenColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         UIImage *img = [self imageWithColor:prettyBtnColor buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         [myButton setImage:img forState:UIControlStateNormal];
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
@@ -408,6 +429,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {
     float yVal;
     float tVal;
+    // instead of directly inputting y value, translate it so that y value for each workload box remains the same.
+    // Howon 11/20/14
+
+    
+//    if (x <= location.x) {
+//        tVal = [self getTvalFromBezierPath:x x0Val:startpt.x x1Val:ctrlpt1.x x2Val:location.x];
+//        yVal = [self getCoordFromBezierPath:tVal origin:startpt.y p1Val:ctrlpt1.y p2Val:fixedLocationY];
+//    } else {
+//        tVal = [self getTvalFromBezierPath:x x0Val:location.x x1Val:ctrlpt2.x x2Val:endpt.x];
+//        yVal = [self getCoordFromBezierPath:tVal origin:fixedLocationY p1Val:ctrlpt2.y p2Val:endpt.y];
+//    }
+    
     if (x <= location.x) {
         tVal = [self getTvalFromBezierPath:x x0Val:startpt.x x1Val:ctrlpt1.x x2Val:location.x];
         yVal = [self getCoordFromBezierPath:tVal origin:startpt.y p1Val:ctrlpt1.y p2Val:location.y];
@@ -418,20 +451,16 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return yVal;
 }
 
-- (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight {
+- (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight scaleFactor:(float)scaleFactor {
     int length = [nums count];
     float realmax = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
-    float max = 110.0; // THIS IS THE VALUE THAT DECIDES HOW MUCH TO COLOR EACH CELL BASED ON THE GRAPH
-//    NSLog(@"realmax value: %f", realmax);
-//    NSLog(@"max value: %f", max);
-    //NSNumber *sum = [nums valueForKeyPath:@"@sum.self"];
-    //float sumFloat = [sum floatValue];
+//    float max = 30.0; // the smaller this value is, the more each cell is filled by Bezier path
+    float max = realmax / 2.0;
     for (int i=0; i<length; i++) {
         float num = [[nums objectAtIndex:i] floatValue];
         float normed_num = num / max;
-        float scaled = normed_num * btnHeight;
+        float scaled = normed_num * btnHeight * scaleFactor;
         if (scaled < 0) {
-            NSLog(@"scaled exceeded: %f", scaled);
             scaled = 0.0;
         }
         NSNumber *num_ns = [NSNumber numberWithFloat:scaled];
@@ -447,8 +476,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 }
 
 - (float)getCoordFromBezierPath:(float)t origin: (float)origin p1Val: (float)p1 p2Val: (float)p2 {
-// tVal = (sqrt((-2.0 * x * x1) + (x * x0) + (x * x2) + pow(x1, 2) - (x0 * x2)) + x0 - x1) / (x0 - (2.0 * x1) + x2);
-//    NSLog(@"v1: %f, v2: %f, v3: %f", (pow((1-t),2) * origin), (2 * t * (1-t) * p1), (pow(t,2) * p2));
     return (pow((1-t),2) * origin) + (2 * t * (1-t) * p1) + (pow(t,2) * p2);
 }
 
@@ -475,10 +502,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     calendarView.backgroundColor = [UIColor colorWithRed:0.84f green:0.85f blue:0.86f alpha:1.0f];
     //calendarView.pagingEnabled = YES;
     calendarView.pagingEnabled = NO;
-
-//    CGFloat onePixel = 0.5f / [UIScreen mainScreen].scale;
     calendarView.contentInset = UIEdgeInsetsMake(0.0f, 0, 0.0f, 0);
-    
 }
+
 
 @end

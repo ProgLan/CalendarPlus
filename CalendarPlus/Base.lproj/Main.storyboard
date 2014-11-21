@@ -110,7 +110,7 @@
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j15-f1-1Cj">
                                 <rect key="frame" x="0.0" y="315" width="300" height="100"/>
-                                <color key="backgroundColor" red="1" green="0.89778869029999997" blue="0.46902739739999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.95294117647058818" green="0.61176470588235299" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.026534880050505083" green="0.0065657321138944194" blue="0.010828114279672991" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -137,8 +137,58 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E4q-sD-I0R">
                                 <rect key="frame" x="300" y="315" width="300" height="100"/>
-                                <color key="backgroundColor" red="1" green="0.65697148444120756" blue="0.90228117958129761" alpha="1" colorSpace="calibratedRGB"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Two Weeks (336 hrs)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1n-ci-hm2">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="YkA-KA-UG2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One Week (168 hrs)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ju2-Vd-LZy">
+                                        <rect key="frame" x="0.0" y="25" width="300" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="rXq-al-F2o"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One Day (24 hrs)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvq-a6-aVm">
+                                        <rect key="frame" x="0.0" y="50" width="300" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="kt4-yG-xsd"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One Hour" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ht-WT-UXB">
+                                        <rect key="frame" x="0.0" y="75" width="300" height="25"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.16078431372549021" green="0.50196078431372548" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="0ht-WT-UXB" firstAttribute="leading" secondItem="yvq-a6-aVm" secondAttribute="leading" id="Axh-mi-sN6"/>
+                                    <constraint firstAttribute="trailing" secondItem="f1n-ci-hm2" secondAttribute="trailing" id="FKM-er-Pw4"/>
+                                    <constraint firstItem="ju2-Vd-LZy" firstAttribute="leading" secondItem="yvq-a6-aVm" secondAttribute="leading" id="IEl-h4-KMe"/>
+                                    <constraint firstItem="0ht-WT-UXB" firstAttribute="trailing" secondItem="yvq-a6-aVm" secondAttribute="trailing" id="OZF-ec-3TB"/>
+                                    <constraint firstAttribute="bottom" secondItem="0ht-WT-UXB" secondAttribute="bottom" id="W3J-QL-Whe"/>
+                                    <constraint firstItem="ju2-Vd-LZy" firstAttribute="trailing" secondItem="yvq-a6-aVm" secondAttribute="trailing" id="Ylb-kb-hSd"/>
+                                    <constraint firstItem="0ht-WT-UXB" firstAttribute="top" secondItem="yvq-a6-aVm" secondAttribute="bottom" id="aeQ-q3-ART"/>
+                                    <constraint firstItem="ju2-Vd-LZy" firstAttribute="leading" secondItem="f1n-ci-hm2" secondAttribute="leading" id="f1t-xR-AcN"/>
+                                    <constraint firstItem="yvq-a6-aVm" firstAttribute="top" secondItem="ju2-Vd-LZy" secondAttribute="bottom" id="kCC-pA-II2"/>
+                                    <constraint firstItem="f1n-ci-hm2" firstAttribute="leading" secondItem="E4q-sD-I0R" secondAttribute="leading" id="kjO-4m-ybZ"/>
+                                    <constraint firstItem="ju2-Vd-LZy" firstAttribute="top" secondItem="f1n-ci-hm2" secondAttribute="bottom" id="sD1-im-Lhe"/>
+                                    <constraint firstItem="f1n-ci-hm2" firstAttribute="top" secondItem="E4q-sD-I0R" secondAttribute="top" id="vhc-62-sRQ"/>
+                                    <constraint firstItem="ju2-Vd-LZy" firstAttribute="trailing" secondItem="f1n-ci-hm2" secondAttribute="trailing" id="vtI-ku-vlB"/>
+                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="cP2-s0-dib" appends="YES" id="1Iz-IW-PSX"/>
                                 </connections>
@@ -201,6 +251,10 @@
                         <outlet property="graphView" destination="E4q-sD-I0R" id="48y-uj-z3r"/>
                         <outlet property="smallCalendarView" destination="caj-48-irQ" id="Sn7-qf-IWv"/>
                         <outlet property="tapRecognizer" destination="cP2-s0-dib" id="EjM-r7-gIj"/>
+                        <outlet property="workButton1" destination="0ht-WT-UXB" id="tSf-Ne-iTK"/>
+                        <outlet property="workButton2" destination="yvq-a6-aVm" id="cji-va-nh2"/>
+                        <outlet property="workButton3" destination="ju2-Vd-LZy" id="Xhp-G1-RuM"/>
+                        <outlet property="workButton4" destination="f1n-ci-hm2" id="S7u-p8-23s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nIT-S8-yIv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -211,6 +265,23 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="595" y="469"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="j0f-OC-g09">
+            <objects>
+                <viewController id="YVf-OW-P9P" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XT0-Pf-zZA"/>
+                        <viewControllerLayoutGuide type="bottom" id="LLQ-uU-BvQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ns9-iI-Rhc">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="If1-2z-pmq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
 </document>

@@ -54,7 +54,6 @@
     [self performSegueWithIdentifier:@"GoToSecondViewController" sender:self];
 }
 
-
 // Table view related
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
