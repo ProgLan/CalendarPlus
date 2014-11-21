@@ -297,11 +297,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return selectedDates;
 }
 
-- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
-{
-    self.graphView.hidden = NO;
-    CGPoint location = [recognizer locationInView:self.view];
-    
+- (void)drawWorkloadGraph:(CGPoint)location {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
     NSInteger startDay = [startDateComponents day];
     NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
@@ -309,6 +305,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSInteger numDatesSelected = endDay - startDay + 1;
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
     NSMutableArray *selectedDates = [self populateSelectedDates:currentDate numSelectedDates:numDatesSelected];
+    
+    self.graphView.hidden = NO;
     
     // Howon: transforming bezier path
     int numHoursAvailable = (int)numDatesSelected * 24;
@@ -358,7 +356,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         return;
     }
     
-//    HOWON: set a fixed location 11/24/14
+    //    HOWON: set a fixed location 11/24/14
     location.y = 330.0;
     
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
@@ -372,9 +370,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.strokeColor = [self.utils colorFromHexString:@"#16A085"].CGColor;
     shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
-//    To hide the graph, just comment these out. Howon: visible graph
-//    [self.graphView.layer addSublayer:shapeLayer];
-//    [self.view.layer addSublayer:shapeLayer];
+    //    To hide the graph, just comment these out. Howon: visible graph
+    //    [self.graphView.layer addSublayer:shapeLayer];
+    //    [self.view.layer addSublayer:shapeLayer];
     
     float xStart = 188.0;
     float xEnd = 370.0;
@@ -398,7 +396,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     //Represent the workload on the calendar
     //Get a range of NSDate objects
-//    NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
+    //    NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float xPointOnBezierPath = xStart;
     float xTickLabel = (tickInterval/2.0);
@@ -412,17 +410,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self.graphView addSubview:self.tickDateLabelContainer];
     
     for (int i = 0; i < numDatesSelected; i++) {
-//        [selectedDates addObject:currentDate];
-//        
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"d"];
-////        
-//        NSDateComponents *aDayDiff = [[NSDateComponents alloc] init];
-//        aDayDiff.day = 1;
-//        NSDate *aDayAfter = [[NSCalendar currentCalendar] dateByAddingComponents:aDayDiff
-//                                                                          toDate:currentDate
-//                                                                         options:0];
-//        currentDate = aDayAfter;
         float prevXPoint = xPointOnBezierPath;
         xPointOnBezierPath = xPointOnBezierPath + tickInterval;
         xTickLabel += tickInterval;
@@ -436,7 +423,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
     
-//    NSLog(@"after normalizing: %@", fillHeightsArr);
+    //    NSLog(@"after normalizing: %@", fillHeightsArr);
     // Clear all previously colored buttons
     
     int numColoredButtons = [self.coloredButtons count];
@@ -457,6 +444,22 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
     }
 }
+
+- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.view];
+    [self drawWorkloadGraph:location];
+}
+
+- (IBAction)displayGestureForPanRecognizer:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.view];
+    [self drawWorkloadGraph:location];
+}
+
+
+
+
 
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {
     float yVal;
@@ -538,4 +541,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 }
 
 
+- (IBAction)actionForPanning:(id)sender {
+}
 @end

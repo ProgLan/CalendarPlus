@@ -190,7 +190,8 @@
                                     <constraint firstItem="ju2-Vd-LZy" firstAttribute="trailing" secondItem="f1n-ci-hm2" secondAttribute="trailing" id="vtI-ku-vlB"/>
                                 </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="cP2-s0-dib" appends="YES" id="1Iz-IW-PSX"/>
+                                    <outletCollection property="gestureRecognizers" destination="qW2-au-KlM" appends="YES" id="glM-wJ-oCf"/>
+                                    <outletCollection property="gestureRecognizers" destination="4mp-Ln-fzA" appends="YES" id="Iqo-UB-ZLI"/>
                                 </connections>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deadline" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVq-aw-QKD">
@@ -276,8 +277,9 @@
                         <outlet property="endDateLabel" destination="vrH-cL-R0i" id="CsC-no-Igz"/>
                         <outlet property="eventTitle" destination="WWl-Ry-50z" id="Y0C-cc-5Rw"/>
                         <outlet property="graphView" destination="E4q-sD-I0R" id="48y-uj-z3r"/>
+                        <outlet property="panRecognizer" destination="qW2-au-KlM" id="jWL-ds-1oP"/>
                         <outlet property="smallCalendarView" destination="caj-48-irQ" id="Sn7-qf-IWv"/>
-                        <outlet property="tapRecognizer" destination="cP2-s0-dib" id="EjM-r7-gIj"/>
+                        <outlet property="tapRecognizer" destination="4mp-Ln-fzA" id="H31-WQ-t8V"/>
                         <outlet property="workButton1" destination="0ht-WT-UXB" id="tSf-Ne-iTK"/>
                         <outlet property="workButton2" destination="yvq-a6-aVm" id="cji-va-nh2"/>
                         <outlet property="workButton3" destination="ju2-Vd-LZy" id="Xhp-G1-RuM"/>
@@ -285,9 +287,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nIT-S8-yIv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="cP2-s0-dib">
+                <panGestureRecognizer minimumNumberOfTouches="1" id="qW2-au-KlM">
                     <connections>
-                        <action selector="displayGestureForTapRecognizer:" destination="BXE-Pg-e6e" id="uW8-d4-HC0"/>
+                        <action selector="displayGestureForPanRecognizer:" destination="BXE-Pg-e6e" id="HWm-Ox-WbG"/>
+                    </connections>
+                </panGestureRecognizer>
+                <tapGestureRecognizer id="4mp-Ln-fzA">
+                    <connections>
+                        <action selector="displayGestureForTapRecognizer:" destination="BXE-Pg-e6e" id="Xv5-DR-XnF"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

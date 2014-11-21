@@ -54,6 +54,13 @@
 @property (nonatomic, strong) IBOutlet UITapGestureRecognizer *tapRecognizer;
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer;
 
+// PanGesture Recognizer
+@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panRecognizer;
+- (IBAction)displayGestureForPanRecognizer:(UIPanGestureRecognizer *)recognizer;
+
+
+
+
 // SmallCalendarView
 
 @property (nonatomic, strong) NSCalendar *calendar;
