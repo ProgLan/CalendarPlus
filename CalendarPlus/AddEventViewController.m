@@ -305,6 +305,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     float xStart = 0.0;
     float xEnd = 370.0;
+    float yStart = 430.0;
     float xRange = xEnd - xStart;
     
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
@@ -315,8 +316,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSInteger numDatesSelected = endDay - startDay + 1;
     float tickInterval = xRange / numDatesSelected;
     
-    CGPoint origin = CGPointMake(xStart, 620.0);
-    CGPoint endpt = CGPointMake(xEnd, 620.0);
+    CGPoint origin = CGPointMake(xStart, yStart);
+    CGPoint endpt = CGPointMake(xEnd, yStart);
     CGPoint midpt1 = midPointForPoints(origin, location);
     CGPoint midpt2 = midPointForPoints(location, endpt);
     CGPoint ctrlpt1 = CGPointMake(midpt1.x, midpt1.y+50);
