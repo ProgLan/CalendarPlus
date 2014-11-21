@@ -71,4 +71,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *workButton2;
 @property (weak, nonatomic) IBOutlet UILabel *workButton1;
 
+- (NSMutableArray*)populateSelectedDates:(NSDate *)currentDate numSelectedDates:(int)numDatesSelected;
+
 @end
