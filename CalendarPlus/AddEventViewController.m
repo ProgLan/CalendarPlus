@@ -22,6 +22,10 @@
     self.eventTitle.delegate = self;
     self.STARTDATELABEL = @"startDateSelected";
     self.STARTDATELABEL = @"endDateSelected";
+    self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    self.availableHours = 8;
+    self.maxBtnHeight = 31.0;
+    self.maxBtnWidth = 53.5;
     
     // Set button backgrounds
 //    UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
@@ -63,10 +67,56 @@
 //    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTap)];
 //    self.workButton1.userInteractionEnabled = YES;
 //    [self.workButton1 addGestureRecognizer:tapGesture];
+    
+    
+//    [self markExistingEvents];
+    
+    
 }
 
-- (void)labelTap {
-    NSLog(@"im tapped!");
+
+- (void)markExistingEvents {
+    NSLog(@"mark existing events starts");
+    UIColor *greyBtnColor = [self.utils colorFromHexString:@"#E67E22"];
+    NSDate* startDate = self.eventStartDate;
+    NSLog(@"startDate: %@", startDate);
+    NSDateComponents *dateComponents = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:startDate];
+    [dateComponents setDay:1];
+    [dateComponents setHour:0];
+    startDate = [self.calendar dateFromComponents:dateComponents];
+    NSDate* currentDate = startDate;
+    for (int i = 0; i < 30; i++) { //FIXME: find either 30 or 31
+        NSMutableArray* events = [[NSMutableArray alloc] init];
+        events = [self.appDelegate.eventManager fetchEvents:currentDate];
+        int numEvents = (int)[events count];
+        NSLog(@"fetched events for %@: %d", currentDate, numEvents);
+        NSTimeInterval timeOfAllEvents = 0;
+        for (int j = 0; j < numEvents; j++) {
+            EKEvent *event = [events objectAtIndex:j];
+            NSTimeInterval diff = [event.endDate timeIntervalSinceDate:event.startDate];
+            timeOfAllEvents += diff;
+        }
+        float numOccupiedHours = (float)floor(timeOfAllEvents/3600);
+        if (numOccupiedHours > 0.0) {
+            NSLog(@"numOccupiedHours: %f", numOccupiedHours);
+            
+            float fillHeight = (numOccupiedHours / self.availableHours) * self.maxBtnHeight;
+            if (fillHeight > self.maxBtnHeight) fillHeight = self.maxBtnHeight;
+            
+            // how come it doesn't look for the button correctly???
+            // :solved!! because it should've been called in viewDidAppear, not viewDidLoad
+            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[currentDate timeIntervalSince1970]];
+            NSLog(@"myButton: %@, currentDate: %@", myButton, currentDate);
+            
+            UIImage *btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+            NSLog(@"width: %f, height: %f, fillHeight: %f", self.maxBtnWidth, self.maxBtnHeight, fillHeight);
+            
+            [myButton setImage:btnImg forState:UIControlStateNormal];
+            [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
+            [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
+        }
+        currentDate = [self makeTomorrowDate:currentDate];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -82,6 +132,7 @@
         NSLog(@"no permission");
     }
     [self.eventTitle becomeFirstResponder];
+    [self markExistingEvents];
 }
 
 - (void)setInitDate:(NSDate *)pickedDate
@@ -186,31 +237,32 @@
     return endDate;
 }
 
-- (NSMutableArray *)fetchEvents
-{
-    NSDate *startDate = [NSDate date];
-    
-    //Create the end date components
-//    NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
-//    tomorrowDateComponents.day = 1;
+//
+//- (NSMutableArray *)fetchEvents
+//{
+//    NSDate *startDate = [NSDate date];
 //    
-//    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:tomorrowDateComponents
-//                                                                    toDate:startDate
-//                                                                   options:0];
-    NSDate *endDate = [self makeTomorrowDate:startDate];
-    // We will only search the default calendar for our events
-    NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
-    
-    // Create the predicate
-    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate
-                                                                      endDate:endDate
-                                                                    calendars:calendarArray];
-    
-    // Fetch all events that match the predicate
-    NSMutableArray *events = [NSMutableArray arrayWithArray:[self.eventStore eventsMatchingPredicate:predicate]];
-    
-    return events;
-}
+//    //Create the end date components
+////    NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
+////    tomorrowDateComponents.day = 1;
+////    
+////    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:tomorrowDateComponents
+////                                                                    toDate:startDate
+////                                                                   options:0];
+//    NSDate *endDate = [self makeTomorrowDate:startDate];
+//    // We will only search the default calendar for our events
+//    NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
+//    
+//    // Create the predicate
+//    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate
+//                                                                      endDate:endDate
+//                                                                    calendars:calendarArray];
+//    
+//    // Fetch all events that match the predicate
+//    NSMutableArray *events = [NSMutableArray arrayWithArray:[self.eventStore eventsMatchingPredicate:predicate]];
+//    
+//    return events;
+//}
 
 // Prompt the user for access to their Calendar
 -(void)requestCalendarAccess
@@ -284,6 +336,7 @@
     NSDate *dateSelected = self.datePicker.date;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+    
     UIButton *dateCellButton = (UIButton *)[self.smallCalendarView viewWithTag:[dateSelected timeIntervalSince1970]];
 
     if (self.currentDateLabel == self.STARTDATELABEL) {
@@ -378,6 +431,11 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
+//    self.maxBtnWidth = btnWidth;
+//    self.maxBtnHeight = btnHeight;
+    
+    NSLog(@"btnWidth~!~!~! %f", btnWidth);
+    NSLog(@"btnHEight~!~!! %f", btnHeight);
     
     if (transformingScale > 1) {
 //        NSLog(@"we cannot draw the graph");
@@ -488,6 +546,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     for (int i = 0; i < numDatesSelected; i++) {
         NSDate* selectedDate = [self.selectedDates objectAtIndex:i];
+        
+        NSLog(@"seleted date looks like: %@", selectedDate);
+        
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDate timeIntervalSince1970]];
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
@@ -496,25 +557,11 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
         [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
         int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
+        // probably not the best to store an array of reminders every single time I move my finger
         [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
         NSLog(@"reminder duration %@", [NSNumber numberWithInt:reminderDuration]);
         NSLog(@"stored reminder Duration %@", self.reminderDurations);
-        
-//         HOWON on 11/23/14: add event
-//        FIXME: this should be run when "add Event" button has been clicked.
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
-//        unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit                       | NSSecondCalendarUnit;
-//        int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
-//        NSDateComponents *startDateComponents = [self.calendar components:unitFlags fromDate:selectedDate];
-//        NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
-//        componentsDiff.minute = reminderDuration;
-//        NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
-//        NSDateComponents *dueDateComponents = [self.calendar components:unitFlags fromDate:dueDate];
-//
-//        NSString *reminderTitle = [NSString stringWithFormat:@"[re]start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
-//        [self addReminder:reminderTitle startDateComps:startDateComponents dueDateComps:dueDateComponents];
-//        NSLog(@"Added: %@", reminderTitle);
+        // Howon: 12/4/14 this is causing a huge overhead.
     }
 }
 

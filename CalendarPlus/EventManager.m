@@ -17,6 +17,7 @@
     self = [super init];
     self.eventStore = [[EKEventStore alloc] init];
     self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
+    self.reminders = [[NSMutableArray alloc] initWithCapacity:0];
     [self checkEventStoreAccessForCalendar];
     [self requestCalendarAccess];
     return self;
@@ -84,6 +85,28 @@
                                                                     calendars:calendarArray];
     NSMutableArray *events = [NSMutableArray arrayWithArray:[self.eventStore eventsMatchingPredicate:predicate]];
     return events;
+}
+
+
+- (NSMutableArray *)fetchReminders: (NSDate*)startDate
+{
+    startDate = [[NSCalendar currentCalendar] dateBySettingHour:0 minute:0 second:0 ofDate:startDate options:0];
+    NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
+    tomorrowDateComponents.day = 1;
+    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:tomorrowDateComponents
+                                                                    toDate:startDate
+                                                                   options:0];
+
+    // We will only search the default calendar for our events
+    NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
+    NSPredicate *predicate = [self.eventStore predicateForRemindersInCalendars:nil];
+    [self.eventStore fetchRemindersMatchingPredicate:predicate completion:^(NSArray *reminders) {
+        for (EKReminder *reminder in reminders) {
+            [self.reminders addObject:reminder];
+        }
+    }];
+    NSLog(@"fetch reminders: %@", self.reminders);
+    return self.reminders;
 }
 
 // This method is called when the user has granted permission to Calendar

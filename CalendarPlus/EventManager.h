@@ -20,6 +20,7 @@
 
 // Selected date's event list
 @property (nonatomic, strong) NSMutableArray *eventsList;
+@property (nonatomic, strong) NSMutableArray *reminders;
 
 @property BOOL eventsAccessGranted;
 
@@ -28,5 +29,6 @@
 - (NSMutableArray *)fetchEvents:(NSDate*)startDate;
 - (void)accessGrantedForCalendar;
 - (UIImage *)imageWithColor:(UIColor*)color width:(float)w height:(float)h;
+
 
 @end
