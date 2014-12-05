@@ -21,7 +21,6 @@
 // Selected date's event list
 @property (nonatomic, strong) NSMutableArray *eventsList;
 
-
 @property BOOL eventsAccessGranted;
 
 - (void)checkEventStoreAccessForCalendar;

@@ -36,6 +36,8 @@
     
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
     self.eventStore = [[EKEventStore alloc] init];
+    self.reminderDurations = [[NSMutableArray alloc] initWithCapacity:0];
+//    self.selectedDates = [[NSMutableArray alloc] initWithCapacity:0];
     
 //    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
     self.addEventButton.enabled = NO;
@@ -46,9 +48,9 @@
     self.coloredButtons = [[NSMutableArray alloc] init];
     self.datePicker.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
-    NSLog(@"labelContainer before init: %@", self.tickDateLabelContainer);
+//    NSLog(@"labelContainer before init: %@", self.tickDateLabelContainer);
     self.tickDateLabelContainer = [[UIView alloc] init];
-    NSLog(@"labelContainer after init: %@", self.tickDateLabelContainer);
+//    NSLog(@"labelContainer after init: %@", self.tickDateLabelContainer);
 //    self.tickDateLabels = [[NSMutableArray alloc] init];
     // labels
 //    UILabel *hrLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 600, 50, 20)];
@@ -103,6 +105,31 @@
     self.endDateLabel.text = [dateFormatter stringFromDate:endDate];
 }
 
+- (void)addReminder:(NSString*)title startDateComps:(NSDateComponents*)startDateComps dueDateComps:(NSDateComponents*)dueDateComps {
+//    FIXME: right now, we just add a reminder naively: when there's an open timeslot for a certain duration, we add it.
+    // or.. let's just add at 00:00 for now.
+    EKReminder *reminder = [EKReminder reminderWithEventStore:self.eventStore];
+    reminder.title = title;
+//    NSLog(@"log: year: %ld, month: %ld, day: %ld", (long)startDateComps.year, (long)startDateComps.month, (long)startDateComps.day);
+    reminder.startDateComponents = startDateComps;
+    reminder.dueDateComponents = dueDateComps;
+    [reminder setCalendar:[self.eventStore defaultCalendarForNewReminders]];
+    NSError *err;
+    [self.eventStore saveReminder:reminder commit:YES error:&err];
+    if (err) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"Error"
+                              message:@"Invalid reminder!"
+                              delegate:nil
+                              cancelButtonTitle:@"Okay"
+                              otherButtonTitles:nil];
+        [alert show];
+    } else {
+        // reminder doesn't have to redirect to the previous view
+        //        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (IBAction)addEventBtnPressed:(id)sender
 {
     EKEvent *myEvent = [EKEvent eventWithEventStore:self.eventStore];
@@ -127,6 +154,10 @@
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
+    
+    // Howon 12/5/14 I have to add reminders here.
+    [self addReminders:self.selectedDates reminderDurations:self.reminderDurations];
+    
 }
 
 // This method is called when the user has granted permission to Calendar
@@ -279,6 +310,17 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
+- (NSMutableArray*)distributeWorkload:(NSMutableArray *)fillHeightsArr numDatesSelected:(int)arrSize loc:(CGPoint)location transformingScale:(float)tfScale btnHeight:(float)btnHeight {
+//    float fillHeight = btnHeight * tfScale;
+    // not sure what the fillHeight should be here
+    float fillHeight = tfScale * 10;
+    NSNumber *fhNum = [NSNumber numberWithFloat:fillHeight];
+    for (int i = 0; i < arrSize; i++) {
+        [fillHeightsArr addObject:fhNum];
+    }
+    return fillHeightsArr;
+}
+
 - (NSMutableArray*)populateSelectedDates:(NSDate *)currentDate numSelectedDates:(int)numDatesSelected {
     NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     for (int i = 0; i < numDatesSelected; i++) {
@@ -297,6 +339,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return selectedDates;
 }
 
+
 - (void)drawWorkloadGraph:(CGPoint)location {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
     NSInteger startDay = [startDateComponents day];
@@ -304,39 +347,40 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSInteger endDay = [endDateComponents day];
     NSInteger numDatesSelected = endDay - startDay + 1;
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
-    NSMutableArray *selectedDates = [self populateSelectedDates:currentDate numSelectedDates:numDatesSelected];
+//    NSMutableArray *selectedDates = [self populateSelectedDates:currentDate numSelectedDates:numDatesSelected];
+    self.selectedDates = [self populateSelectedDates:currentDate numSelectedDates:(int)numDatesSelected];
     
     self.graphView.hidden = NO;
     
     // Howon: transforming bezier path
-    int numHoursAvailable = (int)numDatesSelected * 24;
+    int numHoursAvailable = (int)numDatesSelected * 8;
     // workButton1: 430 ~ 405 - least amount of work (the less fixLocationY is, the bigger the graph is)
     // workButton2: 405 ~ 380
     // workButton3: 380 ~ 355
     // workButton4: 355 ~ 330
     int workload = 0;
     if (location.y < 355 && location.y >= 330) {
-        workload = 14 * 24;
+        workload = 14 * 8;
         //NSLog(@"Two weeks. Available: %i, Workload: %i", numHoursAvailable, workload);
     } else if (location.y < 380 && location.y >= 355) {
-        workload = 7 * 24;
+        workload = 7 * 8;
         //NSLog(@"One week. Available: %i, Workload: %i", numHoursAvailable, workload);
     } else if (location.y < 405 && location.y >= 380) {
-        workload = 24;
+        workload = 8;
         //NSLog(@"One day. Available: %i, Workload: %i", numHoursAvailable, workload);
     } else if (location.y < 430 && location.y >= 405) {
         workload = 1;
         //NSLog(@"One hour. Available: %i, Workload: %i", numHoursAvailable, workload);
     }
     float transformingScale = workload / (float)numHoursAvailable;
-    NSLog(@"transfomringScale = %f", transformingScale);
+//    NSLog(@"transfomringScale = %f", transformingScale);
     
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
     
     if (transformingScale > 1) {
-        NSLog(@"we cannot draw the graph");
+//        NSLog(@"we cannot draw the graph");
         int numColoredButtons = [self.coloredButtons count];
         for (int i = 0; i < numColoredButtons; i++) {
             UIButton *cb = [self.coloredButtons objectAtIndex:i];
@@ -345,7 +389,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [self.coloredButtons removeAllObjects];
         
         for (int i = 0; i < numDatesSelected; i++) {
-            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
+            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[self.selectedDates objectAtIndex:i] timeIntervalSince1970]];
             [self.coloredButtons addObject:myButton];
             UIImage *img = [self imageWithColor:[UIColor redColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight];
             [myButton setImage:img forState:UIControlStateNormal];
@@ -409,19 +453,27 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     self.tickDateLabelContainer.backgroundColor = [UIColor clearColor];
     [self.graphView addSubview:self.tickDateLabelContainer];
     
-    for (int i = 0; i < numDatesSelected; i++) {
-        float prevXPoint = xPointOnBezierPath;
-        xPointOnBezierPath = xPointOnBezierPath + tickInterval;
-        xTickLabel += tickInterval;
-        float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
-        float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
-        float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
-        float fillHeightFromY1Y2 = origin.y - avgY1Y2;
-        NSNumber *fhNum = [NSNumber numberWithFloat:fillHeightFromY1Y2];
-        [fillHeightsArr addObject:fhNum];
+// working here
+    float epsilon = 10.0;
+    float xMid = (origin.x + endpt.x)/2.0;
+    if (location.x >= xMid-epsilon && location.x <= xMid+epsilon) {
+        // HOWON: if x falls in the middle, then return an evenly distributed workload
+        fillHeightsArr = [self distributeWorkload:fillHeightsArr numDatesSelected:(int)numDatesSelected loc:location transformingScale:transformingScale btnHeight:btnHeight];
+    } else {
+        for (int i = 0; i < numDatesSelected; i++) {
+            float prevXPoint = xPointOnBezierPath;
+            xPointOnBezierPath = xPointOnBezierPath + tickInterval;
+            xTickLabel += tickInterval;
+            
+            float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
+            float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
+            float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
+            float fillHeightFromY1Y2 = origin.y - avgY1Y2;
+            NSNumber *fhNum = [NSNumber numberWithFloat:fillHeightFromY1Y2];
+            [fillHeightsArr addObject:fhNum];
+        }
+        fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
     }
-    
-    fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
     
     //    NSLog(@"after normalizing: %@", fillHeightsArr);
     // Clear all previously colored buttons
@@ -435,13 +487,55 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     UIColor *prettyBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     
     for (int i = 0; i < numDatesSelected; i++) {
-        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[selectedDates objectAtIndex:i] timeIntervalSince1970]];
+        NSDate* selectedDate = [self.selectedDates objectAtIndex:i];
+        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDate timeIntervalSince1970]];
         [self.coloredButtons addObject:myButton];
         float fillHeight = [fillHeightsArr[i] floatValue];
         UIImage *img = [self imageWithColor:prettyBtnColor buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         [myButton setImage:img forState:UIControlStateNormal];
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
         [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
+        int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
+        [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
+        NSLog(@"reminder duration %@", [NSNumber numberWithInt:reminderDuration]);
+        NSLog(@"stored reminder Duration %@", self.reminderDurations);
+        
+//         HOWON on 11/23/14: add event
+//        FIXME: this should be run when "add Event" button has been clicked.
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+//        unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit                       | NSSecondCalendarUnit;
+//        int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
+//        NSDateComponents *startDateComponents = [self.calendar components:unitFlags fromDate:selectedDate];
+//        NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
+//        componentsDiff.minute = reminderDuration;
+//        NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
+//        NSDateComponents *dueDateComponents = [self.calendar components:unitFlags fromDate:dueDate];
+//
+//        NSString *reminderTitle = [NSString stringWithFormat:@"[re]start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
+//        [self addReminder:reminderTitle startDateComps:startDateComponents dueDateComps:dueDateComponents];
+//        NSLog(@"Added: %@", reminderTitle);
+    }
+}
+
+- (void)addReminders:(NSMutableArray *)selectedDates reminderDurations:(NSMutableArray *)reminderDurations {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit                       | NSSecondCalendarUnit;
+    int numDatesSelected = (int)[selectedDates count];
+    for (int i = 0; i < numDatesSelected; i++) {
+        int reminderDuration = (int)[[reminderDurations objectAtIndex:i] integerValue];
+        NSDate *selectedDate = [selectedDates objectAtIndex:i];
+//        [NSNumber numberWithInteger:i]
+        NSDateComponents *startDateComponents = [self.calendar components:unitFlags fromDate:selectedDate];
+        NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
+        componentsDiff.minute = reminderDuration; // why am I pulling out only minutes??
+        NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
+        NSDateComponents *dueDateComponents = [self.calendar components:unitFlags fromDate:dueDate];
+        
+        NSString *reminderTitle = [NSString stringWithFormat:@"[re]start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
+        [self addReminder:reminderTitle startDateComps:startDateComponents dueDateComps:dueDateComponents];
+        NSLog(@"Added: %@", reminderTitle);
     }
 }
 
@@ -457,24 +551,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self drawWorkloadGraph:location];
 }
 
-
-
-
-
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {
     float yVal;
     float tVal;
-    // instead of directly inputting y value, translate it so that y value for each workload box remains the same.
-    // Howon 11/20/14
-
-    
-//    if (x <= location.x) {
-//        tVal = [self getTvalFromBezierPath:x x0Val:startpt.x x1Val:ctrlpt1.x x2Val:location.x];
-//        yVal = [self getCoordFromBezierPath:tVal origin:startpt.y p1Val:ctrlpt1.y p2Val:fixedLocationY];
-//    } else {
-//        tVal = [self getTvalFromBezierPath:x x0Val:location.x x1Val:ctrlpt2.x x2Val:endpt.x];
-//        yVal = [self getCoordFromBezierPath:tVal origin:fixedLocationY p1Val:ctrlpt2.y p2Val:endpt.y];
-//    }
     
     if (x <= location.x) {
         tVal = [self getTvalFromBezierPath:x x0Val:startpt.x x1Val:ctrlpt1.x x2Val:location.x];
@@ -540,7 +619,4 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     calendarView.contentInset = UIEdgeInsetsMake(0.0f, 0, 0.0f, 0);
 }
 
-
-- (IBAction)actionForPanning:(id)sender {
-}
 @end

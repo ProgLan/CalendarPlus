@@ -79,5 +79,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *workButton1;
 
 - (NSMutableArray*)populateSelectedDates:(NSDate *)currentDate numSelectedDates:(int)numDatesSelected;
+- (void)addReminder:(NSString*)title startDateComps:(NSDateComponents*)startDateComps dueDateComps:(NSDateComponents*)dueDateComps;
+
+// temporary variables that hold reminder component information
+@property (strong, nonatomic) NSMutableArray *selectedDates;
+@property (strong, nonatomic) NSMutableArray *reminderDurations;
+
+
+
 
 @end
