@@ -63,23 +63,16 @@
 //    hrLabel.text = @"10hrs";
 //    [self.view addSubview:hrLabel];
     
-//    UITapGestureRecognizer *tapGesture =
-//    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTap)];
-//    self.workButton1.userInteractionEnabled = YES;
-//    [self.workButton1 addGestureRecognizer:tapGesture];
-    
-    
-//    [self markExistingEvents];
-    
-    
+    self.storedFillHeights = [[NSMutableDictionary alloc] init];
 }
 
 
 - (void)markExistingEvents {
-    NSLog(@"mark existing events starts");
-    UIColor *greyBtnColor = [self.utils colorFromHexString:@"#E67E22"];
+//    NSLog(@"mark existing events starts");
+    UIColor *pinkBtnColor = [self.utils colorFromHexString:@"#D2527F"];
+    UIColor *greyBtnColor = [self.utils colorFromHexString:@"#6C7A89"];
     NSDate* startDate = self.eventStartDate;
-    NSLog(@"startDate: %@", startDate);
+//    NSLog(@"startDate: %@", startDate);
     NSDateComponents *dateComponents = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:startDate];
     [dateComponents setDay:1];
     [dateComponents setHour:0];
@@ -89,7 +82,6 @@
         NSMutableArray* events = [[NSMutableArray alloc] init];
         events = [self.appDelegate.eventManager fetchEvents:currentDate];
         int numEvents = (int)[events count];
-        NSLog(@"fetched events for %@: %d", currentDate, numEvents);
         NSTimeInterval timeOfAllEvents = 0;
         for (int j = 0; j < numEvents; j++) {
             EKEvent *event = [events objectAtIndex:j];
@@ -98,25 +90,32 @@
         }
         float numOccupiedHours = (float)floor(timeOfAllEvents/3600);
         if (numOccupiedHours > 0.0) {
-            NSLog(@"numOccupiedHours: %f", numOccupiedHours);
-            
             float fillHeight = (numOccupiedHours / self.availableHours) * self.maxBtnHeight;
-            if (fillHeight > self.maxBtnHeight) fillHeight = self.maxBtnHeight;
+            UIImage *btnImg;
             
-            // how come it doesn't look for the button correctly???
-            // :solved!! because it should've been called in viewDidAppear, not viewDidLoad
-            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[currentDate timeIntervalSince1970]];
-            NSLog(@"myButton: %@, currentDate: %@", myButton, currentDate);
+            if (fillHeight >= self.maxBtnHeight) {
+                fillHeight = self.maxBtnHeight;
+                btnImg = [self imageWithColor:pinkBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+            } else {
+                btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+            }
             
-            UIImage *btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
-            NSLog(@"width: %f, height: %f, fillHeight: %f", self.maxBtnWidth, self.maxBtnHeight, fillHeight);
-            
+            int btnTag = [currentDate timeIntervalSince1970];
+            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
             [myButton setImage:btnImg forState:UIControlStateNormal];
             [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
+            
+            NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag]; // btnTag = [currentDate timeIntervalSince1970];
+            NSNumber *value = [self.storedFillHeights objectForKey:btnTagNumber];
+            [self.storedFillHeights setObject:[NSNumber numberWithFloat:fillHeight] forKey:btnTagNumber];
+            
+//            [self.storedFillHeights setObject:[NSNumber numberWithFloat: fillHeight] atIndexedSubscript:i];
+            
         }
         currentDate = [self makeTomorrowDate:currentDate];
     }
+    NSLog(@"stored FillHEights: %@", self.storedFillHeights);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -393,7 +392,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 }
 
 
-- (void)drawWorkloadGraph:(CGPoint)location {
+- (void)drawWorkloadGraph:(CGPoint)location isEndMotion:(BOOL)isEndMotion {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
     NSInteger startDay = [startDateComponents day];
     NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
@@ -431,12 +430,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
-//    self.maxBtnWidth = btnWidth;
-//    self.maxBtnHeight = btnHeight;
-    
-    NSLog(@"btnWidth~!~!~! %f", btnWidth);
-    NSLog(@"btnHEight~!~!! %f", btnHeight);
-    
+
     if (transformingScale > 1) {
 //        NSLog(@"we cannot draw the graph");
         int numColoredButtons = [self.coloredButtons count];
@@ -447,14 +441,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [self.coloredButtons removeAllObjects];
         
         for (int i = 0; i < numDatesSelected; i++) {
-            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[[self.selectedDates objectAtIndex:i] timeIntervalSince1970]];
+            int btnTag = [[self.selectedDates objectAtIndex:i] timeIntervalSince1970];
+            NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
+//            float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
+//            NSLog(@"currentfillHeight: %f", currentFillHeight);
+            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
             [self.coloredButtons addObject:myButton];
             UIImage *img = [self imageWithColor:[UIColor redColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight];
             [myButton setImage:img forState:UIControlStateNormal];
             [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
+            
         }
-        
         return;
     }
     
@@ -544,25 +542,28 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self.coloredButtons removeAllObjects];
     UIColor *prettyBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     
+    // 12/7/14: perform this step only at the end of pan or tap gesture
     for (int i = 0; i < numDatesSelected; i++) {
         NSDate* selectedDate = [self.selectedDates objectAtIndex:i];
-        
-        NSLog(@"seleted date looks like: %@", selectedDate);
-        
+        int btnTag = [selectedDate timeIntervalSince1970];
         UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDate timeIntervalSince1970]];
         [self.coloredButtons addObject:myButton];
+        
+        NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
+        float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
+        NSLog(@"currentfillHeight: %f", currentFillHeight);
         float fillHeight = [fillHeightsArr[i] floatValue];
         UIImage *img = [self imageWithColor:prettyBtnColor buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
         [myButton setImage:img forState:UIControlStateNormal];
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
-        [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
-        int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
-        // probably not the best to store an array of reminders every single time I move my finger
-        [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
-        NSLog(@"reminder duration %@", [NSNumber numberWithInt:reminderDuration]);
-        NSLog(@"stored reminder Duration %@", self.reminderDurations);
-        // Howon: 12/4/14 this is causing a huge overhead.
+        if (isEndMotion) {
+            NSLog(@"add reminders");
+            [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
+            int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
+            [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
+        }
     }
+
 }
 
 - (void)addReminders:(NSMutableArray *)selectedDates reminderDurations:(NSMutableArray *)reminderDurations {
@@ -589,13 +590,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
-    [self drawWorkloadGraph:location];
+    [self drawWorkloadGraph:location isEndMotion:true];
 }
 
 - (IBAction)displayGestureForPanRecognizer:(UIPanGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
-    [self drawWorkloadGraph:location];
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"gesture ending state");
+        [self drawWorkloadGraph:location isEndMotion:true];
+    } else {
+        [self drawWorkloadGraph:location isEndMotion:false];
+    }
 }
 
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {

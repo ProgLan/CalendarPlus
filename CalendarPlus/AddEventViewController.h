@@ -91,7 +91,9 @@
 @property float maxBtnWidth;
 @property float availableHours;
 
-
+// 12/8/14 added
+@property (strong, nonatomic) NSMutableDictionary *storedFillHeights;
+//@property (strong, nonatomic) NSMutableArray *storedFillHeights;
 
 
 
