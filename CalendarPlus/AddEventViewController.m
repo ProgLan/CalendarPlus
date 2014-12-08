@@ -542,20 +542,23 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self.coloredButtons removeAllObjects];
     UIColor *prettyBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     
-    // 12/7/14: perform this step only at the end of pan or tap gesture
     for (int i = 0; i < numDatesSelected; i++) {
         NSDate* selectedDate = [self.selectedDates objectAtIndex:i];
         int btnTag = [selectedDate timeIntervalSince1970];
-        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:[selectedDate timeIntervalSince1970]];
+        NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
+        UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
         [self.coloredButtons addObject:myButton];
         
-        NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
         float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
         NSLog(@"currentfillHeight: %f", currentFillHeight);
         float fillHeight = [fillHeightsArr[i] floatValue];
-        UIImage *img = [self imageWithColor:prettyBtnColor buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:fillHeight];
+        
+        UIImage *img = [self combinedImage:btnWidth buttonHeight:btnHeight fillHeight1:fillHeight fillHeight2:currentFillHeight];
+        
         [myButton setImage:img forState:UIControlStateNormal];
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
+        
+        // 12/7/14: perform this step only at the end of pan or tap gesture
         if (isEndMotion) {
             NSLog(@"add reminders");
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
@@ -654,6 +657,27 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     CGRect innerRect = CGRectMake(0 , bh - fh, bw, fh);
     [color setFill];
     UIRectFill(innerRect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (UIImage *)combinedImage:(float)bw buttonHeight:(float)bh fillHeight1:(float)fh1 fillHeight2:(float)fh2 {
+    // fh1 for graphBtnColor (goes bottom)
+    // fh2 for currentFillHeight, greyBtnColor (goes up)
+    if ((fh1 + fh2) > bh) {
+        return [self imageWithColor:[UIColor redColor] buttonWidth:bw buttonHeight:bh fillHeight:bh];
+    }
+    UIColor *graphBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
+    UIColor *greyBtnColor = [self.utils colorFromHexString:@"#6C7A89"];
+    CGRect rect = CGRectMake(0, 0, bw, bh);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    CGRect innerBottomRect = CGRectMake(0 , bh - fh1, bw, fh1);
+    CGRect innerUpperRect = CGRectMake(0 , bh - fh2 - fh1, bw, fh2);
+    [graphBtnColor setFill];
+    UIRectFill(innerBottomRect);
+    [greyBtnColor setFill];
+    UIRectFill(innerUpperRect);
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
