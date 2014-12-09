@@ -95,10 +95,15 @@
             
             if (fillHeight >= self.maxBtnHeight) {
                 fillHeight = self.maxBtnHeight;
-                btnImg = [self imageWithColor:pinkBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
-            } else {
-                btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
             }
+            btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+            
+//            if (fillHeight >= self.maxBtnHeight) {
+//                fillHeight = self.maxBtnHeight;
+//                btnImg = [self imageWithColor:pinkBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+//            } else {
+//                btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
+//            }
             
             int btnTag = [currentDate timeIntervalSince1970];
             UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
@@ -665,12 +670,12 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (UIImage *)combinedImage:(float)bw buttonHeight:(float)bh fillHeight1:(float)fh1 fillHeight2:(float)fh2 {
     // fh1 for graphBtnColor (goes bottom)
     // fh2 for currentFillHeight, greyBtnColor (goes up)
-    if ((fh1 + fh2) > bh) {
-        UIColor *pinkBtnColor = [self.utils colorFromHexString:@"#D2527F"];
-        return [self imageWithColor:pinkBtnColor buttonWidth:bw buttonHeight:bh fillHeight:bh];
-    }
     UIColor *graphBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     UIColor *greyBtnColor = [self.utils colorFromHexString:@"#6C7A89"];
+    if ((fh1 + fh2) > bh) {
+//        UIColor *pinkBtnColor = [self.utils colorFromHexString:@"#D2527F"];
+        return [self imageWithColor:greyBtnColor buttonWidth:bw buttonHeight:bh fillHeight:bh];
+    }
     CGRect rect = CGRectMake(0, 0, bw, bh);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
     CGRect innerBottomRect = CGRectMake(0 , bh - fh1, bw, fh1);
