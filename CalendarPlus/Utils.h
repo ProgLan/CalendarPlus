@@ -13,4 +13,6 @@
 
 - (UIColor *)colorFromHexString:(NSString *)hexString;
 
+- (UIImage *)imageWithColor:(UIColor *)color buttonWidth:(float)bw buttonHeight:(float)bh fillHeight:(float)fh;
+
 @end

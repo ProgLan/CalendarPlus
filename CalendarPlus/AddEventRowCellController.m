@@ -7,6 +7,7 @@
 //
 
 #import "AddEventRowCellController.h"
+#import "Utils.h"
 
 @implementation AddEventRowCellController
 
@@ -20,17 +21,17 @@
 
 - (UIImage *)todayBackgroundImage;
 {
-    return [[UIImage imageNamed:@"todays_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+    // I dont want todayBackground to show
+//    return [[UIImage imageNamed:@"todays_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+    
+    Utils* utils = [[Utils alloc] init];
+    UIImage* img = [utils imageWithColor:[UIColor clearColor] buttonWidth:1.0 buttonHeight:1.0 fillHeight:1.0];
+    return [img stretchableImageWithLeftCapWidth:4 topCapHeight:4];
 }
 
 - (UIImage *)selectedBackgroundImage;
 {
     return [[UIImage imageNamed:@"selected_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
-}
-
-- (UIImage *)selectedBackgroundImageTest;
-{
-    return [[UIImage imageNamed:@"CalendarSelectedDate.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
 }
 
 - (UIImage *)notThisMonthBackgroundImage;

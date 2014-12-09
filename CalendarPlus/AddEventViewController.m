@@ -666,7 +666,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     // fh1 for graphBtnColor (goes bottom)
     // fh2 for currentFillHeight, greyBtnColor (goes up)
     if ((fh1 + fh2) > bh) {
-        return [self imageWithColor:[UIColor redColor] buttonWidth:bw buttonHeight:bh fillHeight:bh];
+        UIColor *pinkBtnColor = [self.utils colorFromHexString:@"#D2527F"];
+        return [self imageWithColor:pinkBtnColor buttonWidth:bw buttonHeight:bh fillHeight:bh];
     }
     UIColor *graphBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     UIColor *greyBtnColor = [self.utils colorFromHexString:@"#6C7A89"];

@@ -61,6 +61,7 @@
         [self.contentView addSubview:button];
         [self configureButton:button];
         [button setTitleColor:[self.textColor colorWithAlphaComponent:0.5f] forState:UIControlStateDisabled];
+        
     }
     self.dayButtons = dayButtons;
 }
@@ -89,7 +90,7 @@
     [self configureButton:self.todayButton];
     [self.todayButton addTarget:self action:@selector(todayButtonPressed:) forControlEvents:UIControlEventTouchDown];
     
-    [self.todayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [self.todayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.todayButton setBackgroundImage:[self todayBackgroundImage] forState:UIControlStateNormal];
     [self.todayButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.75f] forState:UIControlStateNormal];
 
@@ -122,21 +123,21 @@
     if (!self.dayButtons) {
         [self createDayButtons];
         [self createNotThisMonthButtons];
-        [self createTodayButton];
+//        [self createTodayButton];
         [self createSelectedButton];
     }
 
     NSDateComponents *offset = [NSDateComponents new];
     offset.day = 1;
 
-    self.todayButton.hidden = YES;
+    //self.todayButton.hidden = YES;
     self.indexOfTodayButton = -1;
     self.selectedButton.hidden = YES;
     self.indexOfSelectedButton = -1;
     
     for (NSUInteger index = 0; index < self.daysInWeek; index++) {
         NSString *title = [self.dayFormatter stringFromDate:date];
-        NSString *accessibilityLabel = [self.accessibilityFormatter stringFromDate:date]; // I can probably use it to refer to this button??
+        NSString *accessibilityLabel = [self.accessibilityFormatter stringFromDate:date];
         [self.dayButtons[index] setTitle:title forState:UIControlStateNormal];
         [self.dayButtons[index] setAccessibilityLabel:accessibilityLabel];
         NSInteger dateTagForButton = [date timeIntervalSince1970];
@@ -154,16 +155,21 @@
         if (self.monthOfBeginningDate != thisDayMonth) {
             [self.notThisMonthButtons[index] setHidden:NO];
         } else {
-            if ([self.todayDateComponents isEqual:thisDateComponents]) {
-                self.todayButton.hidden = NO;
-                [self.todayButton setTitle:title forState:UIControlStateNormal];
-                [self.todayButton setAccessibilityLabel:accessibilityLabel];
-                self.indexOfTodayButton = index;
-            } else {
-                UIButton *button = self.dayButtons[index];
-                button.enabled = ![self.calendarView.delegate respondsToSelector:@selector(calendarView:shouldSelectDate:)] || [self.calendarView.delegate calendarView:self.calendarView shouldSelectDate:date];
-                button.hidden = NO;
-            }
+            // HOWON: 12/09/14: Remove today button!!
+            UIButton *button = self.dayButtons[index];
+            button.enabled = ![self.calendarView.delegate respondsToSelector:@selector(calendarView:shouldSelectDate:)] || [self.calendarView.delegate calendarView:self.calendarView shouldSelectDate:date];
+            button.hidden = NO;
+            
+//            if ([self.todayDateComponents isEqual:thisDateComponents]) {
+//                self.todayButton.hidden = NO;
+//                [self.todayButton setTitle:title forState:UIControlStateNormal];
+//                [self.todayButton setAccessibilityLabel:accessibilityLabel];
+//                self.indexOfTodayButton = index;
+//            } else {
+//                UIButton *button = self.dayButtons[index];
+//                button.enabled = ![self.calendarView.delegate respondsToSelector:@selector(calendarView:shouldSelectDate:)] || [self.calendarView.delegate calendarView:self.calendarView shouldSelectDate:date];
+//                button.hidden = NO;
+//            }
         }
 
         date = [self.calendar dateByAddingComponents:offset toDate:date options:0];
