@@ -58,9 +58,6 @@
 @property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panRecognizer;
 - (IBAction)displayGestureForPanRecognizer:(UIPanGestureRecognizer *)recognizer;
 
-
-
-
 // SmallCalendarView
 
 @property (nonatomic, strong) NSCalendar *calendar;
@@ -95,6 +92,7 @@
 @property (strong, nonatomic) NSMutableDictionary *storedFillHeights;
 //@property (strong, nonatomic) NSMutableArray *storedFillHeights;
 
-
+// 12/10/14 added
+//@property (strong, nonatomic)
 
 @end

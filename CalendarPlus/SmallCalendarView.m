@@ -16,4 +16,9 @@
     return CGRectContainsPoint(frame, point) ? self : nil;
 }
 
+//+ (CGFloat)cellHeight;
+//{
+//    return 46.0f;
+//}
+
 @end

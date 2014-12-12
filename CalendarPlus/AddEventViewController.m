@@ -404,7 +404,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSInteger endDay = [endDateComponents day];
     NSInteger numDatesSelected = endDay - startDay + 1;
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
-//    NSMutableArray *selectedDates = [self populateSelectedDates:currentDate numSelectedDates:numDatesSelected];
     self.selectedDates = [self populateSelectedDates:currentDate numSelectedDates:(int)numDatesSelected];
     
     self.graphView.hidden = NO;
@@ -478,6 +477,10 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     //    To hide the graph, just comment these out. Howon: visible graph
     //    [self.graphView.layer addSublayer:shapeLayer];
     //    [self.view.layer addSublayer:shapeLayer];
+    
+    
+    // 12/10/14: can I add a user feedback shape here??
+    
     
     float xStart = 188.0;
     float xEnd = 370.0;
