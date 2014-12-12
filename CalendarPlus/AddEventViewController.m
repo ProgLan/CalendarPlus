@@ -24,7 +24,7 @@
     self.STARTDATELABEL = @"endDateSelected";
     self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.availableHours = 8;
-    self.maxBtnHeight = 39.0; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
+    self.maxBtnHeight = 37.0; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
     self.maxBtnWidth = 53.5;
     
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
@@ -415,10 +415,17 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     // Howon: transforming bezier path
     int numHoursAvailable = (int)numDatesSelected * 8;
+    
     // workButton1: 430 ~ 405 - least amount of work (the less fixLocationY is, the bigger the graph is)
     // workButton2: 405 ~ 380
     // workButton3: 380 ~ 355
     // workButton4: 355 ~ 330
+    float maxHours = 80.0;
+    float minHOurs = 1.0;
+    
+    
+    
+    
     int workload = 0;
     if (location.y < 355 && location.y >= 330) {
         workload = 14 * 8;
