@@ -3891,6 +3891,7 @@
 				70E719091A3B31A800CDB299 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

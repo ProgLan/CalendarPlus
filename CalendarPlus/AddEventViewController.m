@@ -27,17 +27,6 @@
     self.maxBtnHeight = 39.0; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
     self.maxBtnWidth = 53.5;
     
-    // Set button backgrounds
-//    UIImage *buttonImage = [[UIImage imageNamed:@"btn_carrot.png"]
-//                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-//    UIImage *buttonImageHighlight = [[UIImage imageNamed:@"btn_light_carrot.png"]
-//                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-//    [self.startDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-//    [self.startDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
-//    [self.endDateButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-//    [self.endDateButton setBackgroundImage:buttonImageHighlight forState:(UIControlStateHighlighted | UIControlStateSelected)];
-    // Set button backgrounds Done
-    
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
     self.eventStore = [[EKEventStore alloc] init];
     
@@ -96,20 +85,13 @@
         }
         float numOccupiedHours = (float)floor(timeOfAllEvents/3600);
         if (numOccupiedHours > 0.0) {
-            float fillHeight = (numOccupiedHours / self.availableHours) * self.maxBtnHeight;
+            float fillHeight = (numOccupiedHours / (float)self.availableHours) * self.maxBtnHeight;
             UIImage *btnImg;
             
             if (fillHeight >= self.maxBtnHeight) {
                 fillHeight = self.maxBtnHeight;
             }
             btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
-            
-//            if (fillHeight >= self.maxBtnHeight) {
-//                fillHeight = self.maxBtnHeight;
-//                btnImg = [self imageWithColor:pinkBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
-//            } else {
-//                btnImg = [self imageWithColor:greyBtnColor buttonWidth:self.maxBtnWidth buttonHeight:self.maxBtnHeight fillHeight:fillHeight];
-//            }
             
             int btnTag = [currentDate timeIntervalSince1970];
             UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
@@ -230,12 +212,8 @@
 
 - (IBAction)addEventBtnPressed:(id)sender
 {
-    [self addEvent:self.eventTitle.text startDate:self.eventStartDate endDate:self.eventEndDate isReminder:NO];
-    [self addEvents:self.selectedDates eventDurations:self.eventDurations];
-    
-    // Howon 12/5/14 I have to add reminders here.
-    //[self addReminders:self.selectedDates reminderDurations:self.reminderDurations];
-    
+    //[self addEvent:self.eventTitle.text startDate:self.eventStartDate endDate:self.eventEndDate isReminder:NO];
+    [self addEvents:self.eventTitle.text selectedDates:self.selectedDates eventDurations:self.eventDurations];
 }
 
 // This method is called when the user has granted permission to Calendar
@@ -598,8 +576,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         // 12/7/14: perform this step only at the end of pan or tap gesture
         if (recognizerState == UIGestureRecognizerStateEnded) {
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
-            int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
-            [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
+            int reminderDuration = (int)((fillHeight/btnHeight) * 60.0 * 8.0); // 8 hours in minutes * fraction
+            //[self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
             [self.eventDurations addObject:[NSNumber numberWithInt:reminderDuration]];
         }
     }
@@ -626,10 +604,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     }
 }
 
-- (void)addEvents:(NSMutableArray *)selectedDates eventDurations:(NSMutableArray *)eventDurations {
+- (void)addEvents:(NSString *)eventTitle selectedDates:(NSMutableArray *)selectedDates eventDurations:(NSMutableArray *)eventDurations {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
-    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit                       | NSSecondCalendarUnit;
     int numDatesSelected = (int)[selectedDates count];
     for (int i = 0; i < numDatesSelected; i++) {
         int eventDuration = (int)[[eventDurations objectAtIndex:i] integerValue];
@@ -637,9 +614,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
         componentsDiff.minute = eventDuration;
         NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
-        NSString *eventTitle = [NSString stringWithFormat:@"start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
-        NSLog(@"is it correct?: %@", eventTitle);
-        
         [self addEvent:eventTitle startDate:selectedDate endDate:dueDate isReminder:YES];
         NSLog(@"Added a reminder event: %@", eventTitle);
     }

@@ -95,10 +95,8 @@
     NSDate *endD = currentEvent.endDate;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mma"];
-    
-    NSLog(currentEvent.title);
     NSString *eventTitle = [currentEvent.title substringFromIndex:3];
-    
+    eventTitle = [NSString stringWithFormat:@"%@       [  ]", eventTitle];
     //NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
 
     cell.textLabel.text = eventTitle;
