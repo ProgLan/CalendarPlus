@@ -40,6 +40,11 @@
     
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
     self.eventStore = [[EKEventStore alloc] init];
+    
+    // HOWON 12/10/14 see if sharing this with todayWidget works
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.CalendarPlus"];
+    [sharedDefaults setObject:@"hello there" forKey:@"helloString"];
+    
     self.reminderDurations = [[NSMutableArray alloc] initWithCapacity:0];
 //    self.selectedDates = [[NSMutableArray alloc] initWithCapacity:0];
     
@@ -241,32 +246,7 @@
     return endDate;
 }
 
-//
-//- (NSMutableArray *)fetchEvents
-//{
-//    NSDate *startDate = [NSDate date];
-//    
-//    //Create the end date components
-////    NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
-////    tomorrowDateComponents.day = 1;
-////    
-////    NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:tomorrowDateComponents
-////                                                                    toDate:startDate
-////                                                                   options:0];
-//    NSDate *endDate = [self makeTomorrowDate:startDate];
-//    // We will only search the default calendar for our events
-//    NSArray *calendarArray = [NSArray arrayWithObject:self.defaultCalendar];
-//    
-//    // Create the predicate
-//    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate
-//                                                                      endDate:endDate
-//                                                                    calendars:calendarArray];
-//    
-//    // Fetch all events that match the predicate
-//    NSMutableArray *events = [NSMutableArray arrayWithArray:[self.eventStore eventsMatchingPredicate:predicate]];
-//    
-//    return events;
-//}
+
 
 // Prompt the user for access to their Calendar
 -(void)requestCalendarAccess

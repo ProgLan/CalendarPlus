@@ -24,7 +24,6 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *goToDetailedView;
 - (IBAction)clickGoToDetailedView:(id)sender;
 
-
 @property AppDelegate *appDelegate;
 
 @property (nonatomic,strong) Utils *utils;

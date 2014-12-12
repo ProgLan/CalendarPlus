@@ -46,6 +46,10 @@
 		709B12C61A007A1000CA7C1A /* TableViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C51A007A1000CA7C1A /* TableViewBackground.png */; };
 		709B12C81A00898F00CA7C1A /* calendarPlusIcon180x180.png in Resources */ = {isa = PBXBuildFile; fileRef = 709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */; };
 		70BE655C1A0F3A9E009D9CDD /* SmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BE655B1A0F3A9E009D9CDD /* SmallCalendarView.m */; };
+		70E718FC1A3B31A800CDB299 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70E718FB1A3B31A800CDB299 /* NotificationCenter.framework */; };
+		70E719021A3B31A800CDB299 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E719011A3B31A800CDB299 /* TodayViewController.m */; };
+		70E719041A3B31A800CDB299 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70E719031A3B31A800CDB299 /* MainInterface.storyboard */; };
+		70E719071A3B31A800CDB299 /* CalendarPlus Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 70E718F91A3B31A800CDB299 /* CalendarPlus Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -322,7 +326,28 @@
 			remoteGlobalIDString = 7043873319F4AA27000AE179;
 			remoteInfo = CalendarPlus;
 		};
+		70E719051A3B31A800CDB299 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7043872C19F4AA27000AE179 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70E718F81A3B31A800CDB299;
+			remoteInfo = "CalendarPlus Widget";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		70E719101A3B31A800CDB299 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				70E719071A3B31A800CDB299 /* CalendarPlus Widget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7002350319FE449800CBACB4 /* AddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddEventViewController.h; sourceTree = "<group>"; };
@@ -861,6 +886,14 @@
 		709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendarPlusIcon180x180.png; path = Resources/calendarPlusIcon180x180.png; sourceTree = SOURCE_ROOT; };
 		70BE655A1A0F3A9E009D9CDD /* SmallCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallCalendarView.h; sourceTree = "<group>"; };
 		70BE655B1A0F3A9E009D9CDD /* SmallCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallCalendarView.m; sourceTree = "<group>"; };
+		70E718F91A3B31A800CDB299 /* CalendarPlus Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "CalendarPlus Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		70E718FB1A3B31A800CDB299 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		70E718FF1A3B31A800CDB299 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70E719001A3B31A800CDB299 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		70E719011A3B31A800CDB299 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		70E719031A3B31A800CDB299 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		70E719111A3B37D700CDB299 /* CalendarPlus Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "CalendarPlus Widget.entitlements"; sourceTree = "<group>"; };
+		70E719121A3B380200CDB299 /* CalendarPlus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CalendarPlus.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -876,6 +909,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70E718F61A3B31A800CDB299 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70E718FC1A3B31A800CDB299 /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2627,6 +2668,8 @@
 				703049AE19FD8B1D00DF81E0 /* Documents */,
 				7043873619F4AA27000AE179 /* CalendarPlus */,
 				7043875019F4AA28000AE179 /* CalendarPlusTests */,
+				70E718FD1A3B31A800CDB299 /* CalendarPlus Widget */,
+				70E718FA1A3B31A800CDB299 /* Frameworks */,
 				7043873519F4AA27000AE179 /* Products */,
 				7043875D19F4AA72000AE179 /* FrameWorks */,
 			);
@@ -2637,6 +2680,7 @@
 			children = (
 				7043873419F4AA27000AE179 /* CalendarPlus.app */,
 				7043874D19F4AA28000AE179 /* CalendarPlusTests.xctest */,
+				70E718F91A3B31A800CDB299 /* CalendarPlus Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2644,6 +2688,7 @@
 		7043873619F4AA27000AE179 /* CalendarPlus */ = {
 			isa = PBXGroup;
 			children = (
+				70E719121A3B380200CDB299 /* CalendarPlus.entitlements */,
 				7043874119F4AA27000AE179 /* Main.storyboard */,
 				7043873B19F4AA27000AE179 /* AppDelegate.h */,
 				7043873C19F4AA27000AE179 /* AppDelegate.m */,
@@ -2743,6 +2788,34 @@
 			path = TimesSquare;
 			sourceTree = "<group>";
 		};
+		70E718FA1A3B31A800CDB299 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				70E718FB1A3B31A800CDB299 /* NotificationCenter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		70E718FD1A3B31A800CDB299 /* CalendarPlus Widget */ = {
+			isa = PBXGroup;
+			children = (
+				70E719111A3B37D700CDB299 /* CalendarPlus Widget.entitlements */,
+				70E719001A3B31A800CDB299 /* TodayViewController.h */,
+				70E719011A3B31A800CDB299 /* TodayViewController.m */,
+				70E719031A3B31A800CDB299 /* MainInterface.storyboard */,
+				70E718FE1A3B31A800CDB299 /* Supporting Files */,
+			);
+			path = "CalendarPlus Widget";
+			sourceTree = "<group>";
+		};
+		70E718FE1A3B31A800CDB299 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				70E718FF1A3B31A800CDB299 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2753,10 +2826,12 @@
 				7043873019F4AA27000AE179 /* Sources */,
 				7043873119F4AA27000AE179 /* Frameworks */,
 				7043873219F4AA27000AE179 /* Resources */,
+				70E719101A3B31A800CDB299 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				70E719061A3B31A800CDB299 /* PBXTargetDependency */,
 			);
 			name = CalendarPlus;
 			productName = CalendarPlus;
@@ -2781,6 +2856,23 @@
 			productReference = 7043874D19F4AA28000AE179 /* CalendarPlusTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		70E718F81A3B31A800CDB299 /* CalendarPlus Widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70E7190F1A3B31A800CDB299 /* Build configuration list for PBXNativeTarget "CalendarPlus Widget" */;
+			buildPhases = (
+				70E718F51A3B31A800CDB299 /* Sources */,
+				70E718F61A3B31A800CDB299 /* Frameworks */,
+				70E718F71A3B31A800CDB299 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CalendarPlus Widget";
+			productName = "CalendarPlus Widget";
+			productReference = 70E718F91A3B31A800CDB299 /* CalendarPlus Widget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2793,11 +2885,28 @@
 					7043873319F4AA27000AE179 = {
 						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = T2N24XE45W;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
+								enabled = 0;
+							};
+						};
 					};
 					7043874C19F4AA28000AE179 = {
 						CreatedOnToolsVersion = 6.0.1;
 						DevelopmentTeam = G6P7H83FK6;
 						TestTargetID = 7043873319F4AA27000AE179;
+					};
+					70E718F81A3B31A800CDB299 = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = T2N24XE45W;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -2906,6 +3015,7 @@
 			targets = (
 				7043873319F4AA27000AE179 /* CalendarPlus */,
 				7043874C19F4AA28000AE179 /* CalendarPlusTests */,
+				70E718F81A3B31A800CDB299 /* CalendarPlus Widget */,
 			);
 		};
 /* End PBXProject section */
@@ -3214,6 +3324,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70E718F71A3B31A800CDB299 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70E719041A3B31A800CDB299 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3249,6 +3367,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		70E718F51A3B31A800CDB299 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70E719021A3B31A800CDB299 /* TodayViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3256,6 +3382,11 @@
 			isa = PBXTargetDependency;
 			target = 7043873319F4AA27000AE179 /* CalendarPlus */;
 			targetProxy = 7043874E19F4AA28000AE179 /* PBXContainerItemProxy */;
+		};
+		70E719061A3B31A800CDB299 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70E718F81A3B31A800CDB299 /* CalendarPlus Widget */;
+			targetProxy = 70E719051A3B31A800CDB299 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3615,6 +3746,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CalendarPlus/CalendarPlus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CalendarPlus/Info.plist;
@@ -3632,6 +3764,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CalendarPlus/CalendarPlus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CalendarPlus/Info.plist;
@@ -3685,6 +3818,42 @@
 			};
 			name = Release;
 		};
+		70E719081A3B31A800CDB299 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "CalendarPlus Widget/CalendarPlus Widget.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CalendarPlus Widget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		70E719091A3B31A800CDB299 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "CalendarPlus Widget/CalendarPlus Widget.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "CalendarPlus Widget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3714,6 +3883,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		70E7190F1A3B31A800CDB299 /* Build configuration list for PBXNativeTarget "CalendarPlus Widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70E719081A3B31A800CDB299 /* Debug */,
+				70E719091A3B31A800CDB299 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
