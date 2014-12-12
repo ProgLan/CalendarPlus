@@ -191,11 +191,15 @@
     }
 }
 
-- (void)addEvent:(NSString*)eventTitle startDate:(NSDate*)startDate endDate:(NSDate*)endDate
+- (void)addEvent:(NSString*)eventTitle startDate:(NSDate*)startDate endDate:(NSDate*)endDate isReminder:(BOOL)isReminder
 {
     NSLog(@"addEvent starts");
     EKEvent *myEvent = [EKEvent eventWithEventStore:self.eventStore];
     [myEvent setCalendar:[self.eventStore defaultCalendarForNewEvents]];
+    
+    if (isReminder) {
+        eventTitle = [NSString stringWithFormat:@":!: %@", eventTitle];
+    }
     
     myEvent.title = eventTitle;
     myEvent.startDate = startDate;
@@ -208,7 +212,6 @@
     
     NSError *err;
     [self.eventStore saveEvent:myEvent span:EKSpanThisEvent error:&err];
-    
     
     if (err) {
         NSLog(@"err?: %@", err);
@@ -227,7 +230,8 @@
 
 - (IBAction)addEventBtnPressed:(id)sender
 {
-    [self addEvent:self.eventTitle.text startDate:self.eventStartDate endDate:self.eventEndDate];
+    [self addEvent:self.eventTitle.text startDate:self.eventStartDate endDate:self.eventEndDate isReminder:NO];
+    [self addEvents:self.selectedDates eventDurations:self.eventDurations];
     
     // Howon 12/5/14 I have to add reminders here.
     //[self addReminders:self.selectedDates reminderDurations:self.reminderDurations];
@@ -634,8 +638,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         componentsDiff.minute = eventDuration;
         NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
         NSString *eventTitle = [NSString stringWithFormat:@"start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
+        NSLog(@"is it correct?: %@", eventTitle);
         
-        [self addEvent:eventTitle startDate:selectedDate endDate:dueDate];
+        [self addEvent:eventTitle startDate:selectedDate endDate:dueDate isReminder:YES];
         NSLog(@"Added a reminder event: %@", eventTitle);
     }
 }

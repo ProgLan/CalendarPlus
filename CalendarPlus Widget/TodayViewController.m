@@ -51,6 +51,7 @@
     NSDate *startDate = [gregorian dateBySettingHour:0 minute:0 second:0 ofDate:today options:0];
     NSDateComponents *tomorrowDateComponents = [[NSDateComponents alloc] init];
     tomorrowDateComponents.day = 1;
+    
     NSDate *endDate = [gregorian dateByAddingComponents:tomorrowDateComponents
                                                  toDate:startDate
                                                 options:0];
@@ -61,8 +62,17 @@
     NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:startDate
                                                                  endDate:endDate
                                                                calendars:calendarArray];
+    
     todayEvents = [NSMutableArray arrayWithArray:[eventStore eventsMatchingPredicate:predicate]];
-    return todayEvents;
+    NSMutableArray *reminderEvents = [[NSMutableArray alloc] init];
+    
+    for (int i=0; i < [todayEvents count]; i++) {
+        EKEvent *event = [todayEvents objectAtIndex:i];
+        if (!([event.title rangeOfString:@":!:"].location == NSNotFound)) {
+            [reminderEvents addObject:[todayEvents objectAtIndex:i]];
+        }
+    }
+    return reminderEvents;
 }
 
 // Table view related
@@ -85,9 +95,12 @@
     NSDate *endD = currentEvent.endDate;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mma"];
-    NSString *eventTitle = currentEvent.title;
+    
+    NSLog(currentEvent.title);
+    NSString *eventTitle = [currentEvent.title substringFromIndex:3];
     
     //NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
+
     cell.textLabel.text = eventTitle;
     
     UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
