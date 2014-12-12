@@ -81,6 +81,7 @@
 // temporary variables that hold reminder component information
 @property (strong, nonatomic) NSMutableArray *selectedDates;
 @property (strong, nonatomic) NSMutableArray *reminderDurations;
+@property (strong, nonatomic) NSMutableArray *eventDurations;
 @property AppDelegate *appDelegate;
 
 // 12/4/14 added

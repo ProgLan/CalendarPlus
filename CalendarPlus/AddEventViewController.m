@@ -46,6 +46,7 @@
     [sharedDefaults setObject:@"hello there" forKey:@"helloString"];
     
     self.reminderDurations = [[NSMutableArray alloc] initWithCapacity:0];
+    self.eventDurations = [[NSMutableArray alloc] initWithCapacity:0];
 //    self.selectedDates = [[NSMutableArray alloc] initWithCapacity:0];
     
 //    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
@@ -190,23 +191,30 @@
     }
 }
 
-- (IBAction)addEventBtnPressed:(id)sender
+- (void)addEvent:(NSString*)eventTitle startDate:(NSDate*)startDate endDate:(NSDate*)endDate
 {
+    NSLog(@"addEvent starts");
     EKEvent *myEvent = [EKEvent eventWithEventStore:self.eventStore];
-    myEvent.title = self.eventTitle.text;
-    myEvent.startDate = self.eventStartDate;
-    myEvent.endDate = self.eventEndDate;
+    [myEvent setCalendar:[self.eventStore defaultCalendarForNewEvents]];
+    
+    myEvent.title = eventTitle;
+    myEvent.startDate = startDate;
+    myEvent.endDate = endDate;
     myEvent.allDay = NO;
     
-    [myEvent setCalendar:[self.eventStore defaultCalendarForNewEvents]];
+    NSLog(@"title: %@", eventTitle);
+    NSLog(@"startDate: %@", startDate);
+    NSLog(@"endDate: %@", endDate);
     
     NSError *err;
     [self.eventStore saveEvent:myEvent span:EKSpanThisEvent error:&err];
     
+    
     if (err) {
+        NSLog(@"err?: %@", err);
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:@"Error"
-                              message:@"Invalid input"
+                              message:@"Invalid input hi there"
                               delegate:nil
                               cancelButtonTitle:@"Okay"
                               otherButtonTitles:nil];
@@ -214,9 +222,15 @@
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
+    NSLog(@"added an event! %@", eventTitle);
+}
+
+- (IBAction)addEventBtnPressed:(id)sender
+{
+    [self addEvent:self.eventTitle.text startDate:self.eventStartDate endDate:self.eventEndDate];
     
     // Howon 12/5/14 I have to add reminders here.
-    [self addReminders:self.selectedDates reminderDurations:self.reminderDurations];
+    //[self addReminders:self.selectedDates reminderDurations:self.reminderDurations];
     
 }
 
@@ -582,6 +596,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
             int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
             [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
+            [self.eventDurations addObject:[NSNumber numberWithInt:reminderDuration]];
         }
     }
 
@@ -595,7 +610,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     for (int i = 0; i < numDatesSelected; i++) {
         int reminderDuration = (int)[[reminderDurations objectAtIndex:i] integerValue];
         NSDate *selectedDate = [selectedDates objectAtIndex:i];
-//        [NSNumber numberWithInteger:i]
         NSDateComponents *startDateComponents = [self.calendar components:unitFlags fromDate:selectedDate];
         NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
         componentsDiff.minute = reminderDuration; // why am I pulling out only minutes??
@@ -605,6 +619,24 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         NSString *reminderTitle = [NSString stringWithFormat:@"[re]start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
         [self addReminder:reminderTitle startDateComps:startDateComponents dueDateComps:dueDateComponents];
         NSLog(@"Added: %@", reminderTitle);
+    }
+}
+
+- (void)addEvents:(NSMutableArray *)selectedDates eventDurations:(NSMutableArray *)eventDurations {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMMM dd hh:mma"];
+    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit                       | NSSecondCalendarUnit;
+    int numDatesSelected = (int)[selectedDates count];
+    for (int i = 0; i < numDatesSelected; i++) {
+        int eventDuration = (int)[[eventDurations objectAtIndex:i] integerValue];
+        NSDate *selectedDate = [selectedDates objectAtIndex:i];
+        NSDateComponents *componentsDiff = [[NSDateComponents alloc] init];
+        componentsDiff.minute = eventDuration;
+        NSDate *dueDate = [self.calendar dateByAddingComponents:componentsDiff toDate:selectedDate options:0];
+        NSString *eventTitle = [NSString stringWithFormat:@"start: %@, due: %@", [dateFormatter stringFromDate:selectedDate], [dateFormatter stringFromDate:dueDate]];
+        
+        [self addEvent:eventTitle startDate:selectedDate endDate:dueDate];
+        NSLog(@"Added a reminder event: %@", eventTitle);
     }
 }
 
@@ -618,17 +650,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 {
     CGPoint location = [recognizer locationInView:self.view];
     [self drawWorkloadGraph:location recognizerState:recognizer.state];
-    
-    
-//    
-//    if (recognizer.state == UIGestureRecognizerStateBegan) {
-//        [self drawWorkloadGraph:location isEndMotion:false isStartMotion:true];
-//    } else if (recognizer.state == UIGestureRecognizerStateEnded) {
-//        NSLog(@"gesture ending state");
-//        [self drawWorkloadGraph:location isEndMotion:true isStartMotion:false];
-//    } else {
-//        [self drawWorkloadGraph:location isEndMotion:false isStartMotion:true];
-//    }
 }
 
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {
