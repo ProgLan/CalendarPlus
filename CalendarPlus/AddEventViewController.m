@@ -343,10 +343,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-- (NSMutableArray*)distributeWorkload:(NSMutableArray *)fillHeightsArr numDatesSelected:(int)arrSize loc:(CGPoint)location transformingScale:(float)tfScale btnHeight:(float)btnHeight {
-//    float fillHeight = btnHeight * tfScale;
-    // not sure what the fillHeight should be here
-    float fillHeight = tfScale * 10;
+//- (NSMutableArray*)distributeWorkload:(NSMutableArray *)fillHeightsArr numDatesSelected:(int)arrSize loc:(CGPoint)location transformingScale:(float)tfScale btnHeight:(float)btnHeight {
+//    float fillHeight = tfScale * 10;
+//    NSNumber *fhNum = [NSNumber numberWithFloat:fillHeight];
+//    for (int i = 0; i < arrSize; i++) {
+//        [fillHeightsArr addObject:fhNum];
+//    }
+//    return fillHeightsArr;
+//}
+
+- (NSMutableArray*)distributeWorkload:(int)arrSize transformingScale:(float)tfScale btnHeight:(float)btnHeight {
+    NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
+    float fillHeight = tfScale * btnHeight;
     NSNumber *fhNum = [NSNumber numberWithFloat:fillHeight];
     for (int i = 0; i < arrSize; i++) {
         [fillHeightsArr addObject:fhNum];
@@ -393,7 +401,15 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 }
 
 - (float)calculateWorkload:(float)locY maxY:(float)maxY yRange:(float)yRange maxHours:(float)maxHours {
-    return ((locY - maxY) / yRange) * maxHours;
+    float workload;
+    if (locY > maxY) {
+        workload = 0.0;
+        NSLog(@"workload %f", workload);
+        return workload;
+    }
+    workload = ((maxY - locY) / yRange) * maxHours;
+    NSLog(@"workload %f", workload);
+    return workload;
 }
 
 
@@ -415,35 +431,16 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     self.graphView.hidden = NO;
     
     // Howon: transforming bezier path
-    int numHoursAvailable = (int)numDatesSelected * 8;
-    
-    // workButton1: 430 ~ 405 - least amount of work (the less fixLocationY is, the bigger the graph is)
-    // workButton2: 405 ~ 380
-    // workButton3: 380 ~ 355
-    // workButton4: 355 ~ 330
-    
-    float maxHours = 80.0;
-    float maxY = 440.0;
+    float numHoursAvailable = numDatesSelected * 8.0;
+    float maxHours = 8.0 * 14.0; // 8 * 14 (two weeks of workload is maximum)
+    float maxY = 420.0;
     float minY = 320.0;
     float yRange = maxY - minY;
     float workload = [self calculateWorkload:location.y maxY:maxY yRange:yRange maxHours:maxHours];
     
-    
-    int workload = 0;
-    if (location.y < 355 && location.y >= 330) {
-        workload = 14 * 8;
-        //NSLog(@"Two weeks. Available: %i, Workload: %i", numHoursAvailable, workload);
-    } else if (location.y < 380 && location.y >= 355) {
-        workload = 7 * 8;
-        //NSLog(@"One week. Available: %i, Workload: %i", numHoursAvailable, workload);
-    } else if (location.y < 405 && location.y >= 380) {
-        workload = 8;
-        //NSLog(@"One day. Available: %i, Workload: %i", numHoursAvailable, workload);
-    } else if (location.y < 430 && location.y >= 405) {
-        workload = 1;
-        //NSLog(@"One hour. Available: %i, Workload: %i", numHoursAvailable, workload);
-    }
-    float transformingScale = workload / (float)numHoursAvailable;
+    float transformingScale = workload / numHoursAvailable; // To get fillHeight, btnHeight * transformingScale
+    NSLog(@"numHoursAvailable: %f", numHoursAvailable);
+    NSLog(@"transformaingScale: %f", transformingScale);
     
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
@@ -478,7 +475,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     // HOWON: set a fixed location for the bezier graph 11/24/14
     // WATCH OUT IF YOU ARE PLANNING TO USE LOCATION VARIABLE AFTER THIS
-    location.y = 330.0;
+    //location.y = minY;
     
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
     
@@ -494,14 +491,14 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.lineWidth = 1.0;
     // Uncomment the lines below to see what kind of shape is drawn when you touch the input area
     //    To hide the graph, just comment these out. Howon: visible graph
-    //    [self.graphView.layer addSublayer:shapeLayer];
-    //    [self.view.layer addSublayer:shapeLayer];
+        [self.graphView.layer addSublayer:shapeLayer];
+        [self.view.layer addSublayer:shapeLayer];
     
     // 12/10/14: can I add a user feedback shape here??
     
     float xStart = 188.0;
     float xEnd = 370.0;
-    float yStart = 425.0;
+    float yStart = maxY;
     float xRange = xEnd - xStart;
     
     float tickInterval = xRange / numDatesSelected;
@@ -539,7 +536,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     float xMid = (origin.x + endpt.x)/2.0;
     if (location.x >= xMid-epsilon && location.x <= xMid+epsilon) {
         // HOWON: if x falls in the middle, then return an evenly distributed workload
-        fillHeightsArr = [self distributeWorkload:fillHeightsArr numDatesSelected:(int)numDatesSelected loc:location transformingScale:transformingScale btnHeight:btnHeight];
+        fillHeightsArr = [self distributeWorkload:numDatesSelected transformingScale:transformingScale btnHeight:btnHeight];
+        //fillHeightsArr = [self distributeWorkload:fillHeightsArr numDatesSelected:(int)numDatesSelected loc:location transformingScale:transformingScale btnHeight:btnHeight];
     } else {
         for (int i = 0; i < numDatesSelected; i++) {
             float prevXPoint = xPointOnBezierPath;
@@ -554,6 +552,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
             [fillHeightsArr addObject:fhNum];
         }
         fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
+        //NSLog(@"fillHeightsARr: %@", fillHeightsArr);
     }
     
     //    NSLog(@"after normalizing: %@", fillHeightsArr);
