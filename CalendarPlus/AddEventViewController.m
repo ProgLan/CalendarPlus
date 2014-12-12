@@ -392,6 +392,10 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [self.view.layer addSublayer:circle];
 }
 
+- (float)calculateWorkload:(float)locY maxY:(float)maxY yRange:(float)yRange maxHours:(float)maxHours {
+    return ((locY - maxY) / yRange) * maxHours;
+}
+
 
 - (void)drawWorkloadGraph:(CGPoint)location recognizerState:(UIGestureRecognizerState)recognizerState {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
@@ -400,9 +404,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSInteger endDay = [endDateComponents day];
     NSInteger numDatesSelected = endDay - startDay + 1;
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
-    
-    float circleX = location.x;
-    float circleY = location.y;
     
     if (recognizerState == UIGestureRecognizerStateBegan) {
         if (self.currentCircle != nil) {
@@ -420,10 +421,12 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     // workButton2: 405 ~ 380
     // workButton3: 380 ~ 355
     // workButton4: 355 ~ 330
+    
     float maxHours = 80.0;
-    float minHOurs = 1.0;
-    
-    
+    float maxY = 440.0;
+    float minY = 320.0;
+    float yRange = maxY - minY;
+    float workload = [self calculateWorkload:location.y maxY:maxY yRange:yRange maxHours:maxHours];
     
     
     int workload = 0;
