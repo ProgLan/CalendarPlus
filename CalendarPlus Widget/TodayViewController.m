@@ -20,6 +20,8 @@
     NSLog(@"view did load");
     [super viewDidLoad];
     self.todayEvents = [self fetchEvents];
+    self.preferredContentSize = CGSizeMake(self.preferredContentSize.width, [self.todayEvents count] * 44.0);
+    
     for (int i = 0; i < [self.todayEvents count]; i++) {
         EKEvent *event = [self.todayEvents objectAtIndex:i];
         NSLog(@"title: %@", event.title);
@@ -29,6 +31,8 @@
 //        NSLog(@"availability: %d", event.availability);
     }
 //    NSLog(@"todayEvents: %@", todayEvents);
+    self.tableView.separatorColor = [UIColor clearColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView reloadData];
     
 }
@@ -91,6 +95,7 @@
     backView.backgroundColor = [UIColor clearColor];
     cell.backgroundView = backView;
     cell.textLabel.textColor = [UIColor whiteColor];
+    
     return cell;
 }
 // -- Table view related
