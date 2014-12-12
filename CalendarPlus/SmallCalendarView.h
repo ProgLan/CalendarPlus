@@ -15,6 +15,4 @@
 
 - (void)setSelectedDate:(NSDate *)newSelectedDate;
 
-+ (CGFloat)cellHeight;
-
 @end

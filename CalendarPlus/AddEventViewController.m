@@ -24,7 +24,7 @@
     self.STARTDATELABEL = @"endDateSelected";
     self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.availableHours = 8;
-    self.maxBtnHeight = 31.0;
+    self.maxBtnHeight = 39.0; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
     self.maxBtnWidth = 53.5;
     
     // Set button backgrounds
@@ -396,16 +396,45 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return selectedDates;
 }
 
+- (void)drawCircle:(CGPoint)location {
+    if (self.currentCircle != nil) {
+        [self.currentCircle removeFromSuperlayer];
+    }
+    
+    int radius = 10;
+    CAShapeLayer *circle = [CAShapeLayer layer];
+    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                             cornerRadius:radius].CGPath;
+    
+//    circle.position = CGPointMake(circleX, circleY);
+    circle.position = CGPointMake(location.x+radius, location.y-radius);
+    circle.fillColor = [self.utils colorFromHexString:@"#1abc9c"].CGColor;
+    circle.strokeColor = [self.utils colorFromHexString:@"#16a085"].CGColor;
+    circle.lineWidth = 2;
+    
+    self.currentCircle = circle;
+    [self.view.layer addSublayer:circle];
+}
 
-- (void)drawWorkloadGraph:(CGPoint)location isEndMotion:(BOOL)isEndMotion {
+
+- (void)drawWorkloadGraph:(CGPoint)location recognizerState:(UIGestureRecognizerState)recognizerState {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
     NSInteger startDay = [startDateComponents day];
     NSDateComponents *endDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventEndDate];
     NSInteger endDay = [endDateComponents day];
     NSInteger numDatesSelected = endDay - startDay + 1;
     NSDate *currentDate = [self.calendar dateBySettingHour:0 minute:0 second:0 ofDate:self.eventStartDate options:0];
-    self.selectedDates = [self populateSelectedDates:currentDate numSelectedDates:(int)numDatesSelected];
     
+    float circleX = location.x;
+    float circleY = location.y;
+    
+    if (recognizerState == UIGestureRecognizerStateBegan) {
+        if (self.currentCircle != nil) {
+            [self.currentCircle removeFromSuperlayer];
+        }
+    }
+    
+    self.selectedDates = [self populateSelectedDates:currentDate numSelectedDates:(int)numDatesSelected];
     self.graphView.hidden = NO;
     
     // Howon: transforming bezier path
@@ -429,7 +458,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         //NSLog(@"One hour. Available: %i, Workload: %i", numHoursAvailable, workload);
     }
     float transformingScale = workload / (float)numHoursAvailable;
-//    NSLog(@"transfomringScale = %f", transformingScale);
     
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
@@ -447,20 +475,23 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         for (int i = 0; i < numDatesSelected; i++) {
             int btnTag = [[self.selectedDates objectAtIndex:i] timeIntervalSince1970];
             NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
-//            float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
-//            NSLog(@"currentfillHeight: %f", currentFillHeight);
             UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
             [self.coloredButtons addObject:myButton];
             UIImage *img = [self imageWithColor:[UIColor redColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight];
             [myButton setImage:img forState:UIControlStateNormal];
             [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
-            
         }
         return;
     }
     
-    //    HOWON: set a fixed location 11/24/14
+    // Howon 12/10/14 I also want to show the user where he touched
+    if (recognizerState == UIGestureRecognizerStateEnded) {
+        [self drawCircle:location];
+    }
+    
+    // HOWON: set a fixed location for the bezier graph 11/24/14
+    // WATCH OUT IF YOU ARE PLANNING TO USE LOCATION VARIABLE AFTER THIS
     location.y = 330.0;
     
     NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
@@ -469,18 +500,18 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [self.currentGraph removeFromSuperlayer];
     }
     
+    // This shapeLayer is actually hidden.
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     self.currentGraph = shapeLayer;
     shapeLayer.strokeColor = [self.utils colorFromHexString:@"#16A085"].CGColor;
     shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
+    // Uncomment the lines below to see what kind of shape is drawn when you touch the input area
     //    To hide the graph, just comment these out. Howon: visible graph
     //    [self.graphView.layer addSublayer:shapeLayer];
     //    [self.view.layer addSublayer:shapeLayer];
     
-    
     // 12/10/14: can I add a user feedback shape here??
-    
     
     float xStart = 188.0;
     float xEnd = 370.0;
@@ -558,7 +589,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [self.coloredButtons addObject:myButton];
         
         float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
-        NSLog(@"currentfillHeight: %f", currentFillHeight);
+//        NSLog(@"currentfillHeight: %f", currentFillHeight);
         float fillHeight = [fillHeightsArr[i] floatValue];
         
         UIImage *img = [self combinedImage:btnWidth buttonHeight:btnHeight fillHeight1:fillHeight fillHeight2:currentFillHeight];
@@ -567,8 +598,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
         
         // 12/7/14: perform this step only at the end of pan or tap gesture
-        if (isEndMotion) {
-            NSLog(@"add reminders");
+        if (recognizerState == UIGestureRecognizerStateEnded) {
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
             int reminderDuration = (int)((fillHeight/btnHeight) * 60 * 8); // 8 hours in minutes * fraction
             [self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
@@ -601,18 +631,24 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 - (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
-    [self drawWorkloadGraph:location isEndMotion:true];
+    [self drawWorkloadGraph:location recognizerState:recognizer.state];
 }
 
 - (IBAction)displayGestureForPanRecognizer:(UIPanGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        NSLog(@"gesture ending state");
-        [self drawWorkloadGraph:location isEndMotion:true];
-    } else {
-        [self drawWorkloadGraph:location isEndMotion:false];
-    }
+    [self drawWorkloadGraph:location recognizerState:recognizer.state];
+    
+    
+//    
+//    if (recognizer.state == UIGestureRecognizerStateBegan) {
+//        [self drawWorkloadGraph:location isEndMotion:false isStartMotion:true];
+//    } else if (recognizer.state == UIGestureRecognizerStateEnded) {
+//        NSLog(@"gesture ending state");
+//        [self drawWorkloadGraph:location isEndMotion:true isStartMotion:false];
+//    } else {
+//        [self drawWorkloadGraph:location isEndMotion:false isStartMotion:true];
+//    }
 }
 
 - (float)getYFromBezierPath:(float)x location:(CGPoint)location ctrlpt1:(CGPoint)ctrlpt1 ctrlpt2:(CGPoint)ctrlpt2 startpt:(CGPoint)startpt endpt:(CGPoint)endpt {

@@ -93,6 +93,6 @@
 //@property (strong, nonatomic) NSMutableArray *storedFillHeights;
 
 // 12/10/14 added
-//@property (strong, nonatomic)
+@property (strong, nonatomic) CAShapeLayer *currentCircle;
 
 @end

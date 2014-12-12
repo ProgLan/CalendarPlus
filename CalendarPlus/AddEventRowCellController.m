@@ -22,7 +22,7 @@
 - (UIImage *)todayBackgroundImage;
 {
     // I dont want todayBackground to show
-//    return [[UIImage imageNamed:@"todays_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
+    // return [[UIImage imageNamed:@"todays_date_custom.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:4];
     
     Utils* utils = [[Utils alloc] init];
     UIImage* img = [utils imageWithColor:[UIColor clearColor] buttonWidth:1.0 buttonHeight:1.0 fillHeight:1.0];
@@ -47,7 +47,7 @@
 
 + (CGFloat)cellHeight;
 {
-    return 31.5f;
+    return 39.5f;
 }
 
 @end
