@@ -96,4 +96,8 @@
 // 12/10/14 added
 @property (strong, nonatomic) CAShapeLayer *currentCircle;
 
+// 12/13/14 added
+@property (weak, nonatomic) IBOutlet UILabel *numWorkloadLabel;
+
+
 @end

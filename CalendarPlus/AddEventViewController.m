@@ -400,6 +400,54 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return workload;
 }
 
+- (NSString*)hoursToWorkload:(float)hours numHoursADay:(float)numHoursADay {
+    int numDays = 0;
+    int numWeeks = 0;
+    NSString *output = @"";
+    NSString *weeksMsg = @"";
+    NSString *daysMsg = @"";
+    NSString *hoursMsg = @"";
+    
+    if (hours > numHoursADay) {
+        numDays = floor(hours / numHoursADay);
+        hours = hours - (numDays * numHoursADay);
+    }
+    if (numDays >= 7) {
+        numWeeks = floor(numDays / 7);
+        numDays = numDays - (numWeeks * 7);
+    }
+
+    if (numWeeks) {
+        if (numWeeks > 1)
+            weeksMsg = [NSString stringWithFormat:@"%i weeks", numWeeks];
+        else if (numWeeks == 1)
+            weeksMsg = [NSString stringWithFormat:@"%i week", numWeeks];
+    }
+    if (numDays) {
+        if (numDays > 1)
+            daysMsg = [NSString stringWithFormat:@"%i days", numDays];
+        else if (numDays == 1)
+            daysMsg = [NSString stringWithFormat:@"%i day", numDays];
+    }
+    if (hours > 1.0)
+        hoursMsg = [NSString stringWithFormat:@"%0.1f hours", hours];
+    else if (hours == 1)
+        hoursMsg = [NSString stringWithFormat:@"%0.1f hour", hours];
+    
+    return [NSString stringWithFormat:@"%@ %@ %@", weeksMsg, daysMsg, hoursMsg];
+    
+//    
+//    
+//    if (numWeeks) {
+//        output = [NSString stringWithFormat:@"%iw/%id/%0.1fh", numWeeks, numDays, hours];
+//    } else if (numDays) {
+//        output = [NSString stringWithFormat:@"%id/%0.1fh", numDays, hours];
+//    } else {
+//        output = [NSString stringWithFormat:@"%0.1fh", hours];
+//    }
+
+}
+
 
 - (void)drawWorkloadGraph:(CGPoint)location recognizerState:(UIGestureRecognizerState)recognizerState {
     NSDateComponents *startDateComponents = [self.calendar components:(NSCalendarUnitDay) fromDate:self.eventStartDate];
@@ -426,6 +474,10 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     float yRange = maxY - minY;
     float workload = [self calculateWorkload:location.y maxY:maxY yRange:yRange maxHours:maxHours];
     
+    // update workloadLabel
+    //self.numWorkloadLabel.text = [NSString stringWithFormat:@"%.01f hours", workload];
+    self.numWorkloadLabel.text = [self hoursToWorkload:workload numHoursADay:8.0];
+    
     float transformingScale = workload / numHoursAvailable; // To get fillHeight, btnHeight * transformingScale
     
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
@@ -449,10 +501,10 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
     
-    // Uncomment the lines below to see what kind of shape is drawn when you touch the input area
-    //    To hide the graph, just comment these out. Howon: visible graph
-    [self.graphView.layer addSublayer:shapeLayer];
-    [self.view.layer addSublayer:shapeLayer];
+    // IMPORTANT: Uncomment the lines below to see what kind of shape is drawn when you touch the input area
+    // To hide the graph, just comment these out. Howon: visible graph
+    // [self.graphView.layer addSublayer:shapeLayer];
+    // [self.view.layer addSublayer:shapeLayer];
     
     // Define the input area
     float xStart = 188.0;
@@ -518,7 +570,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         [self.coloredButtons addObject:myButton];
         
         float currentFillHeight = [[self.storedFillHeights objectForKey:btnTagNumber] floatValue];
-//        NSLog(@"currentfillHeight: %f", currentFillHeight);
         float fillHeight = [fillHeightsArr[i] floatValue];
         
         UIImage *img = [self combinedImage:btnWidth buttonHeight:btnHeight fillHeight1:fillHeight fillHeight2:currentFillHeight];
@@ -534,7 +585,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
             [self.eventDurations addObject:[NSNumber numberWithInt:reminderDuration]];
         }
     }
-
 }
 
 - (void)addReminders:(NSMutableArray *)selectedDates reminderDurations:(NSMutableArray *)reminderDurations {

@@ -267,6 +267,7 @@
                         <outlet property="endDateLabel" destination="vrH-cL-R0i" id="CsC-no-Igz"/>
                         <outlet property="eventTitle" destination="WWl-Ry-50z" id="Y0C-cc-5Rw"/>
                         <outlet property="graphView" destination="E4q-sD-I0R" id="48y-uj-z3r"/>
+                        <outlet property="numWorkloadLabel" destination="M2H-wx-Sac" id="1NN-10-Jdd"/>
                         <outlet property="panRecognizer" destination="qW2-au-KlM" id="jWL-ds-1oP"/>
                         <outlet property="smallCalendarView" destination="caj-48-irQ" id="Sn7-qf-IWv"/>
                         <outlet property="tapRecognizer" destination="4mp-Ln-fzA" id="H31-WQ-t8V"/>
