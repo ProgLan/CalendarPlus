@@ -24,7 +24,7 @@
     self.STARTDATELABEL = @"endDateSelected";
     self.appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     self.availableHours = 8;
-    self.maxBtnHeight = 37.0; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
+    self.maxBtnHeight = 34.5; //FIXME: hardcoded values: can be found in AddCalendarEventRowController
     self.maxBtnWidth = 53.5;
     
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
@@ -63,17 +63,17 @@
 
 
 - (void)markExistingEvents {
-//    NSLog(@"mark existing events starts");
-    UIColor *pinkBtnColor = [self.utils colorFromHexString:@"#D2527F"];
     UIColor *greyBtnColor = [self.utils colorFromHexString:@"#6C7A89"];
     NSDate* startDate = self.eventStartDate;
-//    NSLog(@"startDate: %@", startDate);
     NSDateComponents *dateComponents = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:startDate];
     [dateComponents setDay:1];
     [dateComponents setHour:0];
     startDate = [self.calendar dateFromComponents:dateComponents];
-    NSDate* currentDate = startDate;
-    for (int i = 0; i < 30; i++) { //FIXME: find either 30 or 31
+    NSDate *currentDate = startDate;
+    
+    // Get how many days there are in current month
+    NSRange daysRange = [self.calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:startDate];
+    for (int i = 0; i < daysRange.length; i++) {
         NSMutableArray* events = [[NSMutableArray alloc] init];
         events = [self.appDelegate.eventManager fetchEvents:currentDate];
         int numEvents = (int)[events count];
@@ -102,9 +102,6 @@
             NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag]; // btnTag = [currentDate timeIntervalSince1970];
             NSNumber *value = [self.storedFillHeights objectForKey:btnTagNumber];
             [self.storedFillHeights setObject:[NSNumber numberWithFloat:fillHeight] forKey:btnTagNumber];
-            
-//            [self.storedFillHeights setObject:[NSNumber numberWithFloat: fillHeight] atIndexedSubscript:i];
-            
         }
         currentDate = [self makeTomorrowDate:currentDate];
     }

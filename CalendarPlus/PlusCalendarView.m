@@ -11,7 +11,6 @@
 
 @implementation PlusCalendarView
 
-
 - (void)setSelectedDate:(NSDate *)newSelectedDate; {
     [super setSelectedDate:newSelectedDate];
     self.initialVC.pickedDate = newSelectedDate; // store this variable for prepareForSegue method
