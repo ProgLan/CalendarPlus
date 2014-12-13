@@ -108,7 +108,6 @@
         }
         currentDate = [self makeTomorrowDate:currentDate];
     }
-    NSLog(@"stored FillHEights: %@", self.storedFillHeights);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -395,11 +394,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     float workload;
     if (locY > maxY) {
         workload = 0.0;
-        NSLog(@"workload %f", workload);
         return workload;
     }
     workload = ((maxY - locY) / yRange) * maxHours;
-    NSLog(@"workload %f", workload);
     return workload;
 }
 
@@ -430,45 +427,16 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     float workload = [self calculateWorkload:location.y maxY:maxY yRange:yRange maxHours:maxHours];
     
     float transformingScale = workload / numHoursAvailable; // To get fillHeight, btnHeight * transformingScale
-    NSLog(@"numHoursAvailable: %f", numHoursAvailable);
-    NSLog(@"transformaingScale: %f", transformingScale);
     
     UIButton *firstButton = (UIButton *)[self.smallCalendarView viewWithTag:[self.eventStartDate timeIntervalSince1970]];
     float btnWidth = firstButton.frame.size.width;
     float btnHeight = firstButton.frame.size.height;
 
-    if (transformingScale > 1) {
-//        NSLog(@"we cannot draw the graph");
-        int numColoredButtons = [self.coloredButtons count];
-        for (int i = 0; i < numColoredButtons; i++) {
-            UIButton *cb = [self.coloredButtons objectAtIndex:i];
-            [cb setImage:[self imageWithColor:[UIColor clearColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight] forState:UIControlStateNormal];
-        }
-        [self.coloredButtons removeAllObjects];
-        
-        for (int i = 0; i < numDatesSelected; i++) {
-            int btnTag = [[self.selectedDates objectAtIndex:i] timeIntervalSince1970];
-            NSNumber *btnTagNumber = [NSNumber numberWithInt:btnTag];
-            UIButton *myButton = (UIButton *)[self.smallCalendarView viewWithTag:btnTag];
-            [self.coloredButtons addObject:myButton];
-            UIImage *img = [self imageWithColor:[UIColor redColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight];
-            [myButton setImage:img forState:UIControlStateNormal];
-            [myButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -53.5, 0.0, 0.0)];
-            [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
-        }
-        return;
-    }
     
     // Howon 12/10/14 I also want to show the user where he touched
     if (recognizerState == UIGestureRecognizerStateEnded) {
         [self drawCircle:location];
     }
-    
-    // HOWON: set a fixed location for the bezier graph 11/24/14
-    // WATCH OUT IF YOU ARE PLANNING TO USE LOCATION VARIABLE AFTER THIS
-    //location.y = minY;
-    
-    NSLog(@"Touch location: %@", NSStringFromCGPoint(location));
     
     if (self.currentGraph != nil) {
         [self.currentGraph removeFromSuperlayer];
@@ -483,8 +451,8 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     
     // Uncomment the lines below to see what kind of shape is drawn when you touch the input area
     //    To hide the graph, just comment these out. Howon: visible graph
-        [self.graphView.layer addSublayer:shapeLayer];
-        [self.view.layer addSublayer:shapeLayer];
+    [self.graphView.layer addSublayer:shapeLayer];
+    [self.view.layer addSublayer:shapeLayer];
     
     // Define the input area
     float xStart = 188.0;
@@ -492,12 +460,17 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     float yStart = maxY;
     float xRange = xEnd - xStart;
     
+    // HOWON / 12/13/14: testing
+    
+    CGPoint bezierLocation = location;
+    bezierLocation.y = minY;
+    
     float tickInterval = xRange / numDatesSelected;
     
     CGPoint origin = CGPointMake(xStart, yStart);
     CGPoint endpt = CGPointMake(xEnd, yStart);
-    CGPoint midpt1 = midPointForPoints(origin, location);
-    CGPoint midpt2 = midPointForPoints(location, endpt);
+    CGPoint midpt1 = midPointForPoints(origin, bezierLocation);
+    CGPoint midpt2 = midPointForPoints(bezierLocation, endpt);
     CGPoint ctrlpt1 = CGPointMake(midpt1.x, midpt1.y+50);
     CGPoint ctrlpt2 = CGPointMake(midpt2.x, midpt2.y+50);
     
@@ -510,20 +483,16 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float xPointOnBezierPath = xStart;
     float xTickLabel = (tickInterval/2.0);
-    
-// working here
-    float epsilon = 10.0;
+    float epsilon = 10.0; // how much area in the middle you consider as "I want to evenly distribute my work"
     float xMid = (origin.x + endpt.x)/2.0;
     if (location.x >= xMid-epsilon && location.x <= xMid+epsilon) {
         // HOWON: if x falls in the middle, then return an evenly distributed workload
-        fillHeightsArr = [self distributeWorkload:numDatesSelected transformingScale:transformingScale btnHeight:btnHeight];
-        //fillHeightsArr = [self distributeWorkload:fillHeightsArr numDatesSelected:(int)numDatesSelected loc:location transformingScale:transformingScale btnHeight:btnHeight];
+        fillHeightsArr = [self distributeWorkload:(int)numDatesSelected transformingScale:transformingScale btnHeight:btnHeight];
     } else {
         for (int i = 0; i < numDatesSelected; i++) {
             float prevXPoint = xPointOnBezierPath;
             xPointOnBezierPath = xPointOnBezierPath + tickInterval;
             xTickLabel += tickInterval;
-            
             float y1Beizer = [self getYFromBezierPath:prevXPoint location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
             float y2Beizer = [self getYFromBezierPath:xPointOnBezierPath location:location ctrlpt1:ctrlpt1 ctrlpt2:ctrlpt2 startpt:origin endpt:endpt];
             float avgY1Y2 = (y1Beizer + y2Beizer) / 2.0;
@@ -531,21 +500,15 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
             NSNumber *fhNum = [NSNumber numberWithFloat:fillHeightFromY1Y2];
             [fillHeightsArr addObject:fhNum];
         }
-        
-        fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
-        //NSLog(@"fillHeightsARr: %@", fillHeightsArr);
+        fillHeightsArr = [self normalize: fillHeightsArr btnHeight:btnHeight workload:workload numHoursADay:8];
     }
-    
-    //    NSLog(@"after normalizing: %@", fillHeightsArr);
-    // Clear all previously colored buttons
-    
-    int numColoredButtons = [self.coloredButtons count];
+
+    int numColoredButtons = (int)[self.coloredButtons count];
     for (int i = 0; i < numColoredButtons; i++) {
         UIButton *cb = [self.coloredButtons objectAtIndex:i];
         [cb setImage:[self imageWithColor:[UIColor clearColor] buttonWidth:btnWidth buttonHeight:btnHeight fillHeight:btnHeight] forState:UIControlStateNormal];
     }
     [self.coloredButtons removeAllObjects];
-    UIColor *prettyBtnColor = [self.utils colorFromHexString:@"#1ABC9C"];
     
     for (int i = 0; i < numDatesSelected; i++) {
         NSDate* selectedDate = [self.selectedDates objectAtIndex:i];
@@ -635,24 +598,43 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return yVal;
 }
 
-// 12/13/14: Howon: I must fix how I normalize this
-- (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight scaleFactor:(float)scaleFactor {
-    int length = (int)[nums count];
-    float realmax = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
-
+// 12/13/14: Howon: fixed normalization process to get accurate workload distribution
+- (NSMutableArray*)normalize:(NSMutableArray*)nums btnHeight:(float)btnHeight workload:(float)workload numHoursADay:(int)numHoursADay {
+    // Process:
+    // initial nums = Y-values from Bezier curve [30,20,20,10]. Divide each by the max value
+    // then, [1,2/3,2/3,1/3]. Now divide each element by the sum of the array.
+    // then, [0.375, 0.25, 0.25, 0.125]. Now multiply by the total workload. (let's say we have 10 hours of work)
+    // then, [3.75, 2.5, 2.5, 1.25]. Now each cell represents number of hours that must be worked on that day.
+    // For example, on the first day, the user has to work 10 hours. Now divide each by the total number of
+    // available hours for each day. The default is 8 hours (we consider people only work for 8 hours a day)
+    // then, [0.46875, 0.3125, 0.3125, 0.15625]. Then we have an array of the ratio of each cell's fillHeight to btnHeight.
+    // Multiply each by the btnHeight to get the correct representation of workload for each cell's filled area. (btnHeight=37.5)
+    // Then, [17.578125, 11.71875, 11.71875, 5.859375]. This is the final fillHeight array. If an element has
+    // a value greater than btnHeight it means
+    // the schedule is not feasible (there is more work to do than free time that day)
+    // [self normalize: fillHeightsArr btnHeight:btnHeight workload:workload numHoursADay:8];
     
-    //    float max = 30.0; // the smaller this value is, the more each cell is filled by Bezier path
-    float max = realmax;
+    int length = (int)[nums count];
+    
+    // First, divide everything by the max of the array
+    float max = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
     for (int i=0; i<length; i++) {
         float num = [[nums objectAtIndex:i] floatValue];
-        float normed_num = num / max;
-        float scaled = normed_num * btnHeight * scaleFactor;
-        if (scaled < 0) {
-            scaled = 0.0;
-        }
-        NSNumber *num_ns = [NSNumber numberWithFloat:scaled];
-        [nums replaceObjectAtIndex:i withObject:num_ns];
+        float normed_num1 = (num / max);
+        NSNumber *tmp = [NSNumber numberWithFloat:normed_num1];
+        [nums replaceObjectAtIndex:i withObject:tmp];
     }
+    
+    // Second, divide everything by the sum of the updated array, and compute more to get the appropriate fillHeight
+    float sum_normed_nums = [[nums valueForKeyPath:@"@sum.self"] floatValue];
+    for (int i=0; i<length; i++) {
+        float num = [[nums objectAtIndex:i] floatValue];
+        float normed_num2 = (((num / sum_normed_nums) * workload) / numHoursADay) * btnHeight;
+        NSNumber *tmp2 = [NSNumber numberWithFloat:normed_num2];
+        [nums replaceObjectAtIndex:i withObject:tmp2];
+    }
+    
+    // Array of fillHeights
     return nums;
 }
 
