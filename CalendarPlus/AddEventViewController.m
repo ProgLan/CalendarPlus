@@ -343,15 +343,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return CGPointMake((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-//- (NSMutableArray*)distributeWorkload:(NSMutableArray *)fillHeightsArr numDatesSelected:(int)arrSize loc:(CGPoint)location transformingScale:(float)tfScale btnHeight:(float)btnHeight {
-//    float fillHeight = tfScale * 10;
-//    NSNumber *fhNum = [NSNumber numberWithFloat:fillHeight];
-//    for (int i = 0; i < arrSize; i++) {
-//        [fillHeightsArr addObject:fhNum];
-//    }
-//    return fillHeightsArr;
-//}
-
 - (NSMutableArray*)distributeWorkload:(int)arrSize transformingScale:(float)tfScale btnHeight:(float)btnHeight {
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float fillHeight = tfScale * btnHeight;
@@ -391,7 +382,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
                                              cornerRadius:radius].CGPath;
     
 //    circle.position = CGPointMake(circleX, circleY);
-    circle.position = CGPointMake(location.x+radius, location.y-radius);
+    circle.position = CGPointMake(location.x-radius, location.y-radius);
     circle.fillColor = [self.utils colorFromHexString:@"#1abc9c"].CGColor;
     circle.strokeColor = [self.utils colorFromHexString:@"#16a085"].CGColor;
     circle.lineWidth = 2;
@@ -489,13 +480,13 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     shapeLayer.strokeColor = [self.utils colorFromHexString:@"#16A085"].CGColor;
     shapeLayer.fillColor = [self.utils colorFromHexString:@"#1ABC9C"].CGColor;
     shapeLayer.lineWidth = 1.0;
+    
     // Uncomment the lines below to see what kind of shape is drawn when you touch the input area
     //    To hide the graph, just comment these out. Howon: visible graph
         [self.graphView.layer addSublayer:shapeLayer];
         [self.view.layer addSublayer:shapeLayer];
     
-    // 12/10/14: can I add a user feedback shape here??
-    
+    // Define the input area
     float xStart = 188.0;
     float xEnd = 370.0;
     float yStart = maxY;
@@ -516,20 +507,9 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     [path addQuadCurveToPoint:endpt controlPoint:ctrlpt2]; //ctrlpt2
     [shapeLayer setPath:path.CGPath];
     
-    //Represent the workload on the calendar
-    //Get a range of NSDate objects
-    //    NSMutableArray *selectedDates = [[NSMutableArray alloc] init];
     NSMutableArray *fillHeightsArr = [[NSMutableArray alloc] init];
     float xPointOnBezierPath = xStart;
     float xTickLabel = (tickInterval/2.0);
-    
-    if (self.tickDateLabelContainer != nil) {
-        [self.tickDateLabelContainer removeFromSuperview];
-    }
-    
-    self.tickDateLabelContainer = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 30)];
-    self.tickDateLabelContainer.backgroundColor = [UIColor clearColor];
-    [self.graphView addSubview:self.tickDateLabelContainer];
     
 // working here
     float epsilon = 10.0;
@@ -551,6 +531,7 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
             NSNumber *fhNum = [NSNumber numberWithFloat:fillHeightFromY1Y2];
             [fillHeightsArr addObject:fhNum];
         }
+        
         fillHeightsArr = [self normalizeAndScale: fillHeightsArr btnHeight:btnHeight scaleFactor:transformingScale];
         //NSLog(@"fillHeightsARr: %@", fillHeightsArr);
     }
@@ -654,10 +635,13 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
     return yVal;
 }
 
+// 12/13/14: Howon: I must fix how I normalize this
 - (NSMutableArray*)normalizeAndScale:(NSMutableArray*)nums btnHeight:(float)btnHeight scaleFactor:(float)scaleFactor {
-    int length = [nums count];
+    int length = (int)[nums count];
     float realmax = [[nums valueForKeyPath:@"@max.floatValue"] floatValue];
-//    float max = 30.0; // the smaller this value is, the more each cell is filled by Bezier path
+
+    
+    //    float max = 30.0; // the smaller this value is, the more each cell is filled by Bezier path
     float max = realmax;
     for (int i=0; i<length; i++) {
         float num = [[nums objectAtIndex:i] floatValue];
