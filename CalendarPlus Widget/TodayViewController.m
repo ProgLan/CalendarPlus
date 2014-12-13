@@ -17,20 +17,10 @@
 @implementation TodayViewController
 
 - (void)viewDidLoad {
-    NSLog(@"view did load");
     [super viewDidLoad];
+    self.eventStore = [[EKEventStore alloc] init];
     self.todayEvents = [self fetchEvents];
     self.preferredContentSize = CGSizeMake(self.preferredContentSize.width, [self.todayEvents count] * 44.0);
-    
-    for (int i = 0; i < [self.todayEvents count]; i++) {
-        EKEvent *event = [self.todayEvents objectAtIndex:i];
-        NSLog(@"title: %@", event.title);
-//        NSLog(@"startDate: %@", event.startDate);
-//        NSLog(@"endDate: %@", event.endDate);
-//        NSLog(@"eventIdentifier: %@", event.eventIdentifier);
-//        NSLog(@"availability: %d", event.availability);
-    }
-//    NSLog(@"todayEvents: %@", todayEvents);
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView reloadData];
@@ -44,7 +34,7 @@
 
 - (NSMutableArray *)fetchEvents
 {
-    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    EKEventStore *eventStore = self.eventStore;
     EKCalendar *calendar = eventStore.defaultCalendarForNewEvents;
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDate *today = [NSDate date];
@@ -57,8 +47,6 @@
                                                 options:0];
     NSMutableArray *todayEvents = [[NSMutableArray alloc] init];
     NSArray *calendarArray = [NSArray arrayWithObject:calendar];
-    
-    
     NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:startDate
                                                                  endDate:endDate
                                                                calendars:calendarArray];
@@ -81,6 +69,41 @@
     return [self.todayEvents count];
 }
 
+- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.view];
+    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    NSString *eventTitle = cell.textLabel.text;
+    
+    NSString *eventToRemove;
+    NSError *err = nil;
+    
+    for (int i=0; i < [self.todayEvents count]; i++) {
+        EKEvent *tmpEvent = self.todayEvents[i];
+        NSString *tmpTitle = [tmpEvent.title substringFromIndex:3];
+        if ([tmpTitle isEqual:eventTitle]) {
+            eventToRemove = tmpEvent.eventIdentifier;
+            break;
+        }
+    }
+    
+    EKEvent *toBeRemoved = [eventStore eventWithIdentifier:eventToRemove];
+    [eventStore removeEvent:toBeRemoved span:EKSpanThisEvent error:&err];
+    if(err){
+        NSLog(@"Error: %@",[err localizedDescription]);
+    }
+    
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (IBAction)displayGestureForLongPressRecognizer:(UILongPressGestureRecognizer *)recognizer
+{
+    NSURL *appURL = [NSURL URLWithString:@"calendarplushome://"];
+    [self.extensionContext openURL:appURL completionHandler:nil];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //NSLog(@"cellForRowATIndexPath is called??");
@@ -91,12 +114,12 @@
     }
     
     EKEvent *currentEvent = [self.todayEvents objectAtIndex:indexPath.row];
-    NSDate *startD = currentEvent.startDate;
-    NSDate *endD = currentEvent.endDate;
+//    NSDate *startD = currentEvent.startDate;
+//    NSDate *endD = currentEvent.endDate;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mma"];
     NSString *eventTitle = [currentEvent.title substringFromIndex:3];
-    eventTitle = [NSString stringWithFormat:@"%@       [  ]", eventTitle];
+    eventTitle = [NSString stringWithFormat:@"%@", eventTitle];
     //NSString *eventTitle = [NSString stringWithFormat:@"%@ - %@: %@", [dateFormatter stringFromDate:startD], [dateFormatter stringFromDate:endD], currentEvent.title];
 
     cell.textLabel.text = eventTitle;
@@ -114,11 +137,6 @@
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
     
     // Perform any setup necessary in order to update the view.
-//    NSLog(@"widgetPErformUpdate");
-//    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.CalendarPlus"];
-//    NSMutableArray *calendars = [[NSMutableArray alloc] init];
-//    calendars = [sharedDefaults objectForKey:@"calendars"];
-    
     // If an error is encountered, use NCUpdateResultFailed
     // If there's no update required, use NCUpdateResultNoData
     // If there's an update, use NCUpdateResultNewData

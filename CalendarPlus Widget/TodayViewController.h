@@ -13,5 +13,8 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *todayEvents;
-
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapGesture;
+- (IBAction)displayGestureForTapRecognizer:(UITapGestureRecognizer *)recognizer;
+- (IBAction)displayGestureForLongPressRecognizer:(UILongPressGestureRecognizer *)recognizer;
+@property (strong, nonatomic) EKEventStore *eventStore;
 @end

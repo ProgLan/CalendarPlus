@@ -25,12 +25,17 @@
                                 </connections>
                             </tableView>
                         </subviews>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="71t-AO-D2X" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" id="Q71-Zl-DLd"/>
                             <constraint firstItem="71t-AO-D2X" firstAttribute="bottom" secondItem="FKl-LY-JtV" secondAttribute="top" id="Ws6-cP-X7T"/>
                             <constraint firstAttribute="trailing" secondItem="71t-AO-D2X" secondAttribute="trailing" id="Y2V-6A-CPn"/>
                             <constraint firstItem="71t-AO-D2X" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leading" id="x6i-Sy-SWA"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="3er-xs-BJ8" appends="YES" id="apx-py-MIT"/>
+                            <outletCollection property="gestureRecognizers" destination="vGy-Ud-YNj" appends="YES" id="9aO-FO-1L0"/>
+                        </connections>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -40,11 +45,39 @@
                     <size key="freeformSize" width="320" height="200"/>
                     <connections>
                         <outlet property="tableView" destination="71t-AO-D2X" id="wco-BA-og4"/>
+                        <outlet property="tapGesture" destination="3er-xs-BJ8" id="Ipu-HC-i3G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vXp-U4-Rya" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="3er-xs-BJ8">
+                    <connections>
+                        <action selector="displayGestureForTapRecognizer:" destination="M4Y-Lb-cyx" id="Stc-Jh-vVo"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="vGy-Ud-YNj">
+                    <connections>
+                        <action selector="displayGestureForLongPressRecognizer:" destination="M4Y-Lb-cyx" id="KYg-se-UzH"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="516" y="285"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="jWk-DQ-reX">
+            <objects>
+                <viewController id="v0U-Zm-UzS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YfB-DY-gV7"/>
+                        <viewControllerLayoutGuide type="bottom" id="Yuu-p6-7Dp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="il1-6v-xfH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x4D-Nj-en9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
