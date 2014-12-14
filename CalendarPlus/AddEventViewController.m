@@ -30,16 +30,9 @@
     [self setDateLables:self.firstDate endDate:self.eventEndDate];
     self.eventStore = [[EKEventStore alloc] init];
     
-    // HOWON 12/10/14 see if sharing this with todayWidget works
-    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.CalendarPlus"];
-    [sharedDefaults setObject:@"hello there" forKey:@"helloString"];
-    
-    self.reminderDurations = [[NSMutableArray alloc] initWithCapacity:0];
     self.eventDurations = [[NSMutableArray alloc] initWithCapacity:0];
-//    self.selectedDates = [[NSMutableArray alloc] initWithCapacity:0];
-    
-//    self.eventsList = [[NSMutableArray alloc] initWithCapacity:0];
     self.addEventButton.enabled = NO;
+    
     // CALENDAR RELATED
     [self setUpCalendarView:self.smallCalendarView];
     [self.smallCalendarView scrollToDate:self.firstDate animated:NO];
@@ -49,6 +42,8 @@
     
 //    NSLog(@"labelContainer before init: %@", self.tickDateLabelContainer);
     self.tickDateLabelContainer = [[UIView alloc] init];
+    
+    
 //    NSLog(@"labelContainer after init: %@", self.tickDateLabelContainer);
 //    self.tickDateLabels = [[NSMutableArray alloc] init];
     // labels
@@ -57,6 +52,38 @@
 //    [hrLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
 //    hrLabel.text = @"10hrs";
 //    [self.view addSubview:hrLabel];
+    
+    // gradient related
+//    CGSize inputAreaSize = self.graphView.frame.size;
+//    UIGraphicsBeginImageContextWithOptions(inputAreaSize, NO, 0);
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+//    size_t gradientNumberOfLocations = 2;
+//    CGFloat gradientLocations[2] = { 0.0, 1.0 };
+//    
+//    
+//    CGFloat gradientComponents[8] = { 200, 200, 153, 1,     //start
+//                                      119, 183, 225, 1, };  //end
+//    CGGradientRef gradient = CGGradientCreateWithColorComponents (colorspace, gradientComponents, gradientLocations, gradientNumberOfLocations);
+//    CGContextDrawLinearGradient(context, gradient, CGPointMake(0, 0), CGPointMake(0, inputAreaSize.height), 0);
+//    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
+//    CGGradientRelease(gradient);
+//    CGColorSpaceRelease(colorspace);
+//    UIGraphicsEndImageContext();
+    //[self.graphView setBackgroundColor:[UIColor colorWithPatternImage:gradientImage]];
+    
+    //self.graphView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"gradImage.png"]];
+    
+    UIImage *originalImage = [UIImage imageNamed:@"gradImage.png"];
+    UIImage *scaledImage =
+    [UIImage imageWithCGImage:[originalImage CGImage]
+                        scale:(originalImage.scale * 0.25)
+                  orientation:(originalImage.imageOrientation)];
+    UIColor *bgColor = [UIColor colorWithPatternImage:scaledImage];
+    [self.graphView setBackgroundColor:bgColor];
+    
+//    [self.graphView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"gradImage.png"]]];
+    
     
     self.storedFillHeights = [[NSMutableDictionary alloc] init];
 }
@@ -110,8 +137,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    
-    // how come this method is not called??
     [appDelegate.eventManager checkEventStoreAccessForCalendar];
     if (appDelegate.eventManager.eventsAccessGranted) {
         self.addEventButton.enabled = YES;
@@ -578,7 +603,6 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
         if (recognizerState == UIGestureRecognizerStateEnded) {
             [myButton setTitle:myButton.titleLabel.text forState:UIControlStateNormal];
             int reminderDuration = (int)((fillHeight/btnHeight) * 60.0 * 8.0); // 8 hours in minutes * fraction
-            //[self.reminderDurations addObject:[NSNumber numberWithInt:reminderDuration]];
             [self.eventDurations addObject:[NSNumber numberWithInt:reminderDuration]];
         }
     }

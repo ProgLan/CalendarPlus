@@ -50,6 +50,7 @@
 		70E719021A3B31A800CDB299 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E719011A3B31A800CDB299 /* TodayViewController.m */; };
 		70E719041A3B31A800CDB299 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70E719031A3B31A800CDB299 /* MainInterface.storyboard */; };
 		70E719071A3B31A800CDB299 /* CalendarPlus Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 70E718F91A3B31A800CDB299 /* CalendarPlus Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		70EF0D121A3D114B007927EB /* gradImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 70EF0D111A3D114B007927EB /* gradImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -894,6 +895,7 @@
 		70E719031A3B31A800CDB299 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		70E719111A3B37D700CDB299 /* CalendarPlus Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "CalendarPlus Widget.entitlements"; sourceTree = "<group>"; };
 		70E719121A3B380200CDB299 /* CalendarPlus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CalendarPlus.entitlements; sourceTree = "<group>"; };
+		70EF0D111A3D114B007927EB /* gradImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gradImage.png; path = Resources/gradImage.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2723,6 +2725,7 @@
 			isa = PBXGroup;
 			children = (
 				709B12C71A00898F00CA7C1A /* calendarPlusIcon180x180.png */,
+				70EF0D111A3D114B007927EB /* gradImage.png */,
 				709B12C51A007A1000CA7C1A /* TableViewBackground.png */,
 				709B12B51A00774A00CA7C1A /* CalendarPreviousMonth.png */,
 				709B12B61A00774A00CA7C1A /* CalendarPreviousMonth@2x.png */,
@@ -3297,6 +3300,7 @@
 				709B12C31A00774A00CA7C1A /* selected_date_custom.png in Resources */,
 				7043874319F4AA27000AE179 /* Main.storyboard in Resources */,
 				702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */,
+				70EF0D121A3D114B007927EB /* gradImage.png in Resources */,
 				709B12BE1A00774A00CA7C1A /* CalendarPreviousMonth@2x.png in Resources */,
 				709B12BF1A00774A00CA7C1A /* CalendarRow.png in Resources */,
 				700D65B719FF3EED00A717FA /* btn_light_carrot.png in Resources */,
