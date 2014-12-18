@@ -28,7 +28,6 @@
 - (void)requestCalendarAccess;
 - (NSMutableArray *)fetchEvents:(NSDate*)startDate;
 - (void)accessGrantedForCalendar;
-- (UIImage *)imageWithColor:(UIColor*)color width:(float)w height:(float)h;
 
 
 @end

@@ -40,40 +40,7 @@
     self.coloredButtons = [[NSMutableArray alloc] init];
     self.datePicker.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     
-//    NSLog(@"labelContainer before init: %@", self.tickDateLabelContainer);
-    self.tickDateLabelContainer = [[UIView alloc] init];
-    
-    
-//    NSLog(@"labelContainer after init: %@", self.tickDateLabelContainer);
-//    self.tickDateLabels = [[NSMutableArray alloc] init];
-    // labels
-//    UILabel *hrLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 600, 50, 20)];
-//    [hrLabel setTextColor:[UIColor blackColor]];
-//    [hrLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-//    hrLabel.text = @"10hrs";
-//    [self.view addSubview:hrLabel];
-    
-    // gradient related
-//    CGSize inputAreaSize = self.graphView.frame.size;
-//    UIGraphicsBeginImageContextWithOptions(inputAreaSize, NO, 0);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-//    size_t gradientNumberOfLocations = 2;
-//    CGFloat gradientLocations[2] = { 0.0, 1.0 };
-//    
-//    
-//    CGFloat gradientComponents[8] = { 200, 200, 153, 1,     //start
-//                                      119, 183, 225, 1, };  //end
-//    CGGradientRef gradient = CGGradientCreateWithColorComponents (colorspace, gradientComponents, gradientLocations, gradientNumberOfLocations);
-//    CGContextDrawLinearGradient(context, gradient, CGPointMake(0, 0), CGPointMake(0, inputAreaSize.height), 0);
-//    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-//    CGGradientRelease(gradient);
-//    CGColorSpaceRelease(colorspace);
-//    UIGraphicsEndImageContext();
-    //[self.graphView setBackgroundColor:[UIColor colorWithPatternImage:gradientImage]];
-    
-    //self.graphView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"gradImage.png"]];
-    
+    // workload input area background color
     UIImage *originalImage = [UIImage imageNamed:@"gradImage.png"];
     UIImage *scaledImage =
     [UIImage imageWithCGImage:[originalImage CGImage]
@@ -81,10 +48,6 @@
                   orientation:(originalImage.imageOrientation)];
     UIColor *bgColor = [UIColor colorWithPatternImage:scaledImage];
     [self.graphView setBackgroundColor:bgColor];
-    
-//    [self.graphView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"gradImage.png"]]];
-    
-    
     self.storedFillHeights = [[NSMutableDictionary alloc] init];
 }
 
