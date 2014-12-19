@@ -471,9 +471,11 @@ static CGPoint midPointForPoints(CGPoint p1, CGPoint p2) {
 
     
     // Howon 12/10/14 I also want to show the user where he touched
-    if (recognizerState == UIGestureRecognizerStateEnded) {
-        [self drawCircle:location];
-    }
+//    if (recognizerState == UIGestureRecognizerStateEnded) {
+//        [self drawCircle:location];
+//    }
+    
+    [self drawCircle:location];
     
     if (self.currentGraph != nil) {
         [self.currentGraph removeFromSuperlayer];

@@ -13,9 +13,7 @@
 		7024AAA419FDA79A0069700D /* PlusCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7024AAA319FDA79A0069700D /* PlusCalendarView.m */; };
 		702D38C419FF3BC1002D2D53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 702D38C319FF3BC1002D2D53 /* Images.xcassets */; };
 		702F9AA31A11B84200EF14FC /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 702F9AA21A11B84200EF14FC /* Utils.m */; };
-		702F9AA91A15FA5300EF14FC /* NonClickableCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 702F9AA81A15FA5300EF14FC /* NonClickableCalendarView.m */; };
 		702F9AAC1A16013700EF14FC /* AddEventRowCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 702F9AAB1A16013700EF14FC /* AddEventRowCellController.m */; };
-		702F9AAF1A16723C00EF14FC /* UIGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 702F9AAE1A16723C00EF14FC /* UIGradientView.m */; };
 		70304CD619FD8BB500DF81E0 /* libTimesSquare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70304CD519FD8BB500DF81E0 /* libTimesSquare.a */; };
 		7043873A19F4AA27000AE179 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873919F4AA27000AE179 /* main.m */; };
 		7043873D19F4AA27000AE179 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7043873C19F4AA27000AE179 /* AppDelegate.m */; };
@@ -360,12 +358,8 @@
 		702D38C319FF3BC1002D2D53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		702F9AA11A11B84200EF14FC /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		702F9AA21A11B84200EF14FC /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		702F9AA71A15FA5300EF14FC /* NonClickableCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonClickableCalendarView.h; sourceTree = "<group>"; };
-		702F9AA81A15FA5300EF14FC /* NonClickableCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonClickableCalendarView.m; sourceTree = "<group>"; };
 		702F9AAA1A16013700EF14FC /* AddEventRowCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddEventRowCellController.h; sourceTree = "<group>"; };
 		702F9AAB1A16013700EF14FC /* AddEventRowCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddEventRowCellController.m; sourceTree = "<group>"; };
-		702F9AAD1A16723C00EF14FC /* UIGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGradientView.h; sourceTree = "<group>"; };
-		702F9AAE1A16723C00EF14FC /* UIGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGradientView.m; sourceTree = "<group>"; };
 		703049AF19FD8B1D00DF81E0 /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
 		703049B019FD8B1D00DF81E0 /* 815 openhouse.key */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "815 openhouse.key"; sourceTree = "<group>"; };
 		703049B119FD8B1D00DF81E0 /* acquisition-overview.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "acquisition-overview.pdf"; sourceTree = "<group>"; };
@@ -2699,8 +2693,6 @@
 				7043873E19F4AA27000AE179 /* ViewController.h */,
 				7043873F19F4AA27000AE179 /* ViewController.m */,
 				7043877E19F4B081000AE179 /* CalendarRowCellViewController.h */,
-				702F9AAD1A16723C00EF14FC /* UIGradientView.h */,
-				702F9AAE1A16723C00EF14FC /* UIGradientView.m */,
 				7043877F19F4B081000AE179 /* CalendarRowCellViewController.m */,
 				702F9AAA1A16013700EF14FC /* AddEventRowCellController.h */,
 				702F9AAB1A16013700EF14FC /* AddEventRowCellController.m */,
@@ -2715,8 +2707,6 @@
 				7043873719F4AA27000AE179 /* Supporting Files */,
 				702F9AA11A11B84200EF14FC /* Utils.h */,
 				702F9AA21A11B84200EF14FC /* Utils.m */,
-				702F9AA71A15FA5300EF14FC /* NonClickableCalendarView.h */,
-				702F9AA81A15FA5300EF14FC /* NonClickableCalendarView.m */,
 			);
 			path = CalendarPlus;
 			sourceTree = "<group>";
@@ -3354,12 +3344,10 @@
 				7043877119F4AB32000AE179 /* TSQCalendarCell.m in Sources */,
 				7002350519FE449800CBACB4 /* AddEventViewController.m in Sources */,
 				7024AAA419FDA79A0069700D /* PlusCalendarView.m in Sources */,
-				702F9AAF1A16723C00EF14FC /* UIGradientView.m in Sources */,
 				7043878019F4B081000AE179 /* CalendarRowCellViewController.m in Sources */,
 				7043877019F4AB32000AE179 /* README.md in Sources */,
 				702F9AAC1A16013700EF14FC /* AddEventRowCellController.m in Sources */,
 				7043873A19F4AA27000AE179 /* main.m in Sources */,
-				702F9AA91A15FA5300EF14FC /* NonClickableCalendarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
